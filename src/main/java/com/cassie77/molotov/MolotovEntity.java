@@ -1,5 +1,8 @@
-package com.cassie77;
+package com.cassie77.molotov;
 
+import com.cassie77.CustomSounds;
+import com.cassie77.ModEntities;
+import com.cassie77.ModItems;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -44,7 +47,7 @@ public class MolotovEntity extends ThrownItemEntity {
             ParticleEffect particleEffect = this.getParticleParameters();
 
             for(int i = 0; i < 8; ++i) {
-                this.getWorld().addParticleClient(particleEffect, this.getX(), this.getY(), this.getZ(), (double)0.0F, (double)0.0F, (double)0.0F);
+                this.getWorld().addParticleClient(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
             }
         }
 
@@ -54,6 +57,18 @@ public class MolotovEntity extends ThrownItemEntity {
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {
             this.getWorld().sendEntityStatus(this, (byte)3);
+
+            ((ServerWorld) this.getWorld()).spawnParticles(
+                    ParticleTypes.LAVA,
+                    this.getX() + 0.5,
+                    this.getY() + 0.5,
+                    this.getZ() + 0.5,
+                    100, // count
+                    0, 0.5, 0, // offset X,Y,Z
+                    0.0 // speed
+            );
+
+
             this.getWorld().playSound(
                     null, this.getX(), this.getY(), this.getZ(),
                     CustomSounds.EXPLODE_MOLOTOV,
@@ -73,10 +88,10 @@ public class MolotovEntity extends ThrownItemEntity {
         if (!this.getWorld().isClient) {
             Entity entity = entityHitResult.getEntity();
 
-            float damageAmount = 10.0F;
+            float damageAmount = 15.0F;
             if(this.getWorld() instanceof ServerWorld serverWorld)
                 entity.damage(serverWorld,this.getWorld().getDamageSources().generic(), damageAmount);
-            entity.setOnFireFor(5);
+            entity.setOnFireFor(10);
         }
     }
 
