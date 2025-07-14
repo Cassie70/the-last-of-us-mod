@@ -1,0 +1,14 @@
+{
+  "throw_molotov": {
+    "subtitle": "sound.the-last-of-us-mod.throw_molotov",
+    "sounds": [
+      "the-last-of-us-mod:throw_molotov"
+    ]
+  },
+  "explode_molotov": {
+    "subtitle": "sound.the-last-of-us-mod.explode_molotov",
+    "sounds": [
+      "the-last-of-us-mod:explode_molotov"
+    ]
+  }
+}

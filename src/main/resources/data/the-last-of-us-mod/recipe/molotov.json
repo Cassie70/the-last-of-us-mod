@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the-last-of-us-mod:rag",
+    "the-last-of-us-mod:alcohol",
+    "the-last-of-us-mod:bottle"
+  ],
+  "result": {
+    "id": "the-last-of-us-mod:molotov",
+    "count": 1
+  }
+}
