@@ -80,7 +80,7 @@ public class BottleEntity extends ThrownItemEntity {
                 entity.damage(serverWorld,this.getWorld().getDamageSources().generic(), damageAmount);
 
             if(entity instanceof LivingEntity livingEntity){
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 5, false, true));
+                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 7, false, true));
                 livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 100, 5, false, true));
                 livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 5, false, true));
             }

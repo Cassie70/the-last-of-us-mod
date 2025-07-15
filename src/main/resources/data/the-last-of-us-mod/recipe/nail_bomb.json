@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the-last-of-us-mod:canister",
+    "minecraft:gunpowder",
+    "the-last-of-us-mod:blade"
+  ],
+  "result": {
+    "id": "the-last-of-us-mod:nail_bomb",
+    "count": 1
+  }
+}

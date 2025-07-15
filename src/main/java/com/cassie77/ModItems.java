@@ -3,6 +3,7 @@ package com.cassie77;
 import com.cassie77.bottle.BottleItem;
 import com.cassie77.molotov.MolotovItem;
 import com.cassie77.nailbomb.NailBombItem;
+import com.cassie77.upgratedpipe.UpgratedPipeItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
@@ -22,14 +23,16 @@ public class ModItems {
     public static final Item BLADE = register("blade", Item::new);
     public static final Item ALCOHOL = register("alcohol", Item::new);
     public static final Item BINDING = register("binding", Item::new);
+    public static final Item CANISTER = register("canister", Item::new);
 
     public static final Item MOLOTOV = register("molotov", MolotovItem::new);
     public static final Item MEDKIT = register("medkit", Item::new);
     public static final Item BOTTLE = register("bottle", BottleItem::new);
     public static final Item NAIL_BOMB = register("nail_bomb", NailBombItem::new);
 
-    public static final Item PIPE = register("pipe", settings -> new Item(settings.sword(ToolMaterial.IRON, 2f, -3f).maxDamage(8)));
-    public static final Item SHIV = register("shiv", settings -> new Item(settings.sword(ToolMaterial.IRON, 17f, -2.4f).maxDamage(3)));
+    public static final Item PIPE = register("pipe", settings -> new Item(settings.sword(ToolMaterial.IRON, 2f, -2f).maxDamage(8)));
+    public static final Item UPGRADED_PIPE = register("upgraded_pipe", settings -> new UpgratedPipeItem(settings.sword(ToolMaterial.IRON, 27f, -3.5f).maxDamage(3)));
+    public static final Item SHIV = register("shiv", settings -> new Item(settings.sword(ToolMaterial.IRON, 17f, -3.5f).maxDamage(3)));
 
     public static Item register(String name, Function<Item.Settings, Item> itemFactory) {
         // Create the item key.
@@ -50,6 +53,7 @@ public class ModItems {
             entries.add(BLADE);
             entries.add(ALCOHOL);
             entries.add(BINDING);
+            entries.add(CANISTER);
         }
         );
 
@@ -59,6 +63,7 @@ public class ModItems {
             entries.add(NAIL_BOMB);
             entries.add(MEDKIT);
             entries.add(PIPE);
+            entries.add(UPGRADED_PIPE);
             entries.add(SHIV);
         });
     }

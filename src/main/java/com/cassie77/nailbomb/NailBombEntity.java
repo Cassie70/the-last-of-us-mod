@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -52,7 +53,19 @@ public class NailBombEntity extends ThrownItemEntity {
                 this.setPos(this.getX(), this.getBlockY() + 2, this.getZ());
                 this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(),
                         SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 5.0F, World.ExplosionSourceType.TNT);
+
+                ((ServerWorld) this.getWorld()).spawnParticles(
+                        ParticleTypes.EXPLOSION,
+                        this.getX() + 0.5,
+                        this.getY() + 0.5,
+                        this.getZ() + 0.5,
+                        50, // count
+                        2, 2, 2,// offset X,Y,Z
+                        0.0 // speed
+                );
+
+
+                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 5.0F, false, World.ExplosionSourceType.NONE);
                 this.discard();
             }
         }

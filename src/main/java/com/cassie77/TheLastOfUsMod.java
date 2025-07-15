@@ -21,7 +21,7 @@ public class TheLastOfUsMod implements ModInitializer {
 		// The mod ID is used to identify your mod in various places, such as the config file.
 		LOGGER.info("Hello Fabric world!");
 		ModItems.initialize();
-		CustomSounds.initialize();
+		ModSounds.initialize();
 		ModEntities.initialize();
 
 	}

@@ -1,6 +1,6 @@
 package com.cassie77.molotov;
 
-import com.cassie77.CustomSounds;
+import com.cassie77.ModSounds;
 import com.cassie77.ModEntities;
 import com.cassie77.ModItems;
 import net.minecraft.block.Blocks;
@@ -64,14 +64,14 @@ public class MolotovEntity extends ThrownItemEntity {
                     this.getY() + 0.5,
                     this.getZ() + 0.5,
                     100, // count
-                    0, 0.5, 0, // offset X,Y,Z
+                    0.5, 0.5, 0.5, // offset X,Y,Z
                     0.0 // speed
             );
 
 
             this.getWorld().playSound(
                     null, this.getX(), this.getY(), this.getZ(),
-                    CustomSounds.EXPLODE_MOLOTOV,
+                    ModSounds.EXPLODE_MOLOTOV,
                     SoundCategory.NEUTRAL,
                     2.0F, 1.0F
             );

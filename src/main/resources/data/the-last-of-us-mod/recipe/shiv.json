@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the-last-of-us-mod:binding",
+    "the-last-of-us-mod:blade"
+  ],
+  "result": {
+    "id": "the-last-of-us-mod:shiv",
+    "count": 1
+  }
+}

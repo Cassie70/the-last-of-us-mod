@@ -8,8 +8,8 @@ import net.minecraft.util.Identifier;
 import static com.cassie77.TheLastOfUsMod.LOGGER;
 import static com.cassie77.TheLastOfUsMod.MOD_ID;
 
-public class CustomSounds {
-    private CustomSounds() {
+public class ModSounds {
+    private ModSounds() {
         // private empty constructor to avoid accidental instantiation
     }
 
