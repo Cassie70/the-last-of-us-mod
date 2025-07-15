@@ -1,0 +1,16 @@
+{
+  "item.the-last-of-us-mod.rag": "Trapo",
+  "item.the-last-of-us-mod.blade": "Cuchilla",
+  "item.the-last-of-us-mod.alcohol": "Alcohol",
+  "item.the-last-of-us-mod.binding": "Cinta",
+  "item.the-last-of-us-mod.medkit": "Kit médico",
+  "item.the-last-of-us-mod.molotov": "Molotov",
+  "item.the-last-of-us-mod.bottle": "Botella",
+  "item.the-last-of-us-mod.pipe": "Tubo",
+  "item.the-last-of-us-mod.upgraded_pipe": "Tubo mejorado",
+  "item.the-last-of-us-mod.shiv": "Navaja",
+  "item.the-last-of-us-mod.canister": "Lata",
+  "item.the-last-of-us-mod.nail_bomb": "Bomba de clavos",
+  "sound.the-last-of-us-mod.throw_molotov": "Molotov arrojado",
+  "sound.the-last-of-us-mod.explode_molotov": "Explosión de molotov"
+}
