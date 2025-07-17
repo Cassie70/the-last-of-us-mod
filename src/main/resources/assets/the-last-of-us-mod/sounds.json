@@ -10,5 +10,24 @@
     "sounds": [
       "the-last-of-us-mod:explode_molotov"
     ]
+  },
+  "clicker_angry": {
+    "subtitle": "sound.the-last-of-us-mod.clicker_angry",
+    "sounds": [
+      "the-last-of-us-mod:clicker_angry"
+    ]
+  },
+  "clicker_aware": {
+    "subtitle": "sound.the-last-of-us-mod.clicker_aware",
+    "sounds": [
+      "the-last-of-us-mod:clicker_aware"
+    ]
+  },
+  "clicker_ambient": {
+    "subtitle": "sound.the-last-of-us-mod.clicker_ambient",
+    "sounds": [
+      "the-last-of-us-mod:clicker_ambient",
+      "the-last-of-us-mod:clicker_ambient_2"
+    ]
   }
 }

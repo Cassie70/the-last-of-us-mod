@@ -1,9 +1,9 @@
 package com.cassie77;
 
-import com.cassie77.bottle.BottleItem;
-import com.cassie77.molotov.MolotovItem;
-import com.cassie77.nailbomb.NailBombItem;
-import com.cassie77.upgratedpipe.UpgratedPipeItem;
+import com.cassie77.item.bottle.BottleItem;
+import com.cassie77.item.molotov.MolotovItem;
+import com.cassie77.item.nailbomb.NailBombItem;
+import com.cassie77.item.upgratedpipe.UpgratedPipeItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;

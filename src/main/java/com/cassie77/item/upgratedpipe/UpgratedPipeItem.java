@@ -1,4 +1,4 @@
-package com.cassie77.upgratedpipe;
+package com.cassie77.item.upgratedpipe;
 
 import com.cassie77.ModItems;
 import net.minecraft.entity.LivingEntity;

@@ -1,4 +1,4 @@
-package com.cassie77.nailbomb;
+package com.cassie77.item.nailbomb;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModItems;

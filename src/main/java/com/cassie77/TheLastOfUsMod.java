@@ -1,7 +1,9 @@
 package com.cassie77;
 
+import com.cassie77.entity.clicker.ClickerEntity;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,8 @@ public class TheLastOfUsMod implements ModInitializer {
 		ModItems.initialize();
 		ModSounds.initialize();
 		ModEntities.initialize();
+		ModSensors.initialize();
 
+		ModEntities.registerAttributes();
 	}
 }

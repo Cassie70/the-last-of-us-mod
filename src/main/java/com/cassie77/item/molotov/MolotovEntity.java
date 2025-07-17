@@ -1,4 +1,4 @@
-package com.cassie77.molotov;
+package com.cassie77.item.molotov;
 
 import com.cassie77.ModSounds;
 import com.cassie77.ModEntities;
@@ -39,7 +39,7 @@ public class MolotovEntity extends ThrownItemEntity {
 
     private ParticleEffect getParticleParameters() {
         ItemStack itemStack = this.getStack();
-        return (ParticleEffect)(itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));
+        return itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack);
     }
 
     public void handleStatus(byte status) {

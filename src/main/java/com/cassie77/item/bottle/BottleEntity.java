@@ -1,4 +1,4 @@
-package com.cassie77.bottle;
+package com.cassie77.item.bottle;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModItems;
@@ -40,7 +40,7 @@ public class BottleEntity extends ThrownItemEntity {
 
     private ParticleEffect getParticleParameters() {
         ItemStack itemStack = this.getStack();
-        return (ParticleEffect)(itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));
+        return itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack);
     }
 
     public void handleStatus(byte status) {

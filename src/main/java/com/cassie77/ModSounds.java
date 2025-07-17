@@ -18,6 +18,11 @@ public class ModSounds {
     public static final SoundEvent THROW_MOLOTOV = registerSound("throw_molotov");
     public static final SoundEvent EXPLODE_MOLOTOV = registerSound("explode_molotov");
 
+    public static final SoundEvent CLICKER_ANGRY = registerSound("clicker_angry");
+    public static final SoundEvent CLICKER_AWARE = registerSound("clicker_aware");
+    public static final SoundEvent CLICKER_AMBIENT = registerSound("clicker_ambient");
+    public static final SoundEvent CLICKER_AMBIENT_2 = registerSound("clicker_ambient_2");
+
 
     // actual registration of all the custom SoundEvents
     private static SoundEvent registerSound(String id) {
