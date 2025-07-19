@@ -17,10 +17,12 @@ public class UpgratedPipeItem extends Item {
         if (!attacker.getWorld().isClient && attacker instanceof PlayerEntity player) {
             if(stack.getDamage() >= stack.getMaxDamage()-1) {
                 stack.damage(1, player);
-                ItemStack reward = new ItemStack(ModItems.PIPE);
-                if (!player.getInventory().insertStack(reward)) {
-                    // Si no cabe en el inventario, lo soltamos en el mundo
-                    player.dropItem(reward, false);
+
+                if (!player.getAbilities().creativeMode) {
+                    ItemStack reward = new ItemStack(ModItems.PIPE);
+                    if (!player.getInventory().insertStack(reward)) {
+                        player.dropItem(reward, false);
+                    }
                 }
                 return;
             }

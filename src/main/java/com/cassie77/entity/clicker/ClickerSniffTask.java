@@ -25,7 +25,7 @@ public class ClickerSniffTask<E extends ClickerEntity> extends MultiTickTask<E> 
     }
 
     protected void run(ServerWorld serverWorld, E clickerEntity, long l) {
-        clickerEntity.playSound(ModSounds.CLICKER_AWARE, 4.0F, 1.0F);
+        clickerEntity.playSound(ModSounds.CLICKER_AWARE, 2.5F, 1.0F);
     }
 
     protected void finishRunning(ServerWorld serverWorld, E clickerEntity, long l) {

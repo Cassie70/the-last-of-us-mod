@@ -40,7 +40,7 @@ public class ClickerRoarTask extends MultiTickTask<ClickerEntity> {
     protected void keepRunning(ServerWorld serverWorld, ClickerEntity clickerEntity, long l) {
         if (!clickerEntity.getBrain().hasMemoryModule(MemoryModuleType.ROAR_SOUND_DELAY) && !clickerEntity.getBrain().hasMemoryModule(MemoryModuleType.ROAR_SOUND_COOLDOWN)) {
             clickerEntity.getBrain().remember(MemoryModuleType.ROAR_SOUND_COOLDOWN, Unit.INSTANCE, ClickerBrain.ROAR_DURATION - SOUND_DELAY);
-            clickerEntity.playSound(ModSounds.CLICKER_ANGRY, 5.0F, 1.0F);
+            clickerEntity.playSound(ModSounds.CLICKER_ANGRY, 2.5F, 1.0F);
         }
     }
 

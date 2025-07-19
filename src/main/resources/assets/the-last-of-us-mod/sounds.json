@@ -29,5 +29,11 @@
       "the-last-of-us-mod:clicker_ambient",
       "the-last-of-us-mod:clicker_ambient_2"
     ]
+  },
+  "clicker_alert": {
+    "subtitle": "sound.the-last-of-us-mod.clicker_alert",
+    "sounds": [
+      "the-last-of-us-mod:clicker_alert"
+    ]
   }
 }

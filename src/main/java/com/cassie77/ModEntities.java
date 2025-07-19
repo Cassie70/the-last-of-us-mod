@@ -22,7 +22,7 @@ public class ModEntities {
     public static final EntityType<BottleEntity> BOTTLE_ENTITY = register("bottle_entity", EntityType.Builder.<BottleEntity>create(BottleEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10));
     public static final EntityType<NailBombEntity> NAIL_BOMB_ENTITY = register("nail_bomb_entity", EntityType.Builder.<NailBombEntity>create(NailBombEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10));
 
-    public static final EntityType<ClickerEntity> CLICKER_ENTITY = register("clicker_entity", EntityType.Builder.create(ClickerEntity::new, SpawnGroup.MONSTER)
+    public static final EntityType<ClickerEntity> CLICKER = register("clicker_entity", EntityType.Builder.create(ClickerEntity::new, SpawnGroup.MONSTER)
             .dimensions(0.6F, 1.95F).eyeHeight(1.74F).passengerAttachments(2.0125F).vehicleAttachment(-0.7F).maxTrackingRange(8));
 
     private static <T extends Entity> EntityType<T> register(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
@@ -42,6 +42,6 @@ public class ModEntities {
     }
 
     public static void registerAttributes() {
-        FabricDefaultAttributeRegistry.register(CLICKER_ENTITY, ClickerEntity.addAttributes());
+        FabricDefaultAttributeRegistry.register(CLICKER, ClickerEntity.addAttributes());
     }
 }

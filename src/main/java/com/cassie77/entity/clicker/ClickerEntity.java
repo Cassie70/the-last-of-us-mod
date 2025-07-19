@@ -1,6 +1,7 @@
 package com.cassie77.entity.clicker;
 
 import com.cassie77.ModEntities;
+import com.cassie77.ModSounds;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.entity.*;
@@ -53,13 +54,14 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     private static final double MOVE_SPEED = 0.3;
     private static final double KNOCKBACK_RESISTANCE = 0.0;
     private static final double ATTACK_KNOCKBACK = 1.0;
-    private static final double ATTACK_DAMAGE = 25.0;
+    private static final double ATTACK_DAMAGE = 20.0;
     private static final double FOLLOW_RANGE = 24.0;
+    private static final int ANGRINESS_AMOUNT = 35;
+    private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 3;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackingAnimationState = new AnimationState();
     public final AnimationState roaringAnimationState = new AnimationState();
-
 
     private final EntityGameEventHandler<Vibrations.VibrationListener> gameEventHandler = new EntityGameEventHandler<>(new Vibrations.VibrationListener(this));
     private final Vibrations.Callback vibrationCallback = new ClickerEntity.VibrationCallback();
@@ -69,7 +71,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     public ClickerEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
 
-        this.experiencePoints = 5;
+        this.experiencePoints = 20;
         this.getNavigation().setCanSwim(true);
         this.setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0.0F);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_OTHER, 8.0F);
@@ -78,7 +80,6 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, 0.0F);
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, 0.0F);
 
-        this.setPose(EntityPose.STANDING);
     }
 
     public boolean canSpawn(WorldView world) {
@@ -94,7 +95,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     }
 
     public float getWeaponDisableBlockingForSeconds() {
-        return 5.0F;
+        return WEAPON_DISABLE_BLOCKING_SECONDS;
     }
 
     protected float calculateNextStepSoundDistance() {
@@ -110,17 +111,12 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     }
 
     protected float getSoundVolume() {
-        return 4.0F;
-    }
-
-    @Nullable
-    protected SoundEvent getAmbientSound() {
-        return !this.isInPose(EntityPose.ROARING) ? this.getAngriness().getSound() : null;
+        return 2.0F;
     }
 
     @Override
     public void playAmbientSound() {
-        super.playSound(this.getAmbientSound(), 3.0F, 1.0F);
+        super.playSound(this.getAngriness().getSound(), 2.0F, 1.0F);
     }
 
     protected SoundEvent getHurtSound(DamageSource source) {
@@ -131,13 +127,9 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         return SoundEvents.ENTITY_ZOMBIE_DEATH;
     }
 
-    //protected void playStepSound(BlockPos pos, BlockState state) {
-    //    this.playSound(SoundEvents.ENTITY_ZOMBIE_STEP, 10.0F, 1.0F);
-    //}
-
     public boolean tryAttack(ServerWorld world, Entity target) {
         world.sendEntityStatus(this, (byte)4);
-        this.playSound(SoundEvents.ENTITY_WARDEN_ATTACK_IMPACT, 2.0F, this.getSoundPitch());
+        this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.5F, this.getSoundPitch());
         return super.tryAttack(world, target);
     }
 
@@ -155,6 +147,14 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         if (var2 instanceof ServerWorld serverWorld) {
             Ticker.tick(serverWorld, this.vibrationListenerData, this.vibrationCallback);
         }
+
+        if (this.getPose() == EntityPose.STANDING
+                && !this.idleAnimationState.isRunning()
+                && !this.attackingAnimationState.isRunning()
+                && !this.roaringAnimationState.isRunning()) {
+            this.idleAnimationState.start(this.age);
+        }
+
         super.tick();
     }
 
@@ -164,7 +164,6 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         this.getBrain().tick(world, this);
         profiler.pop();
         super.mobTick(world);
-
 
         if (this.age % 20 == 0) {
             this.angerManager.tick(world, this::isValidTarget);
@@ -230,7 +229,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     public boolean isValidTarget(@Nullable Entity entity) {
 
         if (entity instanceof LivingEntity livingEntity) {
-            return this.getWorld() == entity.getWorld() && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity) && !this.isTeammate(entity) && livingEntity.getType() != EntityType.ARMOR_STAND && livingEntity.getType() != ModEntities.CLICKER_ENTITY && !livingEntity.isInvulnerable() && !livingEntity.isDead() && this.getWorld().getWorldBorder().contains(livingEntity.getBoundingBox());
+            return this.getWorld() == entity.getWorld() && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity) && !this.isTeammate(entity) && livingEntity.getType() != EntityType.ARMOR_STAND && livingEntity.getType() != ModEntities.CLICKER && !livingEntity.isInvulnerable() && !livingEntity.isDead() && this.getWorld().getWorldBorder().contains(livingEntity.getBoundingBox());
         }
         return false;
     }
@@ -250,9 +249,8 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
 
     private void playListeningSound() {
         if (!this.isInPose(EntityPose.ROARING)) {
-            this.playSound(this.getAngriness().getListeningSound(), 2.0F, this.getSoundPitch());
+            //this.playSound(this.getAngriness().getListeningSound(), 2.0F, this.getSoundPitch());
         }
-
     }
 
     public ClickerAngriness getAngriness() {
@@ -268,7 +266,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     }
 
     public void increaseAngerAt(@Nullable Entity entity) {
-        this.increaseAngerAt(entity, 35, true);
+        this.increaseAngerAt(entity, ANGRINESS_AMOUNT, true);
     }
 
     @VisibleForTesting
@@ -406,7 +404,9 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
             if (!ClickerEntity.this.isDead()) {
                 ClickerEntity.this.brain.remember(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 40L);
                 world.sendEntityStatus(ClickerEntity.this, (byte)61);
-                ClickerEntity.this.playSound(SoundEvents.ENTITY_WARDEN_TENDRIL_CLICKS, 2.0F, ClickerEntity.this.getSoundPitch());
+                if (!ClickerEntity.this.isInPose(EntityPose.ROARING)) {
+                    ClickerEntity.this.playSound(ModSounds.CLICKER_ALERT, 2.0F, ClickerEntity.this.getSoundPitch());
+                }
                 BlockPos blockPos = pos;
                 if (entity != null) {
                     if (ClickerEntity.this.isInRange(entity, 30.0F)) {

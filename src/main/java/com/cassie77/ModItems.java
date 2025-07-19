@@ -1,5 +1,6 @@
 package com.cassie77;
 
+import com.cassie77.item.MedkitItem;
 import com.cassie77.item.bottle.BottleItem;
 import com.cassie77.item.molotov.MolotovItem;
 import com.cassie77.item.nailbomb.NailBombItem;
@@ -26,13 +27,15 @@ public class ModItems {
     public static final Item CANISTER = register("canister", Item::new);
 
     public static final Item MOLOTOV = register("molotov", MolotovItem::new);
-    public static final Item MEDKIT = register("medkit", Item::new);
+    public static final Item MEDKIT = register("medkit", MedkitItem::new);
     public static final Item BOTTLE = register("bottle", BottleItem::new);
     public static final Item NAIL_BOMB = register("nail_bomb", NailBombItem::new);
 
     public static final Item PIPE = register("pipe", settings -> new Item(settings.sword(ToolMaterial.IRON, 2f, -2f).maxDamage(8)));
     public static final Item UPGRADED_PIPE = register("upgraded_pipe", settings -> new UpgratedPipeItem(settings.sword(ToolMaterial.IRON, 27f, -3.5f).maxDamage(3)));
     public static final Item SHIV = register("shiv", settings -> new Item(settings.sword(ToolMaterial.IRON, 17f, -3.5f).maxDamage(3)));
+
+    public static final Item CLICKER_SPAWN_EGG = register("clicker_spawn_egg", settings -> new SpawnEggItem(ModEntities.CLICKER, settings));
 
     public static Item register(String name, Function<Item.Settings, Item> itemFactory) {
         // Create the item key.
@@ -65,6 +68,10 @@ public class ModItems {
             entries.add(PIPE);
             entries.add(UPGRADED_PIPE);
             entries.add(SHIV);
+        });
+
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> {
+            entries.add(CLICKER_SPAWN_EGG);
         });
     }
 

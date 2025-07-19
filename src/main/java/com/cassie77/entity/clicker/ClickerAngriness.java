@@ -10,8 +10,8 @@ import java.util.Arrays;
 public enum ClickerAngriness {
 
     CALM(0, ModSounds.CLICKER_AMBIENT, SoundEvents.ENTITY_WARDEN_LISTENING),
-    AGITATED(40, SoundEvents.ENTITY_WARDEN_AGITATED, SoundEvents.ENTITY_WARDEN_LISTENING_ANGRY),
-    ANGRY(80, SoundEvents.ENTITY_WARDEN_ANGRY, SoundEvents.ENTITY_WARDEN_LISTENING_ANGRY);
+    AGITATED(40, ModSounds.CLICKER_AMBIENT, SoundEvents.ENTITY_WARDEN_LISTENING_ANGRY),
+    ANGRY(80, ModSounds.CLICKER_AMBIENT, SoundEvents.ENTITY_WARDEN_LISTENING_ANGRY);
 
     private static final ClickerAngriness[] VALUES = Util.make(values(), (values) -> Arrays.sort(values, (a, b) -> Integer.compare(b.threshold, a.threshold)));
     private final int threshold;
@@ -32,7 +32,7 @@ public enum ClickerAngriness {
         return this.sound;
     }
 
-    public SoundEvent getListeningSound() {
+    public SoundEvent e() {
         return this.listeningSound;
     }
 

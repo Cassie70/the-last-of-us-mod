@@ -22,6 +22,7 @@ public class ModSounds {
     public static final SoundEvent CLICKER_AWARE = registerSound("clicker_aware");
     public static final SoundEvent CLICKER_AMBIENT = registerSound("clicker_ambient");
     public static final SoundEvent CLICKER_AMBIENT_2 = registerSound("clicker_ambient_2");
+    public static final SoundEvent CLICKER_ALERT = registerSound("clicker_alert");
 
 
     // actual registration of all the custom SoundEvents

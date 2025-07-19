@@ -15,7 +15,7 @@ public class TheLastOfUsModClient implements ClientModInitializer {
 		EntityRendererRegistry.register(ModEntities.NAIL_BOMB_ENTITY, NailBombEntityRenderer::new);
 
 		EntityModelLayerRegistry.registerModelLayer(ClickerModel.CLICKER, ClickerModel::getTexturedModelData);
-		EntityRendererRegistry.register(ModEntities.CLICKER_ENTITY, ClickerRenderer::new);
+		EntityRendererRegistry.register(ModEntities.CLICKER, ClickerRenderer::new);
 
 
 	}
