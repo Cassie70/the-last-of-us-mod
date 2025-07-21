@@ -26,6 +26,7 @@ public class TheLastOfUsMod implements ModInitializer {
 		ModSounds.initialize();
 		ModEntities.initialize();
 		ModSensors.initialize();
+		ModBlocks.initialize();
 
 		ModEntities.registerAttributes();
 	}
