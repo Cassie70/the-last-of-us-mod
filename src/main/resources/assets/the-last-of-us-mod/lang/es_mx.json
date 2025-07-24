@@ -14,9 +14,16 @@
   "item.the-last-of-us-mod.clicker_spawn_egg": "Generar Chasqueador",
   "sound.the-last-of-us-mod.throw_molotov": "Molotov arrojado",
   "sound.the-last-of-us-mod.explode_molotov": "Explosión de molotov",
-  "entity.the-last-of-us-mod.clicker_entity": "Chasqueador",
+  "entity.the-last-of-us-mod.clicker": "Chasqueador",
+  "entity.the-last-of-us-mod.bloater": "Gordinflon",
+
   "sound.the-last-of-us-mod.clicker_angry": "Chasqueador enojado",
   "sound.the-last-of-us-mod.clicker_aware": "Chasqueador informado",
   "sound.the-last-of-us-mod.clicker_ambient": "Chasqueador escuchando",
-  "sound.the-last-of-us-mod.clicker_alert": "Chasqueador alertado"
+  "sound.the-last-of-us-mod.clicker_alert": "Chasqueador alertado",
+
+  "sound.the-last-of-us-mod.bloater_angry": "Gordinflon enojado",
+  "sound.the-last-of-us-mod.bloater_aware": "Gordinflon informado",
+  "sound.the-last-of-us-mod.bloater_ambient": "Gordinflon gruñidos",
+  "sound.the-last-of-us-mod.bloater_alert": "Gordinflon alertado"
 }

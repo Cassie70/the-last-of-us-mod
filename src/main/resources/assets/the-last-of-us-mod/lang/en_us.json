@@ -14,9 +14,16 @@
   "item.the-last-of-us-mod.clicker_spawn_egg": "Clicker Spawn Egg",
   "sound.the-last-of-us-mod.throw_molotov": "Thrown Molotov",
   "sound.the-last-of-us-mod.explode_molotov": "Molotov Explosion",
-  "entity.the-last-of-us-mod.clicker_entity": "Clicker",
+  "entity.the-last-of-us-mod.clicker": "Clicker",
+  "entity.the-last-of-us-mod.bloater": "Bloater",
+
   "sound.the-last-of-us-mod.clicker_angry": "Clicker Angry",
   "sound.the-last-of-us-mod.clicker_aware": "Clicker Aware",
   "sound.the-last-of-us-mod.clicker_ambient": "Clicker Listening",
-  "sound.the-last-of-us-mod.clicker_alert": "Clicker Alerted"
+  "sound.the-last-of-us-mod.clicker_alert": "Clicker Alerted",
+
+  "sound.the-last-of-us-mod.bloater_angry": "Bloater Angry",
+  "sound.the-last-of-us-mod.bloater_aware": "Bloater Aware",
+  "sound.the-last-of-us-mod.bloater_ambient": "Bloater Groans",
+  "sound.the-last-of-us-mod.bloater_alert": "Bloater Alerted"
 }

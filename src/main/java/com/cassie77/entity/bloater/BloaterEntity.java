@@ -1,4 +1,4 @@
-package com.cassie77.entity.clicker;
+package com.cassie77.entity.bloater;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModSounds;
@@ -48,28 +48,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-public class ClickerEntity extends HostileEntity implements Vibrations {
+public class BloaterEntity extends HostileEntity implements Vibrations {
 
     private static final TrackedData<Integer> ANGER;
-    private static final double MAX_HEALTH = 40.0;
+    private static final double MAX_HEALTH = 300.0;
     private static final double MOVE_SPEED = 0.3;
-    private static final double KNOCKBACK_RESISTANCE = 0.0;
+    private static final double KNOCKBACK_RESISTANCE = 0.75;
     private static final double ATTACK_KNOCKBACK = 1.0;
-    private static final double ATTACK_DAMAGE = 15.0;
+    private static final double ATTACK_DAMAGE = 25.0;
     private static final double FOLLOW_RANGE = 24.0;
-    private static final int ANGRINESS_AMOUNT = 50;
-    private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 3;
+    private static final int ANGRINESS_AMOUNT = 60;
+    private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 5;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackingAnimationState = new AnimationState();
     public final AnimationState roaringAnimationState = new AnimationState();
+    public final AnimationState throwingAnimationState = new AnimationState();
 
-    private final EntityGameEventHandler<Vibrations.VibrationListener> gameEventHandler = new EntityGameEventHandler<>(new Vibrations.VibrationListener(this));
-    private final Vibrations.Callback vibrationCallback = new ClickerEntity.VibrationCallback();
-    private Vibrations.ListenerData vibrationListenerData = new Vibrations.ListenerData();
+    private final EntityGameEventHandler<VibrationListener> gameEventHandler = new EntityGameEventHandler<>(new VibrationListener(this));
+    private final Callback vibrationCallback = new VibrationCallback();
+    private ListenerData vibrationListenerData = new ListenerData();
     WardenAngerManager angerManager = new WardenAngerManager(this::isValidTarget, Collections.emptyList());
 
-    public ClickerEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public BloaterEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
 
         this.experiencePoints = 20;
@@ -80,7 +81,6 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         this.setPathfindingPenalty(PathNodeType.LAVA, 8.0F);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, 0.0F);
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, 0.0F);
-
     }
 
     public boolean canSpawn(WorldView world) {
@@ -161,7 +161,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
 
     protected void mobTick(ServerWorld world) {
         Profiler profiler = Profilers.get();
-        profiler.push("ClickerBrain");
+        profiler.push("BloaterBrain");
         this.getBrain().tick(world, this);
         profiler.pop();
         super.mobTick(world);
@@ -171,7 +171,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
             this.updateAnger();
         }
 
-        ClickerBrain.updateActivities(this);
+        BloaterBrain.updateActivities(this);
     }
 
     public void handleStatus(byte status) {
@@ -195,7 +195,6 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
                 case STANDING -> {
                     this.roaringAnimationState.stop();
                     this.attackingAnimationState.stop();
-                    this.idleAnimationState.start(this.age);
                 }
 
             }
@@ -205,12 +204,12 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     }
     
     protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
-        return ClickerBrain.create(this, dynamic);
+        return BloaterBrain.create(this, dynamic);
     }
 
     @SuppressWarnings("unchecked")
-    public Brain<ClickerEntity> getBrain() {
-        return (Brain<ClickerEntity>) super.getBrain();
+    public Brain<BloaterEntity> getBrain() {
+        return (Brain<BloaterEntity>) super.getBrain();
     }
 
     protected void sendAiDebugData() {
@@ -230,7 +229,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     public boolean isValidTarget(@Nullable Entity entity) {
 
         if (entity instanceof LivingEntity livingEntity) {
-            return this.getWorld() == entity.getWorld() && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity) && !this.isTeammate(entity) && livingEntity.getType() != EntityType.ARMOR_STAND && livingEntity.getType() != ModEntities.CLICKER && livingEntity.getType() != ModEntities.BLOATER  &&!livingEntity.isInvulnerable() && !livingEntity.isDead() && this.getWorld().getWorldBorder().contains(livingEntity.getBoundingBox());
+            return this.getWorld() == entity.getWorld() && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity) && !this.isTeammate(entity) && livingEntity.getType() != EntityType.ARMOR_STAND && livingEntity.getType() != ModEntities.CLICKER && livingEntity.getType() != ModEntities.BLOATER && !livingEntity.isInvulnerable() && !livingEntity.isDead() && this.getWorld().getWorldBorder().contains(livingEntity.getBoundingBox());
         }
         return false;
     }
@@ -254,8 +253,8 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         }
     }
 
-    public ClickerAngriness getAngriness() {
-        return ClickerAngriness.getForAnger(this.getAngerAtTarget());
+    public BloaterAngriness getAngriness() {
+        return BloaterAngriness.getForAnger(this.getAngerAtTarget());
     }
 
     private int getAngerAtTarget() {
@@ -275,7 +274,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         if (!this.isAiDisabled() && this.isValidTarget(entity)) {
             boolean bl = !(this.getTarget() instanceof PlayerEntity);
             int i = this.angerManager.increaseAngerAt(entity, amount);
-            if (entity instanceof PlayerEntity && bl && ClickerAngriness.getForAnger(i).isAngry()) {
+            if (entity instanceof PlayerEntity && bl && BloaterAngriness.getForAnger(i).isAngry()) {
                 this.getBrain().forget(MemoryModuleType.ATTACK_TARGET);
             }
 
@@ -305,29 +304,19 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         boolean bl = super.damage(world, source, amount);
         if (!this.isAiDisabled()) {
             Entity entity = source.getAttacker();
-            this.increaseAngerAt(entity, ClickerAngriness.ANGRY.getThreshold() + 20, false);
+            this.increaseAngerAt(entity, BloaterAngriness.ANGRY.getThreshold() + 20, false);
 
             if (entity != null) {
                 double radius = 8.0D;
-                List<ClickerEntity> nearbyClickers = world.getEntitiesByClass(
-                        ClickerEntity.class,
+                List<BloaterEntity> nearbyBloaters = world.getEntitiesByClass(
+                        BloaterEntity.class,
                         this.getBoundingBox().expand(radius),
                         e -> e != this && e.isAlive() && !e.isAiDisabled()
                 );
 
-                for (ClickerEntity clicker : nearbyClickers) {
-                    clicker.increaseAngerAt(entity, ClickerAngriness.ANGRY.getThreshold() + 10, false);
-
-                    if (clicker.brain.getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).isEmpty() && entity instanceof LivingEntity livingEntity) {
-                        if (source.isDirect() || clicker.isInRange(livingEntity, 5.0F)) {
-                            clicker.updateAttackTarget(livingEntity);
-                        }
-                    }
-                }
+                for (BloaterEntity bloater : nearbyBloaters)
+                    bloater.increaseAngerAt(entity, BloaterAngriness.ANGRY.getThreshold() + 10, false);
             }
-
-
-
             if (this.brain.getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).isEmpty() && entity instanceof LivingEntity livingEntity) {
                 if (source.isDirect() || this.isInRange(livingEntity, 5.0F)) {
                     this.updateAttackTarget(livingEntity);
@@ -356,7 +345,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         if (!this.isAiDisabled() && !this.getBrain().hasMemoryModule(MemoryModuleType.TOUCH_COOLDOWN)) {
             this.getBrain().remember(MemoryModuleType.TOUCH_COOLDOWN, Unit.INSTANCE, 20L);
             this.increaseAngerAt(entity);
-            ClickerBrain.lookAtDisturbance(this, entity.getBlockPos());
+            BloaterBrain.lookAtDisturbance(this, entity.getBlockPos());
         }
 
         super.pushAway(entity);
@@ -375,21 +364,21 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         };
     }
 
-    public Vibrations.ListenerData getVibrationListenerData() {
+    public ListenerData getVibrationListenerData() {
         return this.vibrationListenerData;
     }
 
-    public Vibrations.Callback getVibrationCallback() {
+    public Callback getVibrationCallback() {
         return this.vibrationCallback;
     }
 
     static {
-        ANGER = DataTracker.registerData(ClickerEntity.class, TrackedDataHandlerRegistry.INTEGER);
+        ANGER = DataTracker.registerData(BloaterEntity.class, TrackedDataHandlerRegistry.INTEGER);
     }
 
-    class VibrationCallback implements Vibrations.Callback {
+    class VibrationCallback implements Callback {
         private static final int RANGE = 16;
-        private final PositionSource positionSource = new EntityPositionSource(ClickerEntity.this, ClickerEntity.this.getStandingEyeHeight());
+        private final PositionSource positionSource = new EntityPositionSource(BloaterEntity.this, BloaterEntity.this.getStandingEyeHeight());
 
         VibrationCallback() {
         }
@@ -411,11 +400,11 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         }
 
         public boolean accepts(ServerWorld world, BlockPos pos, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter) {
-            if (!ClickerEntity.this.isAiDisabled() && !ClickerEntity.this.isDead() && !ClickerEntity.this.getBrain().hasMemoryModule(MemoryModuleType.VIBRATION_COOLDOWN) && world.getWorldBorder().contains(pos)) {
+            if (!BloaterEntity.this.isAiDisabled() && !BloaterEntity.this.isDead() && !BloaterEntity.this.getBrain().hasMemoryModule(MemoryModuleType.VIBRATION_COOLDOWN) && world.getWorldBorder().contains(pos)) {
                 Entity var6 = emitter.sourceEntity();
 
                 if (var6 instanceof LivingEntity livingEntity) {
-                    return ClickerEntity.this.isValidTarget(livingEntity);
+                    return BloaterEntity.this.isValidTarget(livingEntity);
                 }
                 return true;
             } else {
@@ -424,35 +413,35 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         }
 
         public void accept(ServerWorld world, BlockPos pos, RegistryEntry<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
-            if (!ClickerEntity.this.isDead()) {
-                ClickerEntity.this.brain.remember(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 40L);
-                world.sendEntityStatus(ClickerEntity.this, (byte)61);
-                if (!ClickerEntity.this.isInPose(EntityPose.ROARING)) {
-                    ClickerEntity.this.playSound(ModSounds.CLICKER_ALERT, 2.0F, ClickerEntity.this.getSoundPitch());
+            if (!BloaterEntity.this.isDead()) {
+                BloaterEntity.this.brain.remember(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 40L);
+                world.sendEntityStatus(BloaterEntity.this, (byte)61);
+                if (!BloaterEntity.this.isInPose(EntityPose.ROARING)) {
+                    BloaterEntity.this.playSound(ModSounds.BLOATER_ALERT, 2.0F, BloaterEntity.this.getSoundPitch());
                 }
                 BlockPos blockPos = pos;
                 if (entity != null) {
-                    if (ClickerEntity.this.isInRange(entity, 30.0F)) {
-                        if (ClickerEntity.this.getBrain().hasMemoryModule(MemoryModuleType.RECENT_PROJECTILE)) {
-                            if (ClickerEntity.this.isValidTarget(entity)) {
+                    if (BloaterEntity.this.isInRange(entity, 30.0F)) {
+                        if (BloaterEntity.this.getBrain().hasMemoryModule(MemoryModuleType.RECENT_PROJECTILE)) {
+                            if (BloaterEntity.this.isValidTarget(entity)) {
                                 blockPos = entity.getBlockPos();
                             }
 
-                            ClickerEntity.this.increaseAngerAt(entity);
+                            BloaterEntity.this.increaseAngerAt(entity);
                         } else {
-                            ClickerEntity.this.increaseAngerAt(entity, 10, true);
+                            BloaterEntity.this.increaseAngerAt(entity, 10, true);
                         }
                     }
 
-                    ClickerEntity.this.getBrain().remember(MemoryModuleType.RECENT_PROJECTILE, Unit.INSTANCE, 100L);
+                    BloaterEntity.this.getBrain().remember(MemoryModuleType.RECENT_PROJECTILE, Unit.INSTANCE, 100L);
                 } else {
-                    ClickerEntity.this.increaseAngerAt(sourceEntity);
+                    BloaterEntity.this.increaseAngerAt(sourceEntity);
                 }
 
-                if (!ClickerEntity.this.getAngriness().isAngry()) {
-                    Optional<LivingEntity> optional = ClickerEntity.this.angerManager.getPrimeSuspect();
+                if (!BloaterEntity.this.getAngriness().isAngry()) {
+                    Optional<LivingEntity> optional = BloaterEntity.this.angerManager.getPrimeSuspect();
                     if (entity != null || optional.isEmpty() || optional.get() == sourceEntity) {
-                        ClickerBrain.lookAtDisturbance(ClickerEntity.this, blockPos);
+                        BloaterBrain.lookAtDisturbance(BloaterEntity.this, blockPos);
                     }
                 }
 

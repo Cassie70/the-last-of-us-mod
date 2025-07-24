@@ -24,6 +24,12 @@ public class ModSounds {
     public static final SoundEvent CLICKER_AMBIENT_2 = registerSound("clicker_ambient_2");
     public static final SoundEvent CLICKER_ALERT = registerSound("clicker_alert");
 
+    public static final SoundEvent BLOATER_ANGRY = registerSound("bloater_angry");
+    public static final SoundEvent BLOATER_AWARE = registerSound("bloater_aware");
+    public static final SoundEvent BLOATER_AMBIENT = registerSound("bloater_ambient");
+    public static final SoundEvent BLOATER_AMBIENT_2 = registerSound("bloater_ambient_2");
+    public static final SoundEvent BLOATER_AMBIENT_3 = registerSound("bloater_ambient_3");
+    public static final SoundEvent BLOATER_ALERT = registerSound("bloater_alert");
 
     // actual registration of all the custom SoundEvents
     private static SoundEvent registerSound(String id) {

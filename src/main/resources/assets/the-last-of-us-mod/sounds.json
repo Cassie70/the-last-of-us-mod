@@ -35,5 +35,31 @@
     "sounds": [
       "the-last-of-us-mod:clicker_alert"
     ]
-  }
+  },
+  "bloater_angry": {
+    "subtitle": "sound.the-last-of-us-mod.bloater_angry",
+    "sounds": [
+      "the-last-of-us-mod:bloater_angry"
+    ]
+  },
+  "bloater_aware": {
+    "subtitle": "sound.the-last-of-us-mod.bloater_aware",
+    "sounds": [
+      "the-last-of-us-mod:bloater_aware"
+    ]
+  },
+  "bloater_ambient": {
+    "subtitle": "sound.the-last-of-us-mod.bloater_ambient",
+    "sounds": [
+      "the-last-of-us-mod:bloater_ambient",
+      "the-last-of-us-mod:bloater_ambient_2",
+      "the-last-of-us-mod:bloater_ambient_3"
+    ]
+  },
+    "bloater_alert": {
+        "subtitle": "sound.the-last-of-us-mod.bloater_alert",
+        "sounds": [
+        "the-last-of-us-mod:bloater_alert"
+        ]
+    }
 }

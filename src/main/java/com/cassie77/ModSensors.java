@@ -1,5 +1,6 @@
 package com.cassie77;
 
+import com.cassie77.entity.bloater.BloaterAttackablesSensor;
 import com.cassie77.entity.clicker.ClickerAttackablesSensor;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
@@ -16,6 +17,7 @@ import static com.cassie77.TheLastOfUsMod.MOD_ID;
 public class ModSensors <U extends Sensor<?>>{
 
     public static final SensorType<ClickerAttackablesSensor> CLICKER_ENTITY_SENSOR = register("clicker_entity_sensor", ClickerAttackablesSensor::new);
+    public static final SensorType<BloaterAttackablesSensor> BLOATER_ENTITY_SENSOR = register("bloater_entity_sensor",BloaterAttackablesSensor::new);
 
     private final Supplier<U> factory;
 

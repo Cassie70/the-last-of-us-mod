@@ -1,5 +1,7 @@
 package com.cassie77;
 
+import com.cassie77.bloater.BloaterModel;
+import com.cassie77.bloater.BloaterRenderer;
 import com.cassie77.clicker.ClickerModel;
 import com.cassie77.clicker.ClickerRenderer;
 import net.fabricmc.api.ClientModInitializer;
@@ -16,6 +18,9 @@ public class TheLastOfUsModClient implements ClientModInitializer {
 
 		EntityModelLayerRegistry.registerModelLayer(ClickerModel.CLICKER, ClickerModel::getTexturedModelData);
 		EntityRendererRegistry.register(ModEntities.CLICKER, ClickerRenderer::new);
+
+		EntityModelLayerRegistry.registerModelLayer(BloaterModel.BLOATER, BloaterModel::getTexturedModelData);
+		EntityRendererRegistry.register(ModEntities.BLOATER, BloaterRenderer::new);
 
 
 	}
