@@ -11,6 +11,8 @@ public class BloaterRenderer extends MobEntityRenderer<BloaterEntity, BloaterRen
 
     public BloaterRenderer(EntityRendererFactory.Context context) {
         super(context, new BloaterModel(context.getPart(BloaterModel.BLOATER)), 0.5f);
+
+        this.addFeature(new BloaterHeldItemFeatureRenderer(this));
     }
 
     @Override
@@ -37,5 +39,6 @@ public class BloaterRenderer extends MobEntityRenderer<BloaterEntity, BloaterRen
         bloaterRenderState.idleAnimationState.copyFrom(bloater.idleAnimationState);
         bloaterRenderState.attackingAnimationState.copyFrom(bloater.attackingAnimationState);
         bloaterRenderState.throwingAnimationState.copyFrom(bloater.throwingAnimationState);
+
     }
 }

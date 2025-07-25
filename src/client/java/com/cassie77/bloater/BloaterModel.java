@@ -5,9 +5,9 @@ import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.animation.Animation;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
-
-import java.util.logging.Logger;
 
 public class BloaterModel extends EntityModel<BloaterRenderState> {
 
@@ -115,4 +115,8 @@ public class BloaterModel extends EntityModel<BloaterRenderState> {
         this.cabeza_completa.yaw = yaw * ((float)Math.PI / 180F);
     }
 
+    public void setArmAngle(Arm arm, MatrixStack matrices) {
+        ModelPart armPart = arm == Arm.LEFT ? this.brazo_izquierdo : this.brazo_derecho;
+        armPart.applyTransform(matrices);
+    }
 }

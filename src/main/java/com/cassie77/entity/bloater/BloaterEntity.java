@@ -131,6 +131,7 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     public boolean tryAttack(ServerWorld world, Entity target) {
         world.sendEntityStatus(this, (byte)4);
         this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, 1.5F, this.getSoundPitch());
+        ThrowTask.cooldown(this, 40);
         return super.tryAttack(world, target);
     }
 
@@ -178,7 +179,9 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
         if (status == 4) {
             this.roaringAnimationState.stop();
             this.attackingAnimationState.start(this.age);
-        }  else {
+        }else if (status == 62) {
+            this.throwingAnimationState.start(this.age);
+        } else {
             super.handleStatus(status);
         }
 
@@ -331,6 +334,7 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
         this.getBrain().forget(MemoryModuleType.ROAR_TARGET);
         this.getBrain().remember(MemoryModuleType.ATTACK_TARGET, target);
         this.getBrain().forget(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        ThrowTask.cooldown(this, 200);
     }
 
     public EntityDimensions getBaseDimensions(EntityPose pose) {

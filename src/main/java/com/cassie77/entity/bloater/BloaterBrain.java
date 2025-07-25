@@ -82,7 +82,6 @@ public class BloaterBrain {
     }
 
     private static void addRoarActivities(Brain<BloaterEntity> brain) {
-        // Lista de tareas, solo con tareas
         ImmutableList<Task<? super BloaterEntity>> roarTasks = ImmutableList.of(
                 new BloaterRoarTask()
         );
@@ -96,7 +95,7 @@ public class BloaterBrain {
     }
 
     private static void addFightActivities(BloaterEntity bloater, Brain<BloaterEntity> brain) {
-        brain.setTaskList(Activity.FIGHT, 10, ImmutableList.of(ForgetAttackTargetTask.create((world, target) -> !bloater.getAngriness().isAngry() || !bloater.isValidTarget(target), BloaterBrain::removeDeadSuspect, false), LookAtMobTask.create((entity) -> isTargeting(bloater, entity), (float)bloater.getAttributeValue(EntityAttributes.FOLLOW_RANGE)), RangedApproachTask.create(RANGED_APPROACH_SPEED), MeleeAttackTask.create(MELEE_ATTACK_INTERVAL)), MemoryModuleType.ATTACK_TARGET);
+        brain.setTaskList(Activity.FIGHT, 10, ImmutableList.of(ForgetAttackTargetTask.create((world, target) -> !bloater.getAngriness().isAngry() || !bloater.isValidTarget(target), BloaterBrain::removeDeadSuspect, false), LookAtMobTask.create((entity) -> isTargeting(bloater, entity), (float)bloater.getAttributeValue(EntityAttributes.FOLLOW_RANGE)), RangedApproachTask.create(RANGED_APPROACH_SPEED), MeleeAttackTask.create(MELEE_ATTACK_INTERVAL), new ThrowTask()), MemoryModuleType.ATTACK_TARGET);
     }
 
     private static boolean isTargeting(BloaterEntity bloater, LivingEntity entity) {
@@ -120,6 +119,6 @@ public class BloaterBrain {
 
     static {
         SENSORS = List.of(SensorType.NEAREST_PLAYERS, ModSensors.BLOATER_ENTITY_SENSOR);
-        MEMORY_MODULES = List.of(MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_NEMESIS, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleType.ROAR_TARGET, MemoryModuleType.DISTURBANCE_LOCATION, MemoryModuleType.RECENT_PROJECTILE, MemoryModuleType.IS_SNIFFING, MemoryModuleType.IS_EMERGING, MemoryModuleType.ROAR_SOUND_DELAY, MemoryModuleType.DIG_COOLDOWN, MemoryModuleType.ROAR_SOUND_COOLDOWN, MemoryModuleType.SNIFF_COOLDOWN, MemoryModuleType.TOUCH_COOLDOWN, MemoryModuleType.VIBRATION_COOLDOWN);
+        MEMORY_MODULES = List.of(MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_NEMESIS, MemoryModuleType.LOOK_TARGET, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleType.ROAR_TARGET, MemoryModuleType.DISTURBANCE_LOCATION, MemoryModuleType.RECENT_PROJECTILE, MemoryModuleType.IS_SNIFFING, MemoryModuleType.IS_EMERGING, MemoryModuleType.ROAR_SOUND_DELAY, MemoryModuleType.DIG_COOLDOWN, MemoryModuleType.ROAR_SOUND_COOLDOWN, MemoryModuleType.SNIFF_COOLDOWN, MemoryModuleType.TOUCH_COOLDOWN, MemoryModuleType.VIBRATION_COOLDOWN, MemoryModuleType.SONIC_BOOM_COOLDOWN, MemoryModuleType.SONIC_BOOM_SOUND_COOLDOWN, MemoryModuleType.SONIC_BOOM_SOUND_DELAY);
     }
 }

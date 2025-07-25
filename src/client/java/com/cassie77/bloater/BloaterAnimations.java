@@ -242,7 +242,7 @@ public class BloaterAnimations {
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(0f, 0f, 5f),
                                     Transformation.Interpolations.LINEAR))).build();
-    public static final AnimationDefinition THROW = AnimationDefinition.Builder.create(2f).looping()
+    public static final AnimationDefinition THROW = AnimationDefinition.Builder.create(2f)
             .addBoneAnimation("torso2",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(25f, 0f, 0f),
