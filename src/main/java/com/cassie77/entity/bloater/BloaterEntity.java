@@ -2,6 +2,8 @@ package com.cassie77.entity.bloater;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModSounds;
+import com.cassie77.entity.clicker.ClickerAngriness;
+import com.cassie77.entity.clicker.ClickerEntity;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.entity.*;
@@ -12,6 +14,7 @@ import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -47,6 +50,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.logging.Logger;
 
 public class BloaterEntity extends HostileEntity implements Vibrations {
 
@@ -304,7 +308,13 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     }
 
     public boolean damage(ServerWorld world, DamageSource source, float amount) {
+
+        if( source.isOf(DamageTypes.IN_FIRE) || source.isOf(DamageTypes.ON_FIRE)){
+           amount *= 1.5F;
+        }
+
         boolean bl = super.damage(world, source, amount);
+
         if (!this.isAiDisabled()) {
             Entity entity = source.getAttacker();
             this.increaseAngerAt(entity, BloaterAngriness.ANGRY.getThreshold() + 20, false);
@@ -317,8 +327,18 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
                         e -> e != this && e.isAlive() && !e.isAiDisabled()
                 );
 
+                List<ClickerEntity> nearbyClickers = world.getEntitiesByClass(
+                        ClickerEntity.class,
+                        this.getBoundingBox().expand(radius),
+                        e -> e.isAlive() && !e.isAiDisabled() && e.getTarget() == null
+                );
+
                 for (BloaterEntity bloater : nearbyBloaters)
                     bloater.increaseAngerAt(entity, BloaterAngriness.ANGRY.getThreshold() + 10, false);
+
+                for( ClickerEntity clicker : nearbyClickers)
+                    clicker.increaseAngerAt(entity, ClickerAngriness.ANGRY.getThreshold() + 10, false);
+
             }
             if (this.brain.getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).isEmpty() && entity instanceof LivingEntity livingEntity) {
                 if (source.isDirect() || this.isInRange(livingEntity, 5.0F)) {
@@ -326,7 +346,6 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
                 }
             }
         }
-
         return bl;
     }
 

@@ -1,13 +1,15 @@
 package com.cassie77.bloater;
 
+import com.cassie77.ModItems;
 import com.cassie77.TheLastOfUsMod;
 import com.cassie77.entity.bloater.BloaterEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-public class BloaterRenderer extends MobEntityRenderer<BloaterEntity, BloaterRenderState, BloaterModel> {
+public class BloaterRenderer extends MobEntityRenderer<BloaterEntity, BloaterRenderState, BloaterModel>{
 
     public BloaterRenderer(EntityRendererFactory.Context context) {
         super(context, new BloaterModel(context.getPart(BloaterModel.BLOATER)), 0.5f);
@@ -39,6 +41,7 @@ public class BloaterRenderer extends MobEntityRenderer<BloaterEntity, BloaterRen
         bloaterRenderState.idleAnimationState.copyFrom(bloater.idleAnimationState);
         bloaterRenderState.attackingAnimationState.copyFrom(bloater.attackingAnimationState);
         bloaterRenderState.throwingAnimationState.copyFrom(bloater.throwingAnimationState);
+        bloaterRenderState.heldItem = bloater.getOffHandStack();
 
     }
 }

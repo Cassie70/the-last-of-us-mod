@@ -117,6 +117,8 @@ public class BloaterModel extends EntityModel<BloaterRenderState> {
 
     public void setArmAngle(Arm arm, MatrixStack matrices) {
         ModelPart armPart = arm == Arm.LEFT ? this.brazo_izquierdo : this.brazo_derecho;
-        armPart.applyTransform(matrices);
+        torso.applyTransform(matrices);       // Torso (raíz del modelo)
+        torso2.applyTransform(matrices);      // Torso2 (hijo de torso)
+        brazo_izquierdo.applyTransform(matrices); // Brazo izquierdo (hijo de torso2)
     }
 }

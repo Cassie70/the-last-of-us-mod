@@ -7,6 +7,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -91,7 +93,14 @@ public class MolotovEntity extends ThrownItemEntity {
             float damageAmount = 15.0F;
             if(this.getWorld() instanceof ServerWorld serverWorld)
                 entity.damage(serverWorld,this.getWorld().getDamageSources().generic(), damageAmount);
-            entity.setOnFireFor(10);
+            entity.setOnFireFor(20);
+
+            if(entity instanceof LivingEntity livingEntity){
+                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 7, false, true));
+                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 100, 5, false, true));
+                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 5, false, true));
+            }
+
         }
     }
 

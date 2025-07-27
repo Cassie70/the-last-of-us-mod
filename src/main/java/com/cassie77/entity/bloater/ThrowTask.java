@@ -1,6 +1,7 @@
 package com.cassie77.entity.bloater;
 
 import com.cassie77.ModItems;
+import com.cassie77.ModSounds;
 import com.cassie77.item.molotov.MolotovEntity;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.LivingEntity;
@@ -26,6 +27,8 @@ public class ThrowTask extends MultiTickTask<BloaterEntity> {
     private static final int RUN_TIME = MathHelper.ceil(60.0);
     private static final float THROW_SPEED = 2F;
     private static final float THROW_PITCH = 0.0F;
+    private static final int ITEM_APPEAR_DELAY = 20; // ticks antes de aparecer el ítem
+    private int ticksSinceStart = 0;
 
     public ThrowTask() {
         super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryModuleState.VALUE_PRESENT, MemoryModuleType.SONIC_BOOM_COOLDOWN, MemoryModuleState.VALUE_ABSENT, MemoryModuleType.SONIC_BOOM_SOUND_COOLDOWN, MemoryModuleState.REGISTERED, MemoryModuleType.SONIC_BOOM_SOUND_DELAY, MemoryModuleState.REGISTERED), RUN_TIME);
@@ -43,12 +46,18 @@ public class ThrowTask extends MultiTickTask<BloaterEntity> {
         bloaterEntity.getBrain().remember(MemoryModuleType.ATTACK_COOLING_DOWN, true, RUN_TIME);
         bloaterEntity.getBrain().remember(MemoryModuleType.SONIC_BOOM_SOUND_DELAY, Unit.INSTANCE, SOUND_DELAY);
         serverWorld.sendEntityStatus(bloaterEntity, (byte)62);
-        bloaterEntity.playSound(SoundEvents.ENTITY_WARDEN_SONIC_CHARGE, 3.0F, 1.0F);
 
-        bloaterEntity.setStackInHand(Hand.OFF_HAND, new ItemStack(ModItems.MOLOTOV));
+
+        ticksSinceStart = 0;
     }
 
     protected void keepRunning(ServerWorld serverWorld, BloaterEntity bloaterEntity, long l) {
+        ticksSinceStart++;
+
+        if (ticksSinceStart == ITEM_APPEAR_DELAY) {
+            bloaterEntity.setStackInHand(Hand.OFF_HAND, new ItemStack(ModItems.MOLOTOV));
+        }
+
         bloaterEntity.getBrain().getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> bloaterEntity.getLookControl().lookAt(target.getPos()));
         if (!bloaterEntity.getBrain().hasMemoryModule(MemoryModuleType.SONIC_BOOM_SOUND_DELAY) && !bloaterEntity.getBrain().hasMemoryModule(MemoryModuleType.SONIC_BOOM_SOUND_COOLDOWN)) {
             bloaterEntity.getBrain().remember(MemoryModuleType.SONIC_BOOM_SOUND_COOLDOWN, Unit.INSTANCE, (RUN_TIME - SOUND_DELAY));
@@ -64,7 +73,7 @@ public class ThrowTask extends MultiTickTask<BloaterEntity> {
 
                 serverWorld.spawnEntity(molotovEntity);
 
-                bloaterEntity.playSound(SoundEvents.ENTITY_WITCH_THROW, 1.5F, 1.0F);
+                bloaterEntity.playSound(ModSounds.THROW_MOLOTOV, 3.0F, 1.0F);
 
                 bloaterEntity.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
             });
@@ -72,6 +81,7 @@ public class ThrowTask extends MultiTickTask<BloaterEntity> {
     }
 
     protected void finishRunning(ServerWorld serverWorld, BloaterEntity bloaterEntity, long l) {
+        ticksSinceStart = 0;
         cooldown(bloaterEntity, COOLDOWN);
     }
 

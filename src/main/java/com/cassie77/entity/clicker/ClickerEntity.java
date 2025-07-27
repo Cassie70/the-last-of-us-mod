@@ -2,6 +2,7 @@ package com.cassie77.entity.clicker;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModSounds;
+import com.cassie77.entity.bloater.BloaterEntity;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.entity.*;
@@ -315,18 +316,18 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
                         e -> e != this && e.isAlive() && !e.isAiDisabled()
                 );
 
-                for (ClickerEntity clicker : nearbyClickers) {
+                List<BloaterEntity> nearbyBloaters = world.getEntitiesByClass(
+                        BloaterEntity.class,
+                        this.getBoundingBox().expand(radius),
+                        e -> e.isAlive() && !e.isAiDisabled()
+                );
+
+                for (ClickerEntity clicker : nearbyClickers)
                     clicker.increaseAngerAt(entity, ClickerAngriness.ANGRY.getThreshold() + 10, false);
 
-                    if (clicker.brain.getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).isEmpty() && entity instanceof LivingEntity livingEntity) {
-                        if (source.isDirect() || clicker.isInRange(livingEntity, 5.0F)) {
-                            clicker.updateAttackTarget(livingEntity);
-                        }
-                    }
-                }
+                for (BloaterEntity bloater : nearbyBloaters)
+                    bloater.increaseAngerAt(entity, ClickerAngriness.ANGRY.getThreshold() + 10, false);
             }
-
-
 
             if (this.brain.getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).isEmpty() && entity instanceof LivingEntity livingEntity) {
                 if (source.isDirect() || this.isInRange(livingEntity, 5.0F)) {
