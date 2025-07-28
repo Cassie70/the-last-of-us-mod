@@ -3,6 +3,7 @@ package com.cassie77;
 import com.cassie77.entity.bloater.BloaterEntity;
 import com.cassie77.entity.clicker.ClickerEntity;
 import com.cassie77.item.bottle.BottleEntity;
+import com.cassie77.item.micotoxinsac.MycotoxinSacEntity;
 import com.cassie77.item.molotov.MolotovEntity;
 import com.cassie77.item.nailbomb.NailBombEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -22,6 +23,7 @@ public class ModEntities {
     public static final EntityType<MolotovEntity> MOLOTOV_ENTITY = register("molotov_entity", EntityType.Builder.<MolotovEntity>create(MolotovEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10));
     public static final EntityType<BottleEntity> BOTTLE_ENTITY = register("bottle_entity", EntityType.Builder.<BottleEntity>create(BottleEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10));
     public static final EntityType<NailBombEntity> NAIL_BOMB_ENTITY = register("nail_bomb_entity", EntityType.Builder.<NailBombEntity>create(NailBombEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10));
+    public static final EntityType<MycotoxinSacEntity> MYCOTOXIN_SAC_ENTITY = register("mycotoxin_sac_entity", EntityType.Builder.<MycotoxinSacEntity>create(MycotoxinSacEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10));
 
     public static final EntityType<ClickerEntity> CLICKER = register("clicker", EntityType.Builder.create(ClickerEntity::new, SpawnGroup.MONSTER)
             .dimensions(0.6F, 1.95F).eyeHeight(1.74F).passengerAttachments(2.0125F).vehicleAttachment(-0.7F).maxTrackingRange(8));
