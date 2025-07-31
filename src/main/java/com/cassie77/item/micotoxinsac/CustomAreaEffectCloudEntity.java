@@ -1,4 +1,4 @@
-package com.cassie77.entity.bloater;
+package com.cassie77.item.micotoxinsac;
 
 import com.cassie77.ModEntities;
 import net.minecraft.entity.*;

@@ -1,7 +1,7 @@
 package com.cassie77;
 
 import com.cassie77.entity.bloater.BloaterEntity;
-import com.cassie77.entity.bloater.CustomAreaEffectCloudEntity;
+import com.cassie77.item.micotoxinsac.CustomAreaEffectCloudEntity;
 import com.cassie77.entity.clicker.ClickerEntity;
 import com.cassie77.item.bottle.BottleEntity;
 import com.cassie77.item.micotoxinsac.MycotoxinSacEntity;

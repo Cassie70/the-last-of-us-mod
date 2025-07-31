@@ -2,7 +2,6 @@ package com.cassie77.item.micotoxinsac;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModItems;
-import com.cassie77.entity.bloater.CustomAreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -24,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MycotoxinSacEntity extends ThrownItemEntity {
 
-    public static final float radius = 3.0F;
+    public static final float radius = 4.0F;
 
     public MycotoxinSacEntity(EntityType<? extends MycotoxinSacEntity> entityType, World world) {
         super(entityType, world);
