@@ -50,7 +50,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.logging.Logger;
 
 public class BloaterEntity extends HostileEntity implements Vibrations {
 
@@ -180,10 +179,16 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     }
 
     public void handleStatus(byte status) {
+
+        this.roaringAnimationState.stop();
+        this.throwingAnimationState.stop();
+        this.attackingAnimationState.stop();
+
         if (status == 4) {
             this.roaringAnimationState.stop();
             this.attackingAnimationState.start(this.age);
         }else if (status == 62) {
+            this.roaringAnimationState.stop();
             this.throwingAnimationState.start(this.age);
         } else {
             super.handleStatus(status);
@@ -194,19 +199,10 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     public void onTrackedDataSet(TrackedData<?> data) {
         if (POSE.equals(data)) {
             switch (this.getPose()) {
-                case ROARING -> this.roaringAnimationState.start(this.age);
-                case SNIFFING -> {
-                    this.roaringAnimationState.stop();
-                    this.roaringAnimationState.start(this.age);
-                }
-                case STANDING -> {
-                    this.roaringAnimationState.stop();
-                    this.attackingAnimationState.stop();
-                }
-
+                case ROARING, SNIFFING -> this.roaringAnimationState.start(this.age);
+                case STANDING -> this.roaringAnimationState.stop();
             }
         }
-
         super.onTrackedDataSet(data);
     }
     

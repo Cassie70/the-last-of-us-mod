@@ -71,11 +71,10 @@ public class ModItems {
             entries.add(UPGRADED_PIPE);
             entries.add(SHIV);
             entries.add(MYCOTOXIN_SAC);
+
         });
 
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> {
-            entries.add(CLICKER_SPAWN_EGG);
-        });
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> entries.add(CLICKER_SPAWN_EGG));
     }
 
 }

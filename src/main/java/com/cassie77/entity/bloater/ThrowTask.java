@@ -1,8 +1,7 @@
 package com.cassie77.entity.bloater;
 
 import com.cassie77.ModItems;
-import com.cassie77.ModSounds;
-import com.cassie77.item.molotov.MolotovEntity;
+import com.cassie77.item.micotoxinsac.MycotoxinSacEntity;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleState;
@@ -55,7 +54,7 @@ public class ThrowTask extends MultiTickTask<BloaterEntity> {
         ticksSinceStart++;
 
         if (ticksSinceStart == ITEM_APPEAR_DELAY) {
-            bloaterEntity.setStackInHand(Hand.OFF_HAND, new ItemStack(ModItems.MOLOTOV));
+            bloaterEntity.setStackInHand(Hand.OFF_HAND, new ItemStack(ModItems.MYCOTOXIN_SAC));
         }
 
         bloaterEntity.getBrain().getOptionalRegisteredMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> bloaterEntity.getLookControl().lookAt(target.getPos()));
@@ -65,15 +64,15 @@ public class ThrowTask extends MultiTickTask<BloaterEntity> {
             Objects.requireNonNull(bloaterEntity);
             var10000.filter(bloaterEntity::isValidTarget).filter((target) -> bloaterEntity.isInRange(target, HORIZONTAL_RANGE, VERTICAL_RANGE)).ifPresent((target) -> {
 
-                MolotovEntity molotovEntity = new MolotovEntity(serverWorld, bloaterEntity, bloaterEntity.getStackInHand(Hand.OFF_HAND));
-                molotovEntity.setPosition(bloaterEntity.getX(), bloaterEntity.getEyeY() - 0.1, bloaterEntity.getZ());
+                MycotoxinSacEntity mycotoxinSacEntity = new MycotoxinSacEntity(serverWorld, bloaterEntity, bloaterEntity.getStackInHand(Hand.OFF_HAND));
+                mycotoxinSacEntity.setPosition(bloaterEntity.getX(), bloaterEntity.getEyeY() - 0.1, bloaterEntity.getZ());
 
-                Vec3d targetPos = target.getEyePos().subtract(molotovEntity.getPos());
-                molotovEntity.setVelocity(targetPos.x, targetPos.y, targetPos.z, THROW_SPEED, THROW_PITCH);
+                Vec3d targetPos = target.getEyePos().subtract(mycotoxinSacEntity.getPos());
+                mycotoxinSacEntity.setVelocity(targetPos.x, targetPos.y, targetPos.z, THROW_SPEED, THROW_PITCH);
 
-                serverWorld.spawnEntity(molotovEntity);
+                serverWorld.spawnEntity(mycotoxinSacEntity);
 
-                bloaterEntity.playSound(ModSounds.THROW_MOLOTOV, 3.0F, 1.0F);
+                bloaterEntity.playSound(SoundEvents.ENTITY_SNOWBALL_THROW, 3.0F, 1.0F);
 
                 bloaterEntity.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
             });

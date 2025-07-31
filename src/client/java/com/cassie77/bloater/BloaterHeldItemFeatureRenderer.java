@@ -30,6 +30,7 @@ public class BloaterHeldItemFeatureRenderer extends FeatureRenderer<BloaterRende
         model.setArmAngle(Arm.LEFT, matrices);
 
         matrices.translate(0, (11 * 0.0625) - 0.2, 0); // 0.0625 = factor de píxel a bloque
+        matrices.scale(0.75f, 0.75f, 0.75f);
 
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 

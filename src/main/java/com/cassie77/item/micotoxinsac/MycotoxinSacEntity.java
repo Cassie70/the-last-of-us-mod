@@ -2,6 +2,7 @@ package com.cassie77.item.micotoxinsac;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModItems;
+import com.cassie77.entity.bloater.CustomAreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -14,12 +15,16 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class MycotoxinSacEntity extends ThrownItemEntity {
 
+    public static final float radius = 3.0F;
 
     public MycotoxinSacEntity(EntityType<? extends MycotoxinSacEntity> entityType, World world) {
         super(entityType, world);
@@ -56,10 +61,53 @@ public class MycotoxinSacEntity extends ThrownItemEntity {
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {
-            this.getWorld().sendEntityStatus(this, (byte)3);
+            this.getWorld().sendEntityStatus(this, (byte) 3);
+
+            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(),
+                    SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+
+            Entity var6 = this.getOwner();
+            if (var6 instanceof LivingEntity livingEntity) {
+
+                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 1.5F, false, World.ExplosionSourceType.NONE);
+                CustomAreaEffectCloudEntity cloud = getAreaEffectCloudEntity(livingEntity);
+
+                ((ServerWorld) this.getWorld()).spawnParticles(
+                        ParticleTypes.EXPLOSION,
+                        this.getX() + 0.5,
+                        this.getY() + 0.5,
+                        this.getZ() + 0.5,
+                        10,
+                        1, 1, 1,
+                        0.0
+                );
+
+                cloud.addEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 2));
+
+                cloud.copyComponentsFrom(this.getStack());
+                this.getWorld().spawnEntity(cloud);
+
+            }
 
             this.discard();
         }
+    }
+
+    private @NotNull CustomAreaEffectCloudEntity getAreaEffectCloudEntity(LivingEntity livingEntity) {
+        CustomAreaEffectCloudEntity cloud = new CustomAreaEffectCloudEntity(
+                this.getWorld(),
+                this.getX(),
+                this.getY(),
+                this.getZ()
+        );
+
+        cloud.setOwner(livingEntity);
+        cloud.setRadius(radius);
+        cloud.setRadiusOnUse(-0.5F);
+        cloud.setDuration(600);
+        cloud.setWaitTime(10);
+        cloud.setRadiusGrowth(-radius / (float) cloud.getDuration());
+        return cloud;
     }
 
     @Override
@@ -69,14 +117,12 @@ public class MycotoxinSacEntity extends ThrownItemEntity {
         if (!this.getWorld().isClient) {
             Entity entity = entityHitResult.getEntity();
 
-            float damageAmount = 15.0F;
+            float damageAmount = 1.0F;
             if(this.getWorld() instanceof ServerWorld serverWorld)
                 entity.damage(serverWorld,this.getWorld().getDamageSources().generic(), damageAmount);
 
             if(entity instanceof LivingEntity livingEntity){
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 3, false, true));
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 100, 3, false, true));
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 100, 3, false, true));
+                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 1, false, true));
             }
 
         }
@@ -87,6 +133,10 @@ public class MycotoxinSacEntity extends ThrownItemEntity {
         super.tick();
 
         if (this.getWorld().isClient) {
+            ParticleEffect particleEffect = ParticleTypes.SMOKE;
+            for (int i = 0; i < 2; ++i) {
+                this.getWorld().addParticleClient(particleEffect, this.getX() + this.getRandom().nextGaussian() * 0.2D, this.getY() + this.getRandom().nextGaussian() * 0.2D, this.getZ() + this.getRandom().nextGaussian() * 0.2D, 0.0, 0.0, 0.0);
+            }
         }
     }
 }

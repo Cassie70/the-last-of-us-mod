@@ -7,6 +7,7 @@ import com.cassie77.clicker.ClickerRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.render.entity.EmptyEntityRenderer;
 
 public class TheLastOfUsModClient implements ClientModInitializer {
 	@Override
@@ -16,13 +17,13 @@ public class TheLastOfUsModClient implements ClientModInitializer {
 		EntityRendererRegistry.register(ModEntities.BOTTLE_ENTITY, BottleEntityRenderer::new);
 		EntityRendererRegistry.register(ModEntities.NAIL_BOMB_ENTITY, NailBombEntityRenderer::new);
 		EntityRendererRegistry.register(ModEntities.MYCOTOXIN_SAC_ENTITY, MycotoxinSacEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.CUSTOM_AREA_EFFECT_CLOUD_ENTITY, EmptyEntityRenderer::new);
 
 		EntityModelLayerRegistry.registerModelLayer(ClickerModel.CLICKER, ClickerModel::getTexturedModelData);
 		EntityRendererRegistry.register(ModEntities.CLICKER, ClickerRenderer::new);
 
 		EntityModelLayerRegistry.registerModelLayer(BloaterModel.BLOATER, BloaterModel::getTexturedModelData);
 		EntityRendererRegistry.register(ModEntities.BLOATER, BloaterRenderer::new);
-
 
 	}
 }

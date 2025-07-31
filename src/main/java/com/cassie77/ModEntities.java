@@ -1,6 +1,7 @@
 package com.cassie77;
 
 import com.cassie77.entity.bloater.BloaterEntity;
+import com.cassie77.entity.bloater.CustomAreaEffectCloudEntity;
 import com.cassie77.entity.clicker.ClickerEntity;
 import com.cassie77.item.bottle.BottleEntity;
 import com.cassie77.item.micotoxinsac.MycotoxinSacEntity;
@@ -31,6 +32,7 @@ public class ModEntities {
     public static final EntityType<BloaterEntity> BLOATER = register("bloater", EntityType.Builder.create(BloaterEntity::new, SpawnGroup.MONSTER)
             .dimensions(1.0F, 2.25F).eyeHeight(1.8F).passengerAttachments(3.0F).vehicleAttachment(-1.0F).maxTrackingRange(32));
 
+    public static final EntityType<CustomAreaEffectCloudEntity> CUSTOM_AREA_EFFECT_CLOUD_ENTITY = register("area_effect_cloud", EntityType.Builder.<CustomAreaEffectCloudEntity>create(CustomAreaEffectCloudEntity::new, SpawnGroup.MISC).dropsNothing().makeFireImmune().dimensions(6.0F, 3F).maxTrackingRange(10).trackingTickInterval(Integer.MAX_VALUE));
 
     private static <T extends Entity> EntityType<T> register(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
         return Registry.register(Registries.ENTITY_TYPE, key, type.build(key));
