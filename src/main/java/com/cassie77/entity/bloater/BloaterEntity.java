@@ -18,7 +18,11 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.WaterCreatureEntity;
+import net.minecraft.entity.passive.WaterAnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -49,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 public class BloaterEntity extends HostileEntity implements Vibrations {
@@ -228,11 +233,27 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
 
     }
 
+    private static final Set<EntityType<?>> INVALID_TARGET_TYPES = Set.of(
+            EntityType.ARMOR_STAND,
+            ModEntities.CLICKER,
+            ModEntities.BLOATER
+    );
+
+
     @Contract("null->false")
     public boolean isValidTarget(@Nullable Entity entity) {
 
         if (entity instanceof LivingEntity livingEntity) {
-            return this.getWorld() == entity.getWorld() && EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity) && !this.isTeammate(entity) && livingEntity.getType() != EntityType.ARMOR_STAND && livingEntity.getType() != ModEntities.CLICKER && livingEntity.getType() != ModEntities.BLOATER && !livingEntity.isInvulnerable() && !livingEntity.isDead() && this.getWorld().getWorldBorder().contains(livingEntity.getBoundingBox());
+
+            if (livingEntity instanceof WaterCreatureEntity || livingEntity instanceof WaterAnimalEntity) {
+                return false;
+            }
+            return this.getWorld() == entity.getWorld() &&
+                    EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(entity) &&
+                    !this.isTeammate(entity) &&
+                    !INVALID_TARGET_TYPES.contains(livingEntity.getType()) &&
+                    !livingEntity.isInvulnerable() &&
+                    !livingEntity.isDead() && this.getWorld().getWorldBorder().contains(livingEntity.getBoundingBox());
         }
         return false;
     }
@@ -466,5 +487,13 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
 
             }
         }
+    }
+
+    @Override
+    public boolean addStatusEffect(StatusEffectInstance effect, @Nullable Entity source) {
+        if (effect.getEffectType() == StatusEffects.POISON) {
+            return false;
+        }
+        return super.addStatusEffect(effect, source);
     }
 }
