@@ -38,6 +38,7 @@ public class ModItems {
     public static final Item SHIV = register("shiv", settings -> new Item(settings.sword(ToolMaterial.IRON, 17f, -3.5f).maxDamage(3)));
 
     public static final Item CLICKER_SPAWN_EGG = register("clicker_spawn_egg", settings -> new SpawnEggItem(ModEntities.CLICKER, settings));
+    public static final Item BLOATER_SPAWN_EGG = register("bloater_spawn_egg", settings -> new SpawnEggItem(ModEntities.BLOATER, settings));
 
     public static Item register(String name, Function<Item.Settings, Item> itemFactory) {
         // Create the item key.
@@ -75,6 +76,7 @@ public class ModItems {
         });
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> entries.add(CLICKER_SPAWN_EGG));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(entries -> entries.add(BLOATER_SPAWN_EGG));
     }
 
 }
