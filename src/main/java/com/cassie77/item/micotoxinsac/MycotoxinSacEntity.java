@@ -2,6 +2,7 @@ package com.cassie77.item.micotoxinsac;
 
 import com.cassie77.ModEntities;
 import com.cassie77.ModItems;
+import com.cassie77.entity.CustomAreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -19,11 +20,10 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 public class MycotoxinSacEntity extends ThrownItemEntity {
 
-    public static final float radius = 4.0F;
+    public static final float RADIUS = 3.0F;
 
     public MycotoxinSacEntity(EntityType<? extends MycotoxinSacEntity> entityType, World world) {
         super(entityType, world);
@@ -59,54 +59,39 @@ public class MycotoxinSacEntity extends ThrownItemEntity {
     @Override
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (!this.getWorld().isClient) {
-            this.getWorld().sendEntityStatus(this, (byte) 3);
 
-            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(),
+        World world = this.getWorld();
+
+        if(world instanceof ServerWorld serverWorld) {
+
+            serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(),
                     SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 
-            Entity var6 = this.getOwner();
-            if (var6 instanceof LivingEntity livingEntity) {
+            serverWorld.createExplosion(this, this.getX(), this.getY(), this.getZ(), 1.5F, false, World.ExplosionSourceType.NONE);
 
-                this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 1.5F, false, World.ExplosionSourceType.NONE);
-                CustomAreaEffectCloudEntity cloud = getAreaEffectCloudEntity(livingEntity);
-
-                ((ServerWorld) this.getWorld()).spawnParticles(
-                        ParticleTypes.EXPLOSION,
-                        this.getX() + 0.5,
-                        this.getY() + 0.5,
-                        this.getZ() + 0.5,
-                        10,
-                        1, 1, 1,
-                        0.0
-                );
-
-                cloud.addEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 2));
-
-                cloud.copyComponentsFrom(this.getStack());
-                this.getWorld().spawnEntity(cloud);
-
-            }
+            this.spawnAreaEffectCloud(serverWorld);
 
             this.discard();
         }
     }
 
-    private @NotNull CustomAreaEffectCloudEntity getAreaEffectCloudEntity(LivingEntity livingEntity) {
-        CustomAreaEffectCloudEntity cloud = new CustomAreaEffectCloudEntity(
-                this.getWorld(),
-                this.getX(),
-                this.getY(),
-                this.getZ()
-        );
 
-        cloud.setOwner(livingEntity);
-        cloud.setRadius(radius);
+    public void spawnAreaEffectCloud(ServerWorld world) {
+        CustomAreaEffectCloudEntity cloud = new CustomAreaEffectCloudEntity(this.getWorld(), this.getX(), this.getY(), this.getZ());
+        Entity var6 = this.getOwner();
+        if (var6 instanceof LivingEntity livingEntity) {
+            cloud.setOwner(livingEntity);
+        }
+
+        cloud.setParticleArea(ParticleTypes.FIREFLY);
+        cloud.setDensityFactor(0.1F);
+        cloud.setRadius(RADIUS);
         cloud.setRadiusOnUse(-0.5F);
         cloud.setDuration(600);
         cloud.setWaitTime(10);
-        cloud.setRadiusGrowth(-radius / (float) cloud.getDuration());
-        return cloud;
+        cloud.setRadiusGrowth(-cloud.getRadius() / (float)cloud.getDuration());
+        cloud.addEffect(new StatusEffectInstance(StatusEffects.POISON, 200, 2));
+        world.spawnEntity(cloud);
     }
 
     @Override

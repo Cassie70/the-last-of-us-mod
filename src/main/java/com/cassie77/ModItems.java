@@ -5,6 +5,7 @@ import com.cassie77.item.bottle.BottleItem;
 import com.cassie77.item.micotoxinsac.MycotoxinSacItem;
 import com.cassie77.item.molotov.MolotovItem;
 import com.cassie77.item.nailbomb.NailBombItem;
+import com.cassie77.item.smokebomb.SmokeBombItem;
 import com.cassie77.item.upgratedpipe.UpgratedPipeItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.*;
@@ -32,6 +33,7 @@ public class ModItems {
     public static final Item BOTTLE = register("bottle", BottleItem::new);
     public static final Item NAIL_BOMB = register("nail_bomb", NailBombItem::new);
     public static final Item MYCOTOXIN_SAC = register("mycotoxin_sac", MycotoxinSacItem::new);
+    public static final Item SMOKE_BOMB = register("smoke_bomb", SmokeBombItem::new);
 
     public static final Item PIPE = register("pipe", settings -> new Item(settings.sword(ToolMaterial.IRON, 2f, -2f).maxDamage(8)));
     public static final Item UPGRADED_PIPE = register("upgraded_pipe", settings -> new UpgratedPipeItem(settings.sword(ToolMaterial.IRON, 27f, -3.5f).maxDamage(3)));
@@ -67,6 +69,7 @@ public class ModItems {
             entries.add(BOTTLE);
             entries.add(MOLOTOV);
             entries.add(NAIL_BOMB);
+            entries.add(SMOKE_BOMB);
             entries.add(MEDKIT);
             entries.add(PIPE);
             entries.add(UPGRADED_PIPE);
