@@ -88,7 +88,7 @@ public class MycotoxinSacEntity extends ThrownItemEntity {
         cloud.setRadius(RADIUS);
         cloud.setRadiusOnUse(-0.5F);
         cloud.setDuration(600);
-        cloud.setWaitTime(10);
+        cloud.setWaitTime(0);
         cloud.setRadiusGrowth(-cloud.getRadius() / (float)cloud.getDuration());
         cloud.addEffect(new StatusEffectInstance(StatusEffects.POISON, 200, 2));
         world.spawnEntity(cloud);

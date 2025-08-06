@@ -86,7 +86,7 @@ public class SmokeBombEntity extends ThrownItemEntity {
         cloud.setRadius(RADIUS);
         cloud.setRadiusOnUse(-0.1F);
         cloud.setDuration(1000);
-        cloud.setWaitTime(10);
+        cloud.setWaitTime(0);
         cloud.setRadiusGrowth(-cloud.getRadius() / (float)cloud.getDuration());
         cloud.addEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 40, 0, false, true));
         cloud.addEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 40, 0, false, true));
