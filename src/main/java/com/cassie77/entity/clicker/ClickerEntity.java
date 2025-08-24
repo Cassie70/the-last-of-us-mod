@@ -32,10 +32,7 @@ import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.profiler.Profilers;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.*;
 import net.minecraft.world.event.EntityPositionSource;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.event.PositionSource;
@@ -48,6 +45,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+
 
 public class ClickerEntity extends HostileEntity implements Vibrations {
 
@@ -57,18 +56,26 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     private static final double KNOCKBACK_RESISTANCE = 0.0;
     private static final double ATTACK_KNOCKBACK = 1.0;
     private static final double ATTACK_DAMAGE = 15.0;
-    private static final double FOLLOW_RANGE = 24.0;
+    private static final double FOLLOW_RANGE = 8.0;
     private static final int ANGRINESS_AMOUNT = 50;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 3;
+    private static final double CALLING_DISTANCE = 3.0F;
+
+    private static final Predicate<Difficulty> DOOR_BREAK_DIFFICULTY_CHECKER;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackingAnimationState = new AnimationState();
     public final AnimationState roaringAnimationState = new AnimationState();
 
+    private final ClickerBreakDoorGoal breakDoorsGoal;
+
     private final EntityGameEventHandler<Vibrations.VibrationListener> gameEventHandler = new EntityGameEventHandler<>(new Vibrations.VibrationListener(this));
     private final Vibrations.Callback vibrationCallback = new ClickerEntity.VibrationCallback();
     private Vibrations.ListenerData vibrationListenerData = new Vibrations.ListenerData();
     WardenAngerManager angerManager = new WardenAngerManager(this::isValidTarget, Collections.emptyList());
+
+
+    private boolean canBreakDoors;
 
     public ClickerEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -82,7 +89,32 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, 0.0F);
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, 0.0F);
 
+        this.breakDoorsGoal = new ClickerBreakDoorGoal(this, DOOR_BREAK_DIFFICULTY_CHECKER);
+
     }
+
+    public boolean canBreakDoors() {
+        return this.canBreakDoors;
+    }
+
+    public void setCanBreakDoors(boolean canBreakDoors) {
+        if (this.navigation.canControlOpeningDoors()) {
+            if (this.canBreakDoors != canBreakDoors) {
+                this.canBreakDoors = canBreakDoors;
+                this.navigation.setCanOpenDoors(canBreakDoors);
+                if (canBreakDoors) {
+                    this.goalSelector.add(1, this.breakDoorsGoal);
+                } else {
+                    this.goalSelector.remove(this.breakDoorsGoal);
+                }
+            }
+        } else if (this.canBreakDoors) {
+            this.goalSelector.remove(this.breakDoorsGoal);
+            this.canBreakDoors = false;
+        }
+
+    }
+
 
     public boolean canSpawn(WorldView world) {
         return super.canSpawn(world) && world.isSpaceEmpty(this, this.getType().getDimensions().getBoxAt(this.getPos()));
@@ -170,19 +202,38 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
         if (this.age % 20 == 0) {
             this.angerManager.tick(world, this::isValidTarget);
             this.updateAnger();
+            
+            if(this.getAngerAtTarget() < 135) {
+                world.sendEntityStatus(this, (byte)6);
+            }
+
+            if(this.getAngerAtTarget() < 120){
+                this.angerManager.removeSuspect(this.getTarget());
+            }
+
         }
 
         ClickerBrain.updateActivities(this);
     }
 
+    @Override
     public void handleStatus(byte status) {
         if (status == 4) {
             this.roaringAnimationState.stop();
+            this.attackingAnimationState.start(this.age); // ataque “normal”
+        } else if (status == 5) {
+            // INICIO romper puerta
+            this.roaringAnimationState.stop();
             this.attackingAnimationState.start(this.age);
-        }  else {
+        } else if (status == 6) {
+            // FIN romper puerta
+            this.attackingAnimationState.stop();
+            if (!this.idleAnimationState.isRunning()) {
+                this.idleAnimationState.start(this.age);
+            }
+        } else {
             super.handleStatus(status);
         }
-
     }
     
     public void onTrackedDataSet(TrackedData<?> data) {
@@ -195,7 +246,6 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
                 }
                 case STANDING -> {
                     this.roaringAnimationState.stop();
-                    this.attackingAnimationState.stop();
                     this.idleAnimationState.start(this.age);
                 }
 
@@ -239,15 +289,19 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     protected void writeCustomData(WriteView view) {
         super.writeCustomData(view);
         view.put("anger", WardenAngerManager.createCodec(this::isValidTarget), this.angerManager);
+        view.putBoolean("CanBreakDoors", this.canBreakDoors());
         view.put("listener", ListenerData.CODEC, this.vibrationListenerData);
     }
 
     protected void readCustomData(ReadView view) {
         super.readCustomData(view);
         this.angerManager = view.read("anger", WardenAngerManager.createCodec(this::isValidTarget)).orElseGet(() -> new WardenAngerManager(this::isValidTarget, Collections.emptyList()));
+        this.setCanBreakDoors(view.getBoolean("CanBreakDoors", false));
         this.updateAnger();
         this.vibrationListenerData = view.read("listener", ListenerData.CODEC).orElseGet(ListenerData::new);
     }
+
+
 
     private void playListeningSound() {
         if (!this.isInPose(EntityPose.ROARING)) {
@@ -299,6 +353,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
     
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
+        this.setCanBreakDoors(true);
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
@@ -309,7 +364,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
             this.increaseAngerAt(entity, ClickerAngriness.ANGRY.getThreshold() + 20, false);
 
             if (entity != null) {
-                double radius = 8.0D;
+                double radius = CALLING_DISTANCE;
                 List<ClickerEntity> nearbyClickers = world.getEntitiesByClass(
                         ClickerEntity.class,
                         this.getBoundingBox().expand(radius),
@@ -386,6 +441,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
 
     static {
         ANGER = DataTracker.registerData(ClickerEntity.class, TrackedDataHandlerRegistry.INTEGER);
+        DOOR_BREAK_DIFFICULTY_CHECKER = (difficulty) -> difficulty == Difficulty.HARD;
     }
 
     class VibrationCallback implements Vibrations.Callback {
@@ -426,7 +482,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
 
         public void accept(ServerWorld world, BlockPos pos, RegistryEntry<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
             if (!ClickerEntity.this.isDead()) {
-                ClickerEntity.this.brain.remember(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 40L);
+                ClickerEntity.this.brain.remember(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 20L);
                 world.sendEntityStatus(ClickerEntity.this, (byte)61);
                 if (!ClickerEntity.this.isInPose(EntityPose.ROARING)) {
                     ClickerEntity.this.playSound(ModSounds.CLICKER_ALERT, 2.0F, ClickerEntity.this.getSoundPitch());

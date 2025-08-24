@@ -60,7 +60,7 @@ public class ClickerBrain {
                     ImmutableMap.of(MemoryModuleType.IS_SNIFFING, MemoryModuleState.VALUE_ABSENT),
                     ImmutableList.of(
                             Pair.of(StrollTask.create(STROLL_SPEED), 2),
-                            Pair.of(new WaitTask(30, 60), 1)
+                            Pair.of(new WaitTask(60, 200), 1)
                     )
             )
     );

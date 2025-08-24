@@ -13,8 +13,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class BloaterSniffTask<E extends BloaterEntity> extends MultiTickTask<E> {
-    private static final double HORIZONTAL_RADIUS = 6.0F;
-    private static final double VERTICAL_RADIUS = 20.0F;
+    private static final double HORIZONTAL_RADIUS = 3.0F;
+    private static final double VERTICAL_RADIUS = 15.0F;
 
     public BloaterSniffTask(int runTime) {
         super(ImmutableMap.of(MemoryModuleType.IS_SNIFFING, MemoryModuleState.VALUE_PRESENT, MemoryModuleType.ATTACK_TARGET, MemoryModuleState.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryModuleState.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryModuleState.REGISTERED, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleState.REGISTERED, MemoryModuleType.DISTURBANCE_LOCATION, MemoryModuleState.REGISTERED, MemoryModuleType.SNIFF_COOLDOWN, MemoryModuleState.REGISTERED), runTime);
@@ -38,7 +38,7 @@ public class BloaterSniffTask<E extends BloaterEntity> extends MultiTickTask<E> 
         Objects.requireNonNull(BloaterEntity);
         var10000.filter(BloaterEntity::isValidTarget).ifPresent((target) -> {
             if (BloaterEntity.isInRange(target, HORIZONTAL_RADIUS, VERTICAL_RADIUS)) {
-                BloaterEntity.increaseAngerAt(target);
+                BloaterEntity.increaseAngerAt(target, 150, false);
             }
 
             if (!BloaterEntity.getBrain().hasMemoryModule(MemoryModuleType.DISTURBANCE_LOCATION)) {

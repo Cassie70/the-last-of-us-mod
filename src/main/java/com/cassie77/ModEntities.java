@@ -32,7 +32,7 @@ public class ModEntities {
             .dimensions(0.6F, 1.95F).eyeHeight(1.74F).passengerAttachments(2.0125F).vehicleAttachment(-0.7F).maxTrackingRange(8));
 
     public static final EntityType<BloaterEntity> BLOATER = register("bloater", EntityType.Builder.create(BloaterEntity::new, SpawnGroup.MONSTER)
-            .dimensions(1.0F, 2.25F).eyeHeight(1.8F).passengerAttachments(3.0F).vehicleAttachment(-1.0F).maxTrackingRange(32));
+            .dimensions(1.0F, 2.25F).eyeHeight(1.8F).passengerAttachments(3.0F).vehicleAttachment(-1.0F).maxTrackingRange(16));
 
     public static final EntityType<CustomAreaEffectCloudEntity> CUSTOM_AREA_EFFECT_CLOUD_ENTITY = register("area_effect_cloud", EntityType.Builder.<CustomAreaEffectCloudEntity>create(CustomAreaEffectCloudEntity::new, SpawnGroup.MISC).dropsNothing().makeFireImmune().dimensions(6.0F, 3F).maxTrackingRange(10).trackingTickInterval(Integer.MAX_VALUE));
 

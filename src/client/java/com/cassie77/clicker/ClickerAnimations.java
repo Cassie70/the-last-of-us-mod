@@ -255,7 +255,7 @@ public class ClickerAnimations {
                                     Transformation.Interpolations.LINEAR),
                             new Keyframe(3f, AnimationHelper.createRotationalVector(-15f, 0f, 0f),
                                     Transformation.Interpolations.LINEAR))).build();
-    public static final AnimationDefinition ATTACK = AnimationDefinition.Builder.create(1f)
+    public static final AnimationDefinition ATTACK = AnimationDefinition.Builder.create(1f).looping()
             .addBoneAnimation("torso",
                     new Transformation(Transformation.Targets.ROTATE,
                             new Keyframe(0f, AnimationHelper.createRotationalVector(5f, 0f, 0f),

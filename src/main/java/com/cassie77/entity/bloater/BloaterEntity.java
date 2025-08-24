@@ -64,9 +64,10 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     private static final double KNOCKBACK_RESISTANCE = 0.75;
     private static final double ATTACK_KNOCKBACK = 1.0;
     private static final double ATTACK_DAMAGE = 25.0;
-    private static final double FOLLOW_RANGE = 24.0;
-    private static final int ANGRINESS_AMOUNT = 60;
+    private static final double FOLLOW_RANGE = 6;
+    private static final int ANGRINESS_AMOUNT = 50;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 5;
+    private static final double CALLING_RADIUS = 3.0;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackingAnimationState = new AnimationState();
@@ -337,7 +338,7 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
             this.increaseAngerAt(entity, BloaterAngriness.ANGRY.getThreshold() + 20, false);
 
             if (entity != null) {
-                double radius = 8.0D;
+                double radius = CALLING_RADIUS;
                 List<BloaterEntity> nearbyBloaters = world.getEntitiesByClass(
                         BloaterEntity.class,
                         this.getBoundingBox().expand(radius),
@@ -417,7 +418,7 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     }
 
     class VibrationCallback implements Callback {
-        private static final int RANGE = 16;
+        private static final int RANGE = 12;
         private final PositionSource positionSource = new EntityPositionSource(BloaterEntity.this, BloaterEntity.this.getStandingEyeHeight());
 
         VibrationCallback() {

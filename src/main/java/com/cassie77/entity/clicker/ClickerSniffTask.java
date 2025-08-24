@@ -13,8 +13,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ClickerSniffTask<E extends ClickerEntity> extends MultiTickTask<E> {
-    private static final double HORIZONTAL_RADIUS = 6.0F;
-    private static final double VERTICAL_RADIUS = 20.0F;
+    private static final double HORIZONTAL_RADIUS = 4.0F;
+    private static final double VERTICAL_RADIUS = 4.0F;
 
     public ClickerSniffTask(int runTime) {
         super(ImmutableMap.of(MemoryModuleType.IS_SNIFFING, MemoryModuleState.VALUE_PRESENT, MemoryModuleType.ATTACK_TARGET, MemoryModuleState.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryModuleState.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryModuleState.REGISTERED, MemoryModuleType.NEAREST_ATTACKABLE, MemoryModuleState.REGISTERED, MemoryModuleType.DISTURBANCE_LOCATION, MemoryModuleState.REGISTERED, MemoryModuleType.SNIFF_COOLDOWN, MemoryModuleState.REGISTERED), runTime);
@@ -38,7 +38,7 @@ public class ClickerSniffTask<E extends ClickerEntity> extends MultiTickTask<E> 
         Objects.requireNonNull(clickerEntity);
         var10000.filter(clickerEntity::isValidTarget).ifPresent((target) -> {
             if (clickerEntity.isInRange(target, HORIZONTAL_RADIUS, VERTICAL_RADIUS)) {
-                clickerEntity.increaseAngerAt(target);
+                clickerEntity.increaseAngerAt(target, 150, false);
             }
 
             if (!clickerEntity.getBrain().hasMemoryModule(MemoryModuleType.DISTURBANCE_LOCATION)) {
