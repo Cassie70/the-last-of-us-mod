@@ -24,7 +24,7 @@ public class BloaterBrain {
     private static final float STROLL_SPEED = 0.5F;
     private static final float CELEBRATE_TIME = 0.7F;
     private static final float RANGED_APPROACH_SPEED = 1.2F;
-    private static final int MELEE_ATTACK_INTERVAL = 18;
+    private static final int MELEE_ATTACK_INTERVAL = 20;
     public static final int ROAR_DURATION = MathHelper.ceil(20.0F);
     private static final int SNIFF_DURATION = MathHelper.ceil(83.2F);
 

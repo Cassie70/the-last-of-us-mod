@@ -6,6 +6,9 @@ import com.cassie77.entity.clicker.ClickerAngriness;
 import com.cassie77.entity.clicker.ClickerEntity;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.WardenAngerManager;
 import net.minecraft.entity.ai.brain.Brain;
@@ -26,6 +29,7 @@ import net.minecraft.entity.passive.WaterAnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.GameEventTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.DebugInfoSender;
@@ -36,12 +40,10 @@ import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.profiler.Profilers;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.*;
 import net.minecraft.world.event.EntityPositionSource;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.event.PositionSource;
@@ -55,6 +57,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.logging.Logger;
 
 public class BloaterEntity extends HostileEntity implements Vibrations {
 
@@ -62,12 +65,13 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     private static final double MAX_HEALTH = 300.0;
     private static final double MOVE_SPEED = 0.3;
     private static final double KNOCKBACK_RESISTANCE = 0.75;
-    private static final double ATTACK_KNOCKBACK = 1.0;
-    private static final double ATTACK_DAMAGE = 25.0;
+    private static final double ATTACK_KNOCKBACK = 2;
+    private static final double ATTACK_DAMAGE = 20.0;
     private static final double FOLLOW_RANGE = 6;
-    private static final int ANGRINESS_AMOUNT = 50;
+    private static final int ANGRINESS_AMOUNT = 45;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 5;
     private static final double CALLING_RADIUS = 3.0;
+    private static final int BREAKING_BLOCK_COOLDOWN = 30;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackingAnimationState = new AnimationState();
@@ -79,10 +83,12 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     private ListenerData vibrationListenerData = new ListenerData();
     WardenAngerManager angerManager = new WardenAngerManager(this::isValidTarget, Collections.emptyList());
 
+    private int blockBreakingCooldown=0;
+
     public BloaterEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
 
-        this.experiencePoints = 20;
+        this.experiencePoints = 200;
         this.getNavigation().setCanSwim(true);
         this.setPathfindingPenalty(PathNodeType.UNPASSABLE_RAIL, 0.0F);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_OTHER, 8.0F);
@@ -95,6 +101,7 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     public boolean canSpawn(WorldView world) {
         return super.canSpawn(world) && world.isSpaceEmpty(this, this.getType().getDimensions().getBoxAt(this.getPos()));
     }
+
 
     public float getPathfindingFavor(BlockPos pos, WorldView world) {
         return 0.0F;
@@ -181,11 +188,51 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
             this.updateAnger();
         }
 
+        if (this.blockBreakingCooldown <= 0) {
+            this.blockBreakingCooldown = BREAKING_BLOCK_COOLDOWN;
+        }
+
+        if(this.getAngriness().isAngry()) {
+            if (this.blockBreakingCooldown > 0) {
+                --this.blockBreakingCooldown;
+                if (this.blockBreakingCooldown == 0 && world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
+                    boolean destroyed = false;
+                    int j = MathHelper.floor(this.getWidth() / 2.0F + 1.0F);
+                    int k = MathHelper.floor(this.getHeight());
+
+                    for (BlockPos blockPos : BlockPos.iterate(this.getBlockX() - j, this.getBlockY(), this.getBlockZ() - j, this.getBlockX() + j, this.getBlockY() + k, this.getBlockZ() + j)) {
+                        BlockState blockState = world.getBlockState(blockPos);
+                        if (canDestroy(blockState)) {
+                            destroyed = world.breakBlock(blockPos, true, this) || destroyed;
+                        }
+                    }
+
+                    if (destroyed) {
+                        world.syncWorldEvent(null, 1022, this.getBlockPos(), 0);
+                        this.getWorld().sendEntityStatus(this, (byte)5);
+                    }
+                }
+            }
+
+
+        }
         BloaterBrain.updateActivities(this);
     }
 
-    public void handleStatus(byte status) {
+    private static final Set<Block> BLOATER_IMMUNE = Set.of(
+                Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS, Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST
+    );
 
+    public static boolean canDestroy(BlockState block) {
+        if(block.isIn(BlockTags.FLOWERS) || block.isIn(BlockTags.SMALL_FLOWERS)) return  false;
+
+        if(BLOATER_IMMUNE.contains(block.getBlock())) return false;
+
+        return !block.isAir() && !block.isIn(BlockTags.WITHER_IMMUNE);
+    }
+
+    @Override
+    public void handleStatus(byte status) {
         this.roaringAnimationState.stop();
         this.throwingAnimationState.stop();
         this.attackingAnimationState.stop();
@@ -193,13 +240,15 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
         if (status == 4) {
             this.roaringAnimationState.stop();
             this.attackingAnimationState.start(this.age);
-        }else if (status == 62) {
+        } else if (status == 62) {
             this.roaringAnimationState.stop();
             this.throwingAnimationState.start(this.age);
+        } else if (status == 5) {
+            this.roaringAnimationState.stop();
+            this.attackingAnimationState.start(this.age);
         } else {
             super.handleStatus(status);
         }
-
     }
     
     public void onTrackedDataSet(TrackedData<?> data) {
@@ -404,6 +453,7 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
             }
         };
     }
+
 
     public ListenerData getVibrationListenerData() {
         return this.vibrationListenerData;

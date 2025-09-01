@@ -29,10 +29,10 @@ public class ModEntities {
     public static final EntityType<MycotoxinSacEntity> MYCOTOXIN_SAC_ENTITY = register("mycotoxin_sac_entity", EntityType.Builder.<MycotoxinSacEntity>create(MycotoxinSacEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.25F, 0.25F).maxTrackingRange(4).trackingTickInterval(10));
 
     public static final EntityType<ClickerEntity> CLICKER = register("clicker", EntityType.Builder.create(ClickerEntity::new, SpawnGroup.MONSTER)
-            .dimensions(0.6F, 1.95F).eyeHeight(1.74F).passengerAttachments(2.0125F).vehicleAttachment(-0.7F).maxTrackingRange(8));
+            .dimensions(0.6F, 1.95F).passengerAttachments(2.0125F).vehicleAttachment(-0.7F).maxTrackingRange(8));
 
     public static final EntityType<BloaterEntity> BLOATER = register("bloater", EntityType.Builder.create(BloaterEntity::new, SpawnGroup.MONSTER)
-            .dimensions(1.0F, 2.25F).eyeHeight(1.8F).passengerAttachments(3.0F).vehicleAttachment(-1.0F).maxTrackingRange(16));
+            .dimensions(0.9F, 2.25F).passengerAttachments(3.15F).maxTrackingRange(16));
 
     public static final EntityType<CustomAreaEffectCloudEntity> CUSTOM_AREA_EFFECT_CLOUD_ENTITY = register("area_effect_cloud", EntityType.Builder.<CustomAreaEffectCloudEntity>create(CustomAreaEffectCloudEntity::new, SpawnGroup.MISC).dropsNothing().makeFireImmune().dimensions(6.0F, 3F).maxTrackingRange(10).trackingTickInterval(Integer.MAX_VALUE));
 
