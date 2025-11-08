@@ -1,6 +1,8 @@
 package com.cassie77;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.minecraft.data.loottable.LootTableGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +19,9 @@ public class TheLastOfUsMod implements ModInitializer {
 		ModEntities.initialize();
 		ModSensors.initialize();
 		ModBlocks.initialize();
+		ModEntitySpawns.addSpawns();
 
 		ModEntities.registerAttributes();
+
 	}
 }

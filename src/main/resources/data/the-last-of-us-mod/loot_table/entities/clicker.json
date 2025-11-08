@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:empty", "weight": 75 },
+        { "type": "minecraft:item","name": "the-last-of-us-mod:alcohol", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the-last-of-us-mod:binding", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the-last-of-us-mod:rag", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the-last-of-us-mod:blade", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the-last-of-us-mod:canister", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the-last-of-us-mod:bottle", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the-last-of-us-mod:pipe", "weight": 3.25 }
+      ]
+    }
+  ]
+}

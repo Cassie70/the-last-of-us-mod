@@ -220,7 +220,7 @@ public class BloaterEntity extends HostileEntity implements Vibrations {
     }
 
     private static final Set<Block> BLOATER_IMMUNE = Set.of(
-                Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS, Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST
+                Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS, Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST, Blocks.SHORT_GRASS, Blocks.TALL_GRASS
     );
 
     public static boolean canDestroy(BlockState block) {

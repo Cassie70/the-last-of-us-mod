@@ -115,7 +115,6 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
 
     }
 
-
     public boolean canSpawn(WorldView world) {
         return super.canSpawn(world) && world.isSpaceEmpty(this, this.getType().getDimensions().getBoxAt(this.getPos()));
     }
@@ -150,7 +149,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
 
     @Override
     public void playAmbientSound() {
-        super.playSound(this.getAngriness().getSound(), 2.0F, 1.0F);
+        super.playSound(this.getAngriness().getSound(), 1.5F, 1.0F);
     }
 
     protected SoundEvent getHurtSound(DamageSource source) {
@@ -485,7 +484,7 @@ public class ClickerEntity extends HostileEntity implements Vibrations {
                 ClickerEntity.this.brain.remember(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 20L);
                 world.sendEntityStatus(ClickerEntity.this, (byte)61);
                 if (!ClickerEntity.this.isInPose(EntityPose.ROARING)) {
-                    ClickerEntity.this.playSound(ModSounds.CLICKER_ALERT, 2.0F, ClickerEntity.this.getSoundPitch());
+                    ClickerEntity.this.playSound(ModSounds.CLICKER_ALERT, 1.0F, ClickerEntity.this.getSoundPitch());
                 }
                 BlockPos blockPos = pos;
                 if (entity != null) {

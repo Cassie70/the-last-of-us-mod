@@ -84,7 +84,7 @@ public class MycotoxinSacEntity extends ThrownItemEntity {
         }
 
         cloud.setParticleArea(ParticleTypes.FIREFLY);
-        cloud.setDensityFactor(0.1F);
+        cloud.setDensityFactor(0.2F);
         cloud.setRadius(RADIUS);
         cloud.setRadiusOnUse(-0.5F);
         cloud.setDuration(600);

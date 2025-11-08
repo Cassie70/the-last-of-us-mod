@@ -82,7 +82,7 @@ public class SmokeBombEntity extends ThrownItemEntity {
         }
 
         cloud.setParticleArea(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE);
-        cloud.setDensityFactor(0.05F);
+        cloud.setDensityFactor(0.075F);
         cloud.setRadius(RADIUS);
         cloud.setRadiusOnUse(-0.1F);
         cloud.setDuration(1000);

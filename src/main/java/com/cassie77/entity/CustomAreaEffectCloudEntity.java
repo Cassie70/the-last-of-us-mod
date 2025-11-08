@@ -37,8 +37,9 @@ public class CustomAreaEffectCloudEntity extends AreaEffectCloudEntity {
 
     @Override
     public void tick() {
-        super.tick();
-        if (this.getWorld().isClient()) {
+        if (!this.getWorld().isClient()) {
+            super.tick();
+        }else{
             this.spawnClientParticles();
         }
     }
@@ -51,6 +52,8 @@ public class CustomAreaEffectCloudEntity extends AreaEffectCloudEntity {
         }
 
         ParticleEffect particle = getParticleArea();
+        ParticleEffect particleEffect = this.getParticleType();
+
         float radius = this.getRadius();
         int count = MathHelper.ceil((2.0 / 3.0) * Math.PI * radius * radius * radius * densityFactor); // Ajuste para semiesfera
 
@@ -84,6 +87,7 @@ public class CustomAreaEffectCloudEntity extends AreaEffectCloudEntity {
             double z = centerZ + zOffset;
 
             this.getWorld().addImportantParticleClient(particle, x, y, z, 0.0, 0.0, 0.0);
+            this.getWorld().addImportantParticleClient(particleEffect, x, y, z, 0.0, 0.0, 0.0);
         }
     }
 
