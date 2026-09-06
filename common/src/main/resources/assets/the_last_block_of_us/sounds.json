@@ -1,0 +1,65 @@
+{
+  "throw_molotov": {
+    "subtitle": "sound.the_last_block_of_us.throw_molotov",
+    "sounds": [
+      "the_last_block_of_us:throw_molotov"
+    ]
+  },
+  "explode_molotov": {
+    "subtitle": "sound.the_last_block_of_us.explode_molotov",
+    "sounds": [
+      "the_last_block_of_us:explode_molotov"
+    ]
+  },
+  "clicker_angry": {
+    "subtitle": "sound.the_last_block_of_us.clicker_angry",
+    "sounds": [
+      "the_last_block_of_us:clicker_angry"
+    ]
+  },
+  "clicker_aware": {
+    "subtitle": "sound.the_last_block_of_us.clicker_aware",
+    "sounds": [
+      "the_last_block_of_us:clicker_aware"
+    ]
+  },
+  "clicker_ambient": {
+    "subtitle": "sound.the_last_block_of_us.clicker_ambient",
+    "sounds": [
+      "the_last_block_of_us:clicker_ambient",
+      "the_last_block_of_us:clicker_ambient_2"
+    ]
+  },
+  "clicker_alert": {
+    "subtitle": "sound.the_last_block_of_us.clicker_alert",
+    "sounds": [
+      "the_last_block_of_us:clicker_alert"
+    ]
+  },
+  "bloater_angry": {
+    "subtitle": "sound.the_last_block_of_us.bloater_angry",
+    "sounds": [
+      "the_last_block_of_us:bloater_angry"
+    ]
+  },
+  "bloater_aware": {
+    "subtitle": "sound.the_last_block_of_us.bloater_aware",
+    "sounds": [
+      "the_last_block_of_us:bloater_aware"
+    ]
+  },
+  "bloater_ambient": {
+    "subtitle": "sound.the_last_block_of_us.bloater_ambient",
+    "sounds": [
+      "the_last_block_of_us:bloater_ambient",
+      "the_last_block_of_us:bloater_ambient_2",
+      "the_last_block_of_us:bloater_ambient_3"
+    ]
+  },
+    "bloater_alert": {
+        "subtitle": "sound.the_last_block_of_us.bloater_alert",
+        "sounds": [
+        "the_last_block_of_us:bloater_alert"
+        ]
+    }
+}

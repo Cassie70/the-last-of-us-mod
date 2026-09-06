@@ -1,0 +1,32 @@
+{
+  "item.the_last_block_of_us.rag": "Rag",
+  "item.the_last_block_of_us.blade": "Blade",
+  "item.the_last_block_of_us.alcohol": "Alcohol",
+  "item.the_last_block_of_us.binding": "Binding",
+  "item.the_last_block_of_us.medkit": "Medkit",
+  "item.the_last_block_of_us.molotov": "Molotov",
+  "item.the_last_block_of_us.bottle": "Bottle",
+  "item.the_last_block_of_us.pipe": "Pipe",
+  "item.the_last_block_of_us.upgraded_pipe": "Upgraded Pipe",
+  "item.the_last_block_of_us.shiv": "Shiv",
+  "item.the_last_block_of_us.canister": "Canister",
+  "item.the_last_block_of_us.nail_bomb": "Nail Bomb",
+  "item.the_last_block_of_us.smoke_bomb": "Smoke Bomb",
+  "item.the_last_block_of_us.mycotoxin_sac": "Mycotoxin Sac",
+  "item.the_last_block_of_us.clicker_spawn_egg": "Clicker Spawn Egg",
+  "item.the_last_block_of_us.bloater_spawn_egg": "Bloater Spawn Egg",
+  "sound.the_last_block_of_us.throw_molotov": "Thrown Molotov",
+  "sound.the_last_block_of_us.explode_molotov": "Molotov Explosion",
+  "entity.the_last_block_of_us.clicker": "Clicker",
+  "entity.the_last_block_of_us.bloater": "Bloater",
+
+  "sound.the_last_block_of_us.clicker_angry": "Clicker Angry",
+  "sound.the_last_block_of_us.clicker_aware": "Clicker Aware",
+  "sound.the_last_block_of_us.clicker_ambient": "Clicker Listening",
+  "sound.the_last_block_of_us.clicker_alert": "Clicker Alerted",
+
+  "sound.the_last_block_of_us.bloater_angry": "Bloater Angry",
+  "sound.the_last_block_of_us.bloater_aware": "Bloater Aware",
+  "sound.the_last_block_of_us.bloater_ambient": "Bloater Groans",
+  "sound.the_last_block_of_us.bloater_alert": "Bloater Alerted"
+}

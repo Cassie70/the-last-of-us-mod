@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the_last_block_of_us:binding",
+    "the_last_block_of_us:blade",
+    "the_last_block_of_us:pipe"
+  ],
+  "result": {
+    "id": "the_last_block_of_us:upgraded_pipe",
+    "count": 1
+  }
+}

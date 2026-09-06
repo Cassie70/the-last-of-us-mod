@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the_last_block_of_us:canister",
+    "minecraft:gunpowder",
+    "the_last_block_of_us:blade"
+  ],
+  "result": {
+    "id": "the_last_block_of_us:nail_bomb",
+    "count": 1
+  }
+}

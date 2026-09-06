@@ -1,0 +1,32 @@
+{
+  "item.the_last_block_of_us.rag": "Trapo",
+  "item.the_last_block_of_us.blade": "Cuchilla",
+  "item.the_last_block_of_us.alcohol": "Alcohol",
+  "item.the_last_block_of_us.binding": "Cinta",
+  "item.the_last_block_of_us.medkit": "Kit médico",
+  "item.the_last_block_of_us.molotov": "Molotov",
+  "item.the_last_block_of_us.bottle": "Botella",
+  "item.the_last_block_of_us.pipe": "Tubo",
+  "item.the_last_block_of_us.upgraded_pipe": "Tubo mejorado",
+  "item.the_last_block_of_us.shiv": "Navaja",
+  "item.the_last_block_of_us.canister": "Lata",
+  "item.the_last_block_of_us.nail_bomb": "Bomba de clavos",
+  "item.the_last_block_of_us.smoke_bomb": "Bomba de humo",
+  "item.the_last_block_of_us.mycotoxin_sac": "Saco de micotoxinas",
+  "item.the_last_block_of_us.clicker_spawn_egg": "Generar Chasqueador",
+  "item.the_last_block_of_us.bloater_spawn_egg": "Generar Gordinflon",
+  "sound.the_last_block_of_us.throw_molotov": "Molotov arrojado",
+  "sound.the_last_block_of_us.explode_molotov": "Explosión de molotov",
+  "entity.the_last_block_of_us.clicker": "Chasqueador",
+  "entity.the_last_block_of_us.bloater": "Gordinflon",
+
+  "sound.the_last_block_of_us.clicker_angry": "Chasqueador enojado",
+  "sound.the_last_block_of_us.clicker_aware": "Chasqueador informado",
+  "sound.the_last_block_of_us.clicker_ambient": "Chasqueador escuchando",
+  "sound.the_last_block_of_us.clicker_alert": "Chasqueador alertado",
+
+  "sound.the_last_block_of_us.bloater_angry": "Gordinflon enojado",
+  "sound.the_last_block_of_us.bloater_aware": "Gordinflon informado",
+  "sound.the_last_block_of_us.bloater_ambient": "Gordinflon gruñidos",
+  "sound.the_last_block_of_us.bloater_alert": "Gordinflon alertado"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": { "min": 1, "max": 3 },
+      "entries": [
+        { "type": "minecraft:item","name": "the_last_block_of_us:molotov", "weight": 1 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:nail_bomb", "weight": 1 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:upgraded_pipe", "weight": 1 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:shiv", "weight": 1 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:smoke_bomb", "weight": 1 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:medkit", "weight": 1 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:mycotoxin_sac", "weight": 1 }
+      ]
+    }
+  ]
+}
