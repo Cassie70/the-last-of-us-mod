@@ -1,0 +1,15 @@
+plugins {
+    id 'fabric-loom'
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+}
+
+loom {
+    runs {
+        // Common doesn't need runs directly
+    }
+}
