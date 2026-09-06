@@ -7,9 +7,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -31,10 +28,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.AngerManagement;
-import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -44,9 +39,7 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
-import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Contract;
@@ -113,7 +106,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
         if (this.getNavigation() instanceof GroundPathNavigation) {
             if (this.canBreakDoors != canBreakDoors) {
                 this.canBreakDoors = canBreakDoors;
-                ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(canBreakDoors);
+                this.getNavigation().setCanOpenDoors(canBreakDoors);
                 if (canBreakDoors) {
                     this.goalSelector.addGoal(1, this.breakDoorsGoal);
                 } else {
@@ -141,7 +134,8 @@ public class ClickerEntity extends Monster implements VibrationSystem {
         return false;
     }
 
-    public float getWeaponDisableBlockingForSeconds() {
+    @Override
+    public float getSecondsToDisableBlocking() {
         return WEAPON_DISABLE_BLOCKING_SECONDS;
     }
 
@@ -272,13 +266,13 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+    protected @NotNull Brain<?> makeBrain(Dynamic<?> dynamic) {
         return ClickerBrain.create(this, dynamic);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Brain<ClickerEntity> getBrain() {
+    public @NotNull Brain<ClickerEntity> getBrain() {
         return (Brain<ClickerEntity>) super.getBrain();
     }
 
@@ -431,12 +425,12 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    public VibrationSystem.Data getVibrationData() {
+    public VibrationSystem.@NotNull Data getVibrationData() {
         return this.vibrationData;
     }
 
     @Override
-    public VibrationSystem.User getVibrationUser() {
+    public VibrationSystem.@NotNull User getVibrationUser() {
         return this.vibrationUser;
     }
 
@@ -453,12 +447,12 @@ public class ClickerEntity extends Monster implements VibrationSystem {
         }
 
         @Override
-        public PositionSource getPositionSource() {
+        public @NotNull PositionSource getPositionSource() {
             return this.positionSource;
         }
 
         @Override
-        public TagKey<GameEvent> getListenableEvents() {
+        public @NotNull TagKey<GameEvent> getListenableEvents() {
             return GameEventTags.WARDEN_CAN_LISTEN;
         }
 

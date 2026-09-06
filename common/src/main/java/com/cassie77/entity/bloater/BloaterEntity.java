@@ -6,11 +6,8 @@ import com.cassie77.entity.clicker.ClickerAngriness;
 import com.cassie77.entity.clicker.ClickerEntity;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -27,6 +24,8 @@ import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -34,7 +33,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.AngerManagement;
-import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -51,6 +49,7 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -116,7 +115,8 @@ public class BloaterEntity extends Monster implements VibrationSystem {
         return false;
     }
 
-    public float getWeaponDisableBlockingForSeconds() {
+    @Override
+    public float getSecondsToDisableBlocking() {
         return WEAPON_DISABLE_BLOCKING_SECONDS;
     }
 
@@ -141,12 +141,12 @@ public class BloaterEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
+    protected @NotNull SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ZOMBIE_HURT;
     }
 
     @Override
-    protected SoundEvent getDeathSound() {
+    protected @NotNull SoundEvent getDeathSound() {
         return SoundEvents.ZOMBIE_DEATH;
     }
 
@@ -279,13 +279,13 @@ public class BloaterEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+    protected @NotNull Brain<?> makeBrain(Dynamic<?> dynamic) {
         return BloaterBrain.create(this, dynamic);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Brain<BloaterEntity> getBrain() {
+    public @NotNull Brain<BloaterEntity> getBrain() {
         return (Brain<BloaterEntity>) super.getBrain();
     }
 
@@ -326,9 +326,9 @@ public class BloaterEntity extends Monster implements VibrationSystem {
 
     protected void readAdditionalSaveData(ValueInput valueInput) {
         super.readAdditionalSaveData(valueInput);
-        this.angerManagement = (AngerManagement)valueInput.read("anger", AngerManagement.codec(this::isValidTarget)).orElseGet(() -> new AngerManagement(this::isValidTarget, Collections.emptyList()));
+        this.angerManagement = valueInput.read("anger", AngerManagement.codec(this::isValidTarget)).orElseGet(() -> new AngerManagement(this::isValidTarget, Collections.emptyList()));
         this.updateAnger();
-        this.vibrationData = (VibrationSystem.Data)valueInput.read("listener", Data.CODEC).orElseGet(VibrationSystem.Data::new);
+        this.vibrationData = valueInput.read("listener", Data.CODEC).orElseGet(Data::new);
     }
 
 
@@ -434,12 +434,12 @@ public class BloaterEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    public VibrationSystem.Data getVibrationData() {
+    public VibrationSystem.@NotNull Data getVibrationData() {
         return this.vibrationData;
     }
 
     @Override
-    public VibrationSystem.User getVibrationUser() {
+    public VibrationSystem.@NotNull User getVibrationUser() {
         return this.vibrationUser;
     }
 
@@ -456,12 +456,12 @@ public class BloaterEntity extends Monster implements VibrationSystem {
         }
 
         @Override
-        public PositionSource getPositionSource() {
+        public @NotNull PositionSource getPositionSource() {
             return this.positionSource;
         }
 
         @Override
-        public TagKey<GameEvent> getListenableEvents() {
+        public @NotNull TagKey<GameEvent> getListenableEvents() {
             return GameEventTags.WARDEN_CAN_LISTEN;
         }
 
@@ -515,7 +515,14 @@ public class BloaterEntity extends Monster implements VibrationSystem {
                 }
             }
         }
+    }
 
-        //TODO hacer que sea inmune al veneno
+    @Override
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.POISON) {
+            return false;
+        }
+
+        return super.canBeAffected(effect);
     }
 }
