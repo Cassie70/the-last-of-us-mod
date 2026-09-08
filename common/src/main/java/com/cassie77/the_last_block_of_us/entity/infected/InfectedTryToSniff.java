@@ -1,4 +1,4 @@
-package com.cassie77.the_last_block_of_us.entity.clicker;
+package com.cassie77.the_last_block_of_us.entity.infected;
 
 import net.minecraft.util.Unit;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -9,7 +9,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 
-public class ClickerTryToSniff {
+public class InfectedTryToSniff {
 
     private static final double SNIFF_RANGE = 6.0;
 

@@ -1,4 +1,4 @@
-package com.cassie77.the_last_block_of_us.entity.bloater;
+package com.cassie77.the_last_block_of_us.entity.infected;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
@@ -9,11 +9,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class BloaterFindRoarTargetTask {
+public class InfectedFindRoarTargetTask {
 
-    BloaterFindRoarTargetTask() {}
+    InfectedFindRoarTargetTask() {}
 
-    public static <E extends BloaterEntity> BehaviorControl<E> create(Function<E, Optional<? extends LivingEntity>> targetFinder) {
+    public static <E extends InfectedEntity> BehaviorControl<E> create(Function<E, Optional<? extends LivingEntity>> targetFinder) {
         return BehaviorBuilder.create((context) -> context.group(
                 context.absent(MemoryModuleType.ROAR_TARGET),
                 context.absent(MemoryModuleType.ATTACK_TARGET),

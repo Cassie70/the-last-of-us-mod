@@ -1,7 +1,6 @@
 package com.cassie77.the_last_block_of_us;
 
-import com.cassie77.the_last_block_of_us.entity.bloater.BloaterAttackablesSensor;
-import com.cassie77.the_last_block_of_us.entity.clicker.ClickerAttackablesSensor;
+import com.cassie77.the_last_block_of_us.entity.infected.InfectedAttackablesSensor;
 import com.cassie77.the_last_block_of_us.platform.Services;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,10 +14,8 @@ import java.util.function.Supplier;
 
 public class ModSensors {
 
-    public static final SensorType<ClickerAttackablesSensor> CLICKER_ENTITY_SENSOR = register("clicker_entity_sensor",
-            ClickerAttackablesSensor::new);
-    public static final SensorType<BloaterAttackablesSensor> BLOATER_ENTITY_SENSOR = register("bloater_entity_sensor",
-            BloaterAttackablesSensor::new);
+    public static final SensorType<InfectedAttackablesSensor> INFECTED_ENTITY_SENSOR = register("infected_entity_sensor",
+            InfectedAttackablesSensor::new);
 
     private static <U extends Sensor<?>> SensorType<U> register(String id, Supplier<U> factory) {
         return register(keyOf(id), factory);

@@ -1,6 +1,5 @@
-package com.cassie77.the_last_block_of_us.entity.clicker;
+package com.cassie77.the_last_block_of_us.entity.infected;
 
-import com.cassie77.the_last_block_of_us.ModSounds;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ClickerSniffTask<E extends ClickerEntity> extends Behavior<E> {
+public class InfectedSniffTask<E extends InfectedEntity> extends Behavior<E> {
     private static final double HORIZONTAL_RADIUS = 3.5;
     private static final double VERTICAL_RADIUS = 3.5;
 
-    public ClickerSniffTask(int runTime) {
+    public InfectedSniffTask(int runTime) {
         super(ImmutableMap.of(
                 MemoryModuleType.IS_SNIFFING, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT,
@@ -29,32 +28,36 @@ public class ClickerSniffTask<E extends ClickerEntity> extends Behavior<E> {
     }
 
     @Override
-    protected boolean canStillUse(@NotNull ServerLevel serverLevel, @NotNull E clickerEntity, long l) {
+    protected boolean canStillUse(@NotNull ServerLevel serverLevel, @NotNull E infectedEntity, long l) {
         return true;
     }
 
     @Override
-    protected void start(@NotNull ServerLevel serverLevel, E clickerEntity, long l) {
-        clickerEntity.playSound(ModSounds.CLICKER_AWARE, 2.0F, 1.0F);
+    protected void start(@NotNull ServerLevel serverLevel, E infectedEntity, long l) {
+        infectedEntity.playSound(
+                infectedEntity.getSniffSound(),
+                2.0F,
+                1.0F
+        );
     }
 
     @Override
-    protected void stop(@NotNull ServerLevel serverLevel, E clickerEntity, long l) {
-        if (clickerEntity.hasPose(Pose.SNIFFING)) {
-            clickerEntity.setPose(Pose.STANDING);
+    protected void stop(@NotNull ServerLevel serverLevel, E infectedEntity, long l) {
+        if (infectedEntity.hasPose(Pose.SNIFFING)) {
+            infectedEntity.setPose(Pose.STANDING);
         }
 
-        clickerEntity.getBrain().eraseMemory(MemoryModuleType.IS_SNIFFING);
-        Optional<LivingEntity> nearestAttackable = clickerEntity.getBrain()
+        infectedEntity.getBrain().eraseMemory(MemoryModuleType.IS_SNIFFING);
+        Optional<LivingEntity> nearestAttackable = infectedEntity.getBrain()
                 .getMemory(MemoryModuleType.NEAREST_ATTACKABLE);
-        Objects.requireNonNull(clickerEntity);
-        nearestAttackable.filter(clickerEntity::isValidTarget).ifPresent((target) -> {
-            if (clickerEntity.closerThan(target, HORIZONTAL_RADIUS, VERTICAL_RADIUS)) {
-                clickerEntity.increaseAngerAt(target, 150, false);
+        Objects.requireNonNull(infectedEntity);
+        nearestAttackable.filter(infectedEntity::isValidTarget).ifPresent((target) -> {
+            if (infectedEntity.closerThan(target, HORIZONTAL_RADIUS, VERTICAL_RADIUS)) {
+                infectedEntity.increaseAngerAt(target, 150, false);
             }
 
-            if (!clickerEntity.getBrain().hasMemoryValue(MemoryModuleType.DISTURBANCE_LOCATION)) {
-                ClickerBrain.lookAtDisturbance(clickerEntity, target.blockPosition());
+            if (!infectedEntity.getBrain().hasMemoryValue(MemoryModuleType.DISTURBANCE_LOCATION)) {
+                InfectedBrain.lookAtDisturbance(infectedEntity, target.blockPosition());
             }
         });
     }
