@@ -15,6 +15,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -71,10 +72,14 @@ public class BloaterEntity extends InfectedEntity {
                 .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE);
     }
 
+    @Override
+    protected BehaviorControl<? super InfectedEntity> getAdditionalFightTask() {
+        return new ThrowTask();
+    }
 
     @Override
     public boolean doHurtTarget(ServerLevel world, @NotNull Entity target) {
-        //ThrowTask.cooldown(this, 40);
+        ThrowTask.cooldown(this, 40);
         return super.doHurtTarget(world, target);
     }
 

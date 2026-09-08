@@ -2,6 +2,7 @@ package com.cassie77.the_last_block_of_us.entity.bloater;
 
 import com.cassie77.the_last_block_of_us.ModItems;
 import com.cassie77.the_last_block_of_us.item.micotoxinsac.MycotoxinSacEntity;
+import com.cassie77.the_last_block_of_us.entity.infected.InfectedEntity;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -14,8 +15,9 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
-public class ThrowTask extends Behavior<BloaterEntity> {
+public class ThrowTask extends Behavior<InfectedEntity> {
     private static final int HORIZONTAL_RANGE = 15;
     private static final int VERTICAL_RANGE = 20;
     public static final int COOLDOWN = 40;
@@ -43,7 +45,10 @@ public class ThrowTask extends Behavior<BloaterEntity> {
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerLevel serverWorld, BloaterEntity bloaterEntity) {
+    protected boolean checkExtraStartConditions(@NotNull ServerLevel serverWorld, @NotNull InfectedEntity infectedEntity) {
+        if (!(infectedEntity instanceof BloaterEntity bloaterEntity)) {
+            return false;
+        }
         return bloaterEntity.closerThan(
                 bloaterEntity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get(),
                 HORIZONTAL_RANGE,
@@ -52,12 +57,13 @@ public class ThrowTask extends Behavior<BloaterEntity> {
     }
 
     @Override
-    protected boolean canStillUse(ServerLevel serverWorld, BloaterEntity bloaterEntity, long l) {
+    protected boolean canStillUse(@NotNull ServerLevel serverWorld, @NotNull InfectedEntity infectedEntity, long l) {
         return throwsCount < MAX_THROWS;
     }
 
     @Override
-    protected void start(ServerLevel serverWorld, BloaterEntity bloaterEntity, long l) {
+    protected void start(ServerLevel serverWorld, @NotNull InfectedEntity infectedEntity, long l) {
+        BloaterEntity bloaterEntity = (BloaterEntity) infectedEntity;
         bloaterEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.ATTACK_COOLING_DOWN, true, RUN_TIME);
         bloaterEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.SONIC_BOOM_SOUND_DELAY, Unit.INSTANCE, SOUND_DELAY);
         serverWorld.broadcastEntityEvent(bloaterEntity, (byte) 62);
@@ -67,7 +73,8 @@ public class ThrowTask extends Behavior<BloaterEntity> {
     }
 
     @Override
-    protected void tick(ServerLevel serverWorld, BloaterEntity bloaterEntity, long l) {
+    protected void tick(@NotNull ServerLevel serverWorld, @NotNull InfectedEntity infectedEntity, long l) {
+        BloaterEntity bloaterEntity = (BloaterEntity) infectedEntity;
         ticksSinceStart++;
 
         if (ticksSinceStart == ITEM_APPEAR_DELAY) {
@@ -107,7 +114,8 @@ public class ThrowTask extends Behavior<BloaterEntity> {
     }
 
     @Override
-    protected void stop(ServerLevel serverWorld, BloaterEntity bloaterEntity, long l) {
+    protected void stop(@NotNull ServerLevel serverWorld, @NotNull InfectedEntity infectedEntity, long l) {
+        BloaterEntity bloaterEntity = (BloaterEntity) infectedEntity;
         ticksSinceStart = 0;
 
         if (throwsCount >= MAX_THROWS) {

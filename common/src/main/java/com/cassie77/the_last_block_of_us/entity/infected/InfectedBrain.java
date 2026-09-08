@@ -94,7 +94,20 @@ public class InfectedBrain {
     }
 
     protected static void addFightActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
-        brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(StopAttackingIfTargetInvalid.create((serverLevel, livingEntity) -> !infected.getAngriness().isAngry() || !infected.isValidTarget(livingEntity), InfectedBrain::removeDeadSuspect, false), SetEntityLookTarget.create((livingEntity) -> isTargeting(infected, livingEntity), (float)infected.getAttributeValue(Attributes.FOLLOW_RANGE)), SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(infected.getInfectedRangedApproachSpeed()), MeleeAttack.create(infected.getInfectedMeleeAttackInterval())), MemoryModuleType.ATTACK_TARGET);
+        ImmutableList.Builder<BehaviorControl<? super InfectedEntity>> fightTasks = ImmutableList.builder();
+        fightTasks.add(
+                StopAttackingIfTargetInvalid.create((serverLevel, livingEntity) -> !infected.getAngriness().isAngry() || !infected.isValidTarget(livingEntity), InfectedBrain::removeDeadSuspect, false),
+                SetEntityLookTarget.create((livingEntity) -> isTargeting(infected, livingEntity), (float) infected.getAttributeValue(Attributes.FOLLOW_RANGE)),
+                SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(infected.getInfectedRangedApproachSpeed())
+        );
+
+        BehaviorControl<? super InfectedEntity> additionalFightTask = infected.getAdditionalFightTask();
+        if (additionalFightTask != null) {
+            fightTasks.add(additionalFightTask);
+        }
+
+        fightTasks.add(MeleeAttack.create(infected.getInfectedMeleeAttackInterval()));
+        brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, fightTasks.build(), MemoryModuleType.ATTACK_TARGET);
     }
 
 
@@ -140,6 +153,9 @@ public class InfectedBrain {
                 MemoryModuleType.ROAR_SOUND_DELAY,
                 MemoryModuleType.DIG_COOLDOWN,
                 MemoryModuleType.ROAR_SOUND_COOLDOWN,
+                MemoryModuleType.SONIC_BOOM_COOLDOWN,
+                MemoryModuleType.SONIC_BOOM_SOUND_DELAY,
+                MemoryModuleType.SONIC_BOOM_SOUND_COOLDOWN,
                 MemoryModuleType.SNIFF_COOLDOWN,
                 MemoryModuleType.TOUCH_COOLDOWN,
                 MemoryModuleType.VIBRATION_COOLDOWN

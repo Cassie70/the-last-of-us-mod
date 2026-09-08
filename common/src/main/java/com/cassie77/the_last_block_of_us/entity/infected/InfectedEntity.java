@@ -21,6 +21,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.AngerManagement;
@@ -40,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -72,6 +72,10 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     protected double getInfectedSniffVerticalRadius() { return 3.5; }
     protected int getInfectedAngrinessAmount() { return 50; }
     protected double getInfectedCallingDistance() { return 5.0F; }
+
+    protected BehaviorControl<? super InfectedEntity> getAdditionalFightTask() {
+        return null;
+    }
     
 
     @Override
@@ -151,7 +155,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
             }
 
             if (this.getAngerAtTarget() < 120) {
-                this.angerManagement.clearAnger(Objects.requireNonNull(this.getTarget()));
+                this.angerManagement.clearAnger(this.getTarget());
             }
         }
 
