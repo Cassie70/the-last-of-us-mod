@@ -208,4 +208,10 @@ public class BloaterEntity extends InfectedEntity {
     public SoundEvent getAngrySound() {
         return ModSounds.BLOATER_ANGRY;
     }
+
+    @Override
+    protected int getInfectedMeleeAttackInterval() { return 20; }
+
+    @Override
+    protected int getInfectedAngrinessAmount() { return 45; }
 }

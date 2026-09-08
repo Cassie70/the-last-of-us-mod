@@ -49,9 +49,6 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     private static final EntityDataAccessor<Integer> ANGER =
             SynchedEntityData.defineId(InfectedEntity.class, EntityDataSerializers.INT);
 
-    private static final int ANGRINESS_AMOUNT = 50;
-    private static final double CALLING_DISTANCE = 5.0F;
-
     private final DynamicGameEventListener<Listener> dynamicGameEventListener =
             new DynamicGameEventListener<>(new Listener(this));
     private final User vibrationUser = new VibrationUser();
@@ -61,6 +58,20 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     public InfectedEntity(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
+
+    protected float getInfectedStrollSpeed() { return 0.8F; }
+    protected float getInfectedCelebrateTime() { return 0.7F; }
+    protected float getInfectedRangedApproachSpeed() { return 1.2F; }
+    protected int getInfectedMeleeAttackInterval() { return 10; }
+    protected int getInfectedRoarDuration() { return 20; }
+    protected int getInfectedSniffDuration() { return 84; }
+    protected float getInfectedSwimSpeed() { return 0.8F; }
+    protected int getInfectedLookAtTargetMinDuration() { return 45; }
+    protected int getInfectedLookAtTargetMaxDuration() { return 90; }
+    protected double getInfectedSniffHorizontalRadius() { return 3.5; }
+    protected double getInfectedSniffVerticalRadius() { return 3.5; }
+    protected int getInfectedAngrinessAmount() { return 50; }
+    protected double getInfectedCallingDistance() { return 5.0F; }
     
 
     @Override
@@ -214,7 +225,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     }
 
     public void increaseAngerAt(@Nullable Entity entity) {
-        this.increaseAngerAt(entity, ANGRINESS_AMOUNT, true);
+        this.increaseAngerAt(entity, this.getInfectedAngrinessAmount(), true);
     }
 
     @VisibleForTesting
@@ -246,7 +257,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
             this.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 20, false);
 
             if (entity != null) {
-                double radius = CALLING_DISTANCE;
+                double radius = this.getInfectedCallingDistance();
                 List<InfectedEntity> nearbyClickers = world.getEntitiesOfClass(
                         InfectedEntity.class,
                         this.getBoundingBox().inflate(radius),

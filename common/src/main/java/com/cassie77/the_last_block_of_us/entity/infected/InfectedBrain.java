@@ -8,7 +8,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -24,13 +23,6 @@ import java.util.List;
 
 public class InfectedBrain {
 
-    private static final float STROLL_SPEED = 0.5F;
-    private static final float CELEBRATE_TIME = 0.7F;
-    private static final float RANGED_APPROACH_SPEED = 1.2F;
-    private static final int MELEE_ATTACK_INTERVAL = 10;
-    public static final int ROAR_DURATION = Mth.ceil(20.0F);
-    private static final int SNIFF_DURATION = Mth.ceil(83.2F);
-
     private static final List<SensorType<? extends Sensor<? super InfectedEntity>>> SENSORS;
     private static final List<MemoryModuleType<?>> MEMORY_MODULES;
 
@@ -44,67 +36,65 @@ public class InfectedBrain {
     protected static Brain<?> create(InfectedEntity infected, Dynamic<?> dynamic) {
         Brain.Provider<InfectedEntity> provider = Brain.provider(MEMORY_MODULES, SENSORS);
         Brain<InfectedEntity> brain = provider.makeBrain(dynamic);
-        addCoreActivities(brain);
-        addIdleActivities(brain);
-        addRoarActivities(brain);
+        addCoreActivities(infected, brain);
+        addIdleActivities(infected, brain);
+        addRoarActivities(infected, brain);
         addFightActivities(infected, brain);
-        addInvestigateActivities(brain);
-        addSniffActivities(brain);
+        addInvestigateActivities(infected, brain);
+        addSniffActivities(infected, brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
         brain.useDefaultActivity();
         return brain;
     }
 
-    static ImmutableList<BehaviorControl<? super InfectedEntity>> idleTasks = ImmutableList.of(
-            InfectedFindRoarTargetTask.create(InfectedEntity::getPrimeSuspect),
-            InfectedTryToSniff.create(),
-            new RunOne<>(
-                    ImmutableMap.of(MemoryModuleType.IS_SNIFFING, MemoryStatus.VALUE_ABSENT),
-                    ImmutableList.of(
-                            Pair.of(RandomStroll.stroll(STROLL_SPEED), 2),
-                            Pair.of(new DoNothing(60, 200), 1)
-                    )
-            )
-    );
-
-    private static void addCoreActivities(Brain<InfectedEntity> brain) {
+    private static void addCoreActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                new Swim<>(0.8F),
-                new LookAtTargetSink(45, 90),
+                new Swim<>(infected.getInfectedSwimSpeed()),
+                new LookAtTargetSink(infected.getInfectedLookAtTargetMinDuration(), infected.getInfectedLookAtTargetMaxDuration()),
                 new MoveToTargetSink()
         ));
     }
 
-    private static void addIdleActivities(Brain<InfectedEntity> brain) {
-        brain.addActivity(Activity.IDLE, 10, idleTasks);
+        private static void addIdleActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
+        brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
+            InfectedFindRoarTargetTask.create(InfectedEntity::getPrimeSuspect),
+            InfectedTryToSniff.create(),
+            new RunOne<>(
+                ImmutableMap.of(MemoryModuleType.IS_SNIFFING, MemoryStatus.VALUE_ABSENT),
+                ImmutableList.of(
+                    Pair.of(RandomStroll.stroll(infected.getInfectedStrollSpeed()), 2),
+                    Pair.of(new DoNothing(60, 200), 1)
+                )
+            )
+        ));
     }
 
-    private static void addInvestigateActivities(Brain<InfectedEntity> brain) {
+        private static void addInvestigateActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.INVESTIGATE, 5, ImmutableList.of(
                 InfectedFindRoarTargetTask.create(InfectedEntity::getPrimeSuspect),
-                GoToTargetLocation.create(MemoryModuleType.DISTURBANCE_LOCATION, 2, CELEBRATE_TIME)
+                GoToTargetLocation.create(MemoryModuleType.DISTURBANCE_LOCATION, 2, infected.getInfectedCelebrateTime())
         ), MemoryModuleType.DISTURBANCE_LOCATION);
     }
 
-    private static void addSniffActivities(Brain<InfectedEntity> brain) {
+    private static void addSniffActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.SNIFF, 5, ImmutableList.of(
                 InfectedFindRoarTargetTask.create(InfectedEntity::getPrimeSuspect),
-                new InfectedSniffTask<>(SNIFF_DURATION)
+                new InfectedSniffTask<>(infected.getInfectedSniffDuration())
         ), MemoryModuleType.IS_SNIFFING);
     }
 
-    private static void addRoarActivities(Brain<InfectedEntity> brain) {
+    private static void addRoarActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(
                 Activity.ROAR,
                 10,
-                ImmutableList.of(new InfectedRoarTask()),
+                ImmutableList.of(new InfectedRoarTask(infected.getInfectedRoarDuration())),
                 MemoryModuleType.ROAR_TARGET
         );
     }
 
     protected static void addFightActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
-        brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(StopAttackingIfTargetInvalid.create((serverLevel, livingEntity) -> !infected.getAngriness().isAngry() || !infected.isValidTarget(livingEntity), InfectedBrain::removeDeadSuspect, false), SetEntityLookTarget.create((livingEntity) -> isTargeting(infected, livingEntity), (float)infected.getAttributeValue(Attributes.FOLLOW_RANGE)), SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(RANGED_APPROACH_SPEED), MeleeAttack.create(MELEE_ATTACK_INTERVAL)), MemoryModuleType.ATTACK_TARGET);
+        brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(StopAttackingIfTargetInvalid.create((serverLevel, livingEntity) -> !infected.getAngriness().isAngry() || !infected.isValidTarget(livingEntity), InfectedBrain::removeDeadSuspect, false), SetEntityLookTarget.create((livingEntity) -> isTargeting(infected, livingEntity), (float)infected.getAttributeValue(Attributes.FOLLOW_RANGE)), SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(infected.getInfectedRangedApproachSpeed()), MeleeAttack.create(infected.getInfectedMeleeAttackInterval())), MemoryModuleType.ATTACK_TARGET);
     }
 
 

@@ -19,12 +19,12 @@ public class InfectedRoarTask extends Behavior<InfectedEntity> {
     private static final int SOUND_DELAY = 0;
     private static final int ANGER_INCREASE = 20;
 
-    public InfectedRoarTask() {
+    public InfectedRoarTask(int runTime) {
         super(ImmutableMap.of(
                 MemoryModuleType.ROAR_TARGET, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT,
                 MemoryModuleType.ROAR_SOUND_COOLDOWN, MemoryStatus.REGISTERED,
-                MemoryModuleType.ROAR_SOUND_DELAY, MemoryStatus.REGISTERED), InfectedBrain.ROAR_DURATION);
+                MemoryModuleType.ROAR_SOUND_DELAY, MemoryStatus.REGISTERED), runTime);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class InfectedRoarTask extends Behavior<InfectedEntity> {
         if (!infectedEntity.getBrain().hasMemoryValue(MemoryModuleType.ROAR_SOUND_DELAY)
                 && !infectedEntity.getBrain().hasMemoryValue(MemoryModuleType.ROAR_SOUND_COOLDOWN)) {
             infectedEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.ROAR_SOUND_COOLDOWN, Unit.INSTANCE,
-                    InfectedBrain.ROAR_DURATION - SOUND_DELAY);
+                    infectedEntity.getInfectedRoarDuration() - SOUND_DELAY);
             infectedEntity.playSound(infectedEntity.getAngrySound(), 2.0F, 1.0F);
         }
     }

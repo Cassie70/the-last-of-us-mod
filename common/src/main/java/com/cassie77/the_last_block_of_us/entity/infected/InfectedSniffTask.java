@@ -13,9 +13,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class InfectedSniffTask<E extends InfectedEntity> extends Behavior<E> {
-    private static final double HORIZONTAL_RADIUS = 3.5;
-    private static final double VERTICAL_RADIUS = 3.5;
-
     public InfectedSniffTask(int runTime) {
         super(ImmutableMap.of(
                 MemoryModuleType.IS_SNIFFING, MemoryStatus.VALUE_PRESENT,
@@ -52,7 +49,7 @@ public class InfectedSniffTask<E extends InfectedEntity> extends Behavior<E> {
                 .getMemory(MemoryModuleType.NEAREST_ATTACKABLE);
         Objects.requireNonNull(infectedEntity);
         nearestAttackable.filter(infectedEntity::isValidTarget).ifPresent((target) -> {
-            if (infectedEntity.closerThan(target, HORIZONTAL_RADIUS, VERTICAL_RADIUS)) {
+            if (infectedEntity.closerThan(target, infectedEntity.getInfectedSniffHorizontalRadius(), infectedEntity.getInfectedSniffVerticalRadius())) {
                 infectedEntity.increaseAngerAt(target, 150, false);
             }
 
