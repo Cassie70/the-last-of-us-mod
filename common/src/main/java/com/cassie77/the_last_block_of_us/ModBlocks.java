@@ -1,5 +1,6 @@
 package com.cassie77.the_last_block_of_us;
 
+import com.cassie77.the_last_block_of_us.block.ClickerSpawnerBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +16,16 @@ import java.util.function.Function;
 public class ModBlocks {
 
     public static final Block CORDYCEPS_BLOCK = register("cordyceps_block", Block::new, BlockBehaviour.Properties.of(), true);
+    public static final Block CLICKER_SPAWNER_BLOCK = register(
+            "clicker_spawner_block",
+            ClickerSpawnerBlock::new,
+            BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
+                    .replaceable(),
+            true
+    );
 
     private static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties properties, boolean shouldRegisterItem) {
         ResourceKey<Block> blockKey = keyOfBlock(name);

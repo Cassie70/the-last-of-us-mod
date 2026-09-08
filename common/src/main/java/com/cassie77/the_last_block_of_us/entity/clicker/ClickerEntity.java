@@ -1,7 +1,6 @@
 package com.cassie77.the_last_block_of_us.entity.clicker;
 
 import com.cassie77.the_last_block_of_us.ModEntities;
-import com.cassie77.the_last_block_of_us.ModSounds;
 import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
 import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
@@ -65,7 +64,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     private static final double FOLLOW_RANGE = 8.0;
     private static final int ANGRINESS_AMOUNT = 50;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 3;
-    private static final double CALLING_DISTANCE = 3.0F;
+    private static final double CALLING_DISTANCE = 5.0F;
 
     private static final Predicate<Difficulty> DOOR_BREAK_DIFFICULTY_CHECKER = (difficulty) -> difficulty == Difficulty.HARD;
 
@@ -120,17 +119,17 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    public boolean checkSpawnObstruction(LevelReader world) {
+    public boolean checkSpawnObstruction(@NotNull LevelReader world) {
         return super.checkSpawnObstruction(world) && world.noCollision(this, this.getType().getDimensions().makeBoundingBox(this.position()));
     }
 
     @Override
-    public float getWalkTargetValue(BlockPos pos, LevelReader world) {
+    public float getWalkTargetValue(@NotNull BlockPos pos, @NotNull LevelReader world) {
         return 0.0F;
     }
 
     @Override
-    protected boolean canRide(Entity entity) {
+    protected boolean canRide(@NotNull Entity entity) {
         return false;
     }
 
@@ -160,7 +159,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected @NotNull SoundEvent getHurtSound(DamageSource source) {
+    protected @NotNull SoundEvent getHurtSound(@NotNull DamageSource source) {
         return SoundEvents.ZOMBIE_HURT;
     }
 
@@ -170,14 +169,14 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    public boolean doHurtTarget(ServerLevel world, Entity target) {
+    public boolean doHurtTarget(ServerLevel world, @NotNull Entity target) {
         world.broadcastEntityEvent(this, (byte) 4);
         this.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1.5F, this.getVoicePitch());
         return super.doHurtTarget(world, target);
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         super.defineSynchedData(builder);
         builder.define(ANGER, 0);
     }
@@ -204,7 +203,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected void customServerAiStep(ServerLevel world) {
+    protected void customServerAiStep(@NotNull ServerLevel world) {
         ProfilerFiller profiler = Profiler.get();
         profiler.push("ClickerBrain");
         this.getBrain().tick(world, this);
@@ -246,7 +245,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> data) {
+    public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> data) {
         if (DATA_POSE.equals(data)) {
             switch (this.getPose()) {
                 case ROARING -> this.roaringAnimationState.start(this.tickCount);
@@ -266,7 +265,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected @NotNull Brain<?> makeBrain(Dynamic<?> dynamic) {
+    protected @NotNull Brain<?> makeBrain(@NotNull Dynamic<?> dynamic) {
         return ClickerBrain.create(this, dynamic);
     }
 
@@ -283,7 +282,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> callback) {
+    public void updateDynamicGameEventListener(@NotNull BiConsumer<DynamicGameEventListener<?>, ServerLevel> callback) {
         Level world = this.level();
         if (world instanceof ServerLevel serverWorld) {
             callback.accept(this.dynamicGameEventListener, serverWorld);
@@ -305,14 +304,14 @@ public class ClickerEntity extends Monster implements VibrationSystem {
         return false;
     }
 
-    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+    protected void addAdditionalSaveData(@NotNull ValueOutput valueOutput) {
         super.addAdditionalSaveData(valueOutput);
         valueOutput.store("anger", AngerManagement.codec(this::isValidTarget), this.angerManagement);
         valueOutput.putBoolean("CanBreakDoors", this.canBreakDoors());
         valueOutput.store("listener", Data.CODEC, this.vibrationData);
     }
 
-    protected void readAdditionalSaveData(ValueInput valueInput) {
+    protected void readAdditionalSaveData(@NotNull ValueInput valueInput) {
         super.readAdditionalSaveData(valueInput);
         this.angerManagement = valueInput.read("anger", AngerManagement.codec(this::isValidTarget)).orElseGet(() -> new AngerManagement(this::isValidTarget, Collections.emptyList()));
         this.setCanBreakDoors(valueInput.getBooleanOr("CanBreakDoors", false));
@@ -359,13 +358,13 @@ public class ClickerEntity extends Monster implements VibrationSystem {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, @Nullable SpawnGroupData entityData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull EntitySpawnReason spawnReason, @Nullable SpawnGroupData entityData) {
         this.setCanBreakDoors(true);
         return super.finalizeSpawn(world, difficulty, spawnReason, entityData);
     }
 
     @Override
-    public boolean hurtServer(ServerLevel world, DamageSource source, float amount) {
+    public boolean hurtServer(@NotNull ServerLevel world, @NotNull DamageSource source, float amount) {
         boolean bl = super.hurtServer(world, source, amount);
         if (!this.isNoAi()) {
             Entity entity = source.getEntity();
@@ -414,7 +413,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected void doPush(Entity entity) {
+    protected void doPush(@NotNull Entity entity) {
         if (!this.isNoAi() && !this.getBrain().hasMemoryValue(MemoryModuleType.TOUCH_COOLDOWN)) {
             this.getBrain().setMemoryWithExpiry(MemoryModuleType.TOUCH_COOLDOWN, Unit.INSTANCE, 20L);
             this.increaseAngerAt(entity);
@@ -457,7 +456,7 @@ public class ClickerEntity extends Monster implements VibrationSystem {
         }
 
         @Override
-        public boolean canReceiveVibration(ServerLevel world, BlockPos pos, Holder<GameEvent> event, @Nullable GameEvent.Context context) {
+        public boolean canReceiveVibration(@NotNull ServerLevel world, @NotNull BlockPos pos, @NotNull Holder<GameEvent> event, @Nullable GameEvent.Context context) {
             if (!ClickerEntity.this.isNoAi() && !ClickerEntity.this.isDeadOrDying() && !ClickerEntity.this.getBrain().hasMemoryValue(MemoryModuleType.VIBRATION_COOLDOWN) && world.getWorldBorder().isWithinBounds(pos)) {
                 if (context != null) {
                     Entity sourceEntity = context.sourceEntity();
@@ -472,12 +471,12 @@ public class ClickerEntity extends Monster implements VibrationSystem {
         }
 
         @Override
-        public void onReceiveVibration(ServerLevel world, BlockPos pos, Holder<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
+        public void onReceiveVibration(@NotNull ServerLevel world, @NotNull BlockPos pos, @NotNull Holder<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
             if (!ClickerEntity.this.isDeadOrDying()) {
                 ClickerEntity.this.brain.setMemoryWithExpiry(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 20L);
                 world.broadcastEntityEvent(ClickerEntity.this, (byte) 61);
                 if (!ClickerEntity.this.hasPose(Pose.ROARING)) {
-                    ClickerEntity.this.playSound(ModSounds.CLICKER_ALERT, 1.0F, ClickerEntity.this.getVoicePitch());
+                    ClickerEntity.this.playSound(ClickerEntity.this.getAngriness().getListeningSound(), 1.0F, ClickerEntity.this.getVoicePitch());
                 }
                 BlockPos blockPos = pos;
                 if (entity != null) {

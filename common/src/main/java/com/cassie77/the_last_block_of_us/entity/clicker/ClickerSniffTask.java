@@ -8,13 +8,14 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class ClickerSniffTask<E extends ClickerEntity> extends Behavior<E> {
-    private static final double HORIZONTAL_RADIUS = 4.0;
-    private static final double VERTICAL_RADIUS = 4.0;
+    private static final double HORIZONTAL_RADIUS = 3.5;
+    private static final double VERTICAL_RADIUS = 3.5;
 
     public ClickerSniffTask(int runTime) {
         super(ImmutableMap.of(
@@ -24,28 +25,28 @@ public class ClickerSniffTask<E extends ClickerEntity> extends Behavior<E> {
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.NEAREST_ATTACKABLE, MemoryStatus.REGISTERED,
                 MemoryModuleType.DISTURBANCE_LOCATION, MemoryStatus.REGISTERED,
-                MemoryModuleType.SNIFF_COOLDOWN, MemoryStatus.REGISTERED
-        ), runTime);
+                MemoryModuleType.SNIFF_COOLDOWN, MemoryStatus.REGISTERED), runTime);
     }
 
     @Override
-    protected boolean canStillUse(ServerLevel serverLevel, E clickerEntity, long l) {
+    protected boolean canStillUse(@NotNull ServerLevel serverLevel, @NotNull E clickerEntity, long l) {
         return true;
     }
 
     @Override
-    protected void start(ServerLevel serverLevel, E clickerEntity, long l) {
+    protected void start(@NotNull ServerLevel serverLevel, E clickerEntity, long l) {
         clickerEntity.playSound(ModSounds.CLICKER_AWARE, 2.0F, 1.0F);
     }
 
     @Override
-    protected void stop(ServerLevel serverLevel, E clickerEntity, long l) {
+    protected void stop(@NotNull ServerLevel serverLevel, E clickerEntity, long l) {
         if (clickerEntity.hasPose(Pose.SNIFFING)) {
             clickerEntity.setPose(Pose.STANDING);
         }
 
         clickerEntity.getBrain().eraseMemory(MemoryModuleType.IS_SNIFFING);
-        Optional<LivingEntity> nearestAttackable = clickerEntity.getBrain().getMemory(MemoryModuleType.NEAREST_ATTACKABLE);
+        Optional<LivingEntity> nearestAttackable = clickerEntity.getBrain()
+                .getMemory(MemoryModuleType.NEAREST_ATTACKABLE);
         Objects.requireNonNull(clickerEntity);
         nearestAttackable.filter(clickerEntity::isValidTarget).ifPresent((target) -> {
             if (clickerEntity.closerThan(target, HORIZONTAL_RADIUS, VERTICAL_RADIUS)) {

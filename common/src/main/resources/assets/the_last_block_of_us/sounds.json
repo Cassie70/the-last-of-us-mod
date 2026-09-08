@@ -36,6 +36,13 @@
       "the_last_block_of_us:clicker_alert"
     ]
   },
+  "clicker_alert_angry": {
+    "subtitle": "sound.the_last_block_of_us.clicker_alert_angry",
+    "sounds": [
+      "the_last_block_of_us:clicker_alert_angry",
+      "the_last_block_of_us:clicker_alert_angry_2"
+    ]
+  },
   "bloater_angry": {
     "subtitle": "sound.the_last_block_of_us.bloater_angry",
     "sounds": [

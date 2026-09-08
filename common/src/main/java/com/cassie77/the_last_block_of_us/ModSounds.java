@@ -17,6 +17,8 @@ public class ModSounds {
     public static final SoundEvent CLICKER_AMBIENT = registerSound("clicker_ambient");
     public static final SoundEvent CLICKER_AMBIENT_2 = registerSound("clicker_ambient_2");
     public static final SoundEvent CLICKER_ALERT = registerSound("clicker_alert");
+    public static final SoundEvent CLICKER_ALERT_ANGRY = registerSound("clicker_alert_angry");
+    public static final SoundEvent CLICKER_ALERT_ANGRY_2 = registerSound("clicker_alert_angry_2");
 
     public static final SoundEvent BLOATER_ANGRY = registerSound("bloater_angry");
     public static final SoundEvent BLOATER_AWARE = registerSound("bloater_aware");

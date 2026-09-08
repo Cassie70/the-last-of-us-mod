@@ -2,6 +2,7 @@ package com.cassie77.the_last_block_of_us.item.bottle;
 
 import com.cassie77.the_last_block_of_us.ModEntities;
 import com.cassie77.the_last_block_of_us.ModItems;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,10 +18,16 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class BottleEntity extends ThrowableItemProjectile {
+
+    private int glassHits = 0;
 
     public BottleEntity(EntityType<? extends BottleEntity> entityType, Level world) {
         super(entityType, world);
@@ -35,7 +42,7 @@ public class BottleEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected Item getDefaultItem() {
+    protected @NotNull Item getDefaultItem() {
         return ModItems.BOTTLE;
     }
 
@@ -56,22 +63,59 @@ public class BottleEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected void onHit(HitResult hitResult) {
+    protected void onHit(@NotNull HitResult hitResult) {
         super.onHit(hitResult);
         if (!this.level().isClientSide()) {
-            this.level().broadcastEntityEvent(this, (byte) 3);
-            this.level().playSound(
-                    null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.SPLASH_POTION_BREAK,
-                    SoundSource.NEUTRAL,
-                    2.0F, 1.0F
-            );
-            this.discard();
+
+            if (hitResult instanceof BlockHitResult blockHitResult) {
+                BlockPos blockPos = blockHitResult.getBlockPos();
+                BlockState blockState = this.level().getBlockState(blockPos);
+
+                if(
+                        blockState.getBlock() == Blocks.GLASS_PANE
+                ) {
+                    if (glassHits >= 3) {
+                        breakBottle();
+                        return;
+                    }
+                    glassHits++;
+
+                    this.level().destroyBlock(blockPos, false);
+
+                    this.level().playSound(
+                            null,
+                            this.getX(),
+                            this.getY(),
+                            this.getZ(),
+                            SoundEvents.GLASS_BREAK,
+                            SoundSource.BLOCKS,
+                            1.0F,
+                            1.0F
+                    );
+                }
+                breakBottle();
+            }
         }
     }
 
+
+    private void breakBottle() {
+        this.level().broadcastEntityEvent(this, (byte) 3);
+        this.level().playSound(
+                null,
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                SoundEvents.SPLASH_POTION_BREAK,
+                SoundSource.NEUTRAL,
+                2.0F,
+                1.0F
+        );
+        this.discard();
+    }
+
     @Override
-    protected void onHitEntity(EntityHitResult entityHitResult) {
+    protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
 
         if (!this.level().isClientSide()) {

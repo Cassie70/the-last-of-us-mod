@@ -25,7 +25,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
         // Register default entity attributes
         FabricDefaultAttributeRegistry.register(ModEntities.CLICKER, ClickerEntity.addAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.BLOATER, BloaterEntity.addAttributes());
-
+        FabricModBlockEntities.register();
         // Register creative tab entries
         registerCreativeTabs();
 

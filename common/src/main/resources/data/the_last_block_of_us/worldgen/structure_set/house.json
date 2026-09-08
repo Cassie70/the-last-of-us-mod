@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "the_last_block_of_us:house",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 8,
+    "salt": 328423685
+  }
+}

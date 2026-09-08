@@ -28,5 +28,7 @@
   "sound.the_last_block_of_us.bloater_angry": "Bloater Angry",
   "sound.the_last_block_of_us.bloater_aware": "Bloater Aware",
   "sound.the_last_block_of_us.bloater_ambient": "Bloater Groans",
-  "sound.the_last_block_of_us.bloater_alert": "Bloater Alerted"
+  "sound.the_last_block_of_us.bloater_alert": "Bloater Alerted",
+
+  "block.the_last_block_of_us.clicker_spawner_block": "Clicker Spawner"
 }

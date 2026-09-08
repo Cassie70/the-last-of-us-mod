@@ -14,13 +14,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
-import net.minecraft.world.entity.ai.behavior.warden.Sniffing;
-import net.minecraft.world.entity.ai.behavior.warden.TryToSniff;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.monster.warden.WardenAi;
 import net.minecraft.world.entity.schedule.Activity;
 
 import java.util.List;
@@ -61,7 +58,7 @@ public class ClickerBrain {
 
     static ImmutableList<BehaviorControl<? super ClickerEntity>> idleTasks = ImmutableList.of(
             ClickerFindRoarTargetTask.create(ClickerEntity::getPrimeSuspect),
-            TryToSniff.create(),
+            ClickerTryToSniff.create(),
             new RunOne<>(
                     ImmutableMap.of(MemoryModuleType.IS_SNIFFING, MemoryStatus.VALUE_ABSENT),
                     ImmutableList.of(

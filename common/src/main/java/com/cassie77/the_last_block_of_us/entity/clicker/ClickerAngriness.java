@@ -3,15 +3,14 @@ package com.cassie77.the_last_block_of_us.entity.clicker;
 import com.cassie77.the_last_block_of_us.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.Arrays;
 
 public enum ClickerAngriness {
 
-    CALM(0, ModSounds.CLICKER_AMBIENT, SoundEvents.WARDEN_LISTENING),
-    AGITATED(60, ModSounds.CLICKER_AMBIENT, SoundEvents.WARDEN_LISTENING_ANGRY),
-    ANGRY(120, ModSounds.CLICKER_AMBIENT, SoundEvents.WARDEN_LISTENING_ANGRY);
+    CALM(0, ModSounds.CLICKER_AMBIENT, ModSounds.CLICKER_ALERT),
+    AGITATED(60, ModSounds.CLICKER_AMBIENT, ModSounds.CLICKER_ALERT),
+    ANGRY(120, ModSounds.CLICKER_AMBIENT, ModSounds.CLICKER_ALERT_ANGRY);
 
     private static final ClickerAngriness[] VALUES = Util.make(values(), (values) -> Arrays.sort(values, (a, b) -> Integer.compare(b.threshold, a.threshold)));
     private final int threshold;
