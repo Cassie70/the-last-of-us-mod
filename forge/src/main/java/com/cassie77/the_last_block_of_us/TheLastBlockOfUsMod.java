@@ -6,24 +6,41 @@ import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 
 @Mod(Constants.MOD_ID)
 public class TheLastBlockOfUsMod {
 
     public TheLastBlockOfUsMod(FMLJavaModLoadingContext context) {
         Constants.LOG.info("Initializing {} on Forge!", Constants.MOD_NAME);
-        CommonClass.init();
 
         var modBusGroup = context.getModBusGroup();
+        ForgeModBlocks.BLOCKS.register(modBusGroup);
+        ForgeModBlocks.ITEMS.register(modBusGroup);
+        ForgeModEntities.ENTITY_TYPES.register(modBusGroup);
+        ForgeModSensors.SENSOR_TYPES.register(modBusGroup);
+        ForgeModSounds.SOUNDS.register(modBusGroup);
+        ForgeModBlockEntities.BLOCK_ENTITY_TYPES.register(modBusGroup);
+        ForgeModItems.ITEMS.register(modBusGroup);
+        CommonClass.init();
 
         EntityAttributeCreationEvent.getBus(modBusGroup).addListener(this::onEntityAttributeCreation);
         BuildCreativeModeTabContentsEvent.getBus(modBusGroup).addListener(this::onBuildCreativeTabs);
         SpawnPlacementRegisterEvent.getBus(modBusGroup).addListener(this::onRegisterSpawnPlacements);
+
+        if (FMLLoader.getDist() == Dist.CLIENT) {
+            EntityRenderersEvent.RegisterLayerDefinitions.getBus(modBusGroup)
+                    .addListener(ForgeModClient::registerLayerDefinitions);
+            EntityRenderersEvent.RegisterRenderers.getBus(modBusGroup)
+                    .addListener(ForgeModClient::registerRenderers);
+        }
 
     }
 
@@ -63,15 +80,13 @@ public class TheLastBlockOfUsMod {
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules,
-                SpawnPlacementRegisterEvent.Operation.OR
-        );
+                SpawnPlacementRegisterEvent.Operation.OR);
 
         event.register(
                 ModEntities.BLOATER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules,
-                SpawnPlacementRegisterEvent.Operation.OR
-        );
+                SpawnPlacementRegisterEvent.Operation.OR);
     }
 }

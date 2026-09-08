@@ -10,10 +10,5 @@ public class CommonClass {
                 Services.PLATFORM.getPlatformName(),
                 Services.PLATFORM.getEnvironmentName());
 
-        ModItems.initialize();
-        ModSounds.initialize();
-        ModEntities.initialize();
-        ModSensors.initialize();
-        ModBlocks.initialize();
     }
 }

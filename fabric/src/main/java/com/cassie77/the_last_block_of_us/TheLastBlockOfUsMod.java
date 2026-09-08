@@ -22,14 +22,17 @@ public class TheLastBlockOfUsMod implements ModInitializer {
         Constants.LOG.info("Initializing {} on Fabric!", Constants.MOD_NAME);
         CommonClass.init();
 
-        // Register default entity attributes
+            FabricModSounds.initialize();
+            FabricModEntities.initialize();
+            FabricModSensors.initialize();
+            FabricModBlocks.initialize();
         FabricDefaultAttributeRegistry.register(ModEntities.CLICKER, ClickerEntity.addAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.BLOATER, BloaterEntity.addAttributes());
-        FabricModBlockEntities.register();
-        // Register creative tab entries
-        registerCreativeTabs();
 
-        // Register entity spawns
+        FabricModBlockEntities.initialize();
+        FabricModItems.initialize();
+
+        registerCreativeTabs();
         registerSpawns();
     }
 

@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FabricModBlockEntities {
 
-    public static void register() {
+    public static void initialize() {
         ModBlockEntities.CLICKER_SPAWNER_BLOCK_ENTITY = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
                 ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "clicker_spawner_block_entity"),
