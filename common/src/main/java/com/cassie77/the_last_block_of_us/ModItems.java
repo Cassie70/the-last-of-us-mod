@@ -7,6 +7,8 @@ public class ModItems {
     public static Item RAG;
     public static Item BLADE;
     public static Item ALCOHOL;
+    public static Item ALCOHOL_HALF;
+    public static Item ALCOHOL_QUARTER;
     public static Item BINDING;
     public static Item CANISTER;
 

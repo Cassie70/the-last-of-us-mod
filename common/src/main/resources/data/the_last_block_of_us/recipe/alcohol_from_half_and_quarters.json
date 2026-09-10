@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the_last_block_of_us:alcohol_half",
+    "the_last_block_of_us:alcohol_quarter",
+    "the_last_block_of_us:alcohol_quarter"
+  ],
+  "result": {
+    "id": "the_last_block_of_us:alcohol",
+    "count": 1
+  }
+}

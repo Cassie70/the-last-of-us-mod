@@ -41,6 +41,8 @@ public class TheLastBlockOfUsMod implements ModInitializer {
             entries.accept(ModItems.RAG);
             entries.accept(ModItems.BLADE);
             entries.accept(ModItems.ALCOHOL);
+            entries.accept(ModItems.ALCOHOL_HALF);
+            entries.accept(ModItems.ALCOHOL_QUARTER);
             entries.accept(ModItems.BINDING);
             entries.accept(ModItems.CANISTER);
         });
@@ -57,9 +59,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
             entries.accept(ModItems.MYCOTOXIN_SAC);
         });
 
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> {
-            entries.accept(ModBlocks.CORDYCEPS_BLOCK);
-        });
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register(entries -> entries.accept(ModBlocks.CORDYCEPS_BLOCK));
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> {
             entries.accept(ModItems.CLICKER_SPAWN_EGG);

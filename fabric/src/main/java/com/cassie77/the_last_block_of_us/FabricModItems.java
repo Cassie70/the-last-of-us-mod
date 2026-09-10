@@ -33,7 +33,11 @@ public class FabricModItems {
 
         ModItems.RAG = register("rag", Item::new);
         ModItems.BLADE = register("blade", Item::new);
+
         ModItems.ALCOHOL = register("alcohol", Item::new);
+        ModItems.ALCOHOL_HALF = register("alcohol_half", Item::new);
+        ModItems.ALCOHOL_QUARTER = register("alcohol_quarter", Item::new);
+
         ModItems.BINDING = register("binding", Item::new);
         ModItems.CANISTER = register("canister", Item::new);
 
