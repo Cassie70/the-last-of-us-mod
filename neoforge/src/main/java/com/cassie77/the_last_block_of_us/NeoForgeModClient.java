@@ -6,11 +6,10 @@ import com.cassie77.the_last_block_of_us.client.bloater.BloaterRenderer;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerModel;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-public final class ForgeModClient {
-
-    private ForgeModClient() {
+public final class NeoForgeModClient {
+    private NeoForgeModClient() {
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {

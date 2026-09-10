@@ -1,4 +1,4 @@
-package com.cassie77.the_last_block_of_us.clicker;
+package com.cassie77.the_last_block_of_us.client.clicker;
 
 import com.cassie77.the_last_block_of_us.Constants;
 import net.minecraft.client.animation.KeyframeAnimation;

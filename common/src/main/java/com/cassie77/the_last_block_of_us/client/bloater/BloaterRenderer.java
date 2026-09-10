@@ -1,4 +1,4 @@
-package com.cassie77.the_last_block_of_us.bloater;
+package com.cassie77.the_last_block_of_us.client.bloater;
 
 import com.cassie77.the_last_block_of_us.Constants;
 import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class BloaterRenderer extends MobRenderer<BloaterEntity, BloaterRenderState, BloaterModel> {
 
@@ -15,24 +16,24 @@ public class BloaterRenderer extends MobRenderer<BloaterEntity, BloaterRenderSta
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BloaterRenderState state) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull BloaterRenderState state) {
         return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/bloater/bloater.png");
     }
 
     @Override
-    protected void scale(BloaterRenderState state, PoseStack matrices) {
+    protected void scale(@NotNull BloaterRenderState state, PoseStack matrices) {
         float scale = 1.25f;
         matrices.scale(scale, scale, scale);
         super.scale(state, matrices);
     }
 
     @Override
-    public BloaterRenderState createRenderState() {
+    public @NotNull BloaterRenderState createRenderState() {
         return new BloaterRenderState();
     }
 
     @Override
-    public void extractRenderState(BloaterEntity bloater, BloaterRenderState bloaterRenderState, float f) {
+    public void extractRenderState(@NotNull BloaterEntity bloater, @NotNull BloaterRenderState bloaterRenderState, float f) {
         super.extractRenderState(bloater, bloaterRenderState, f);
 
         bloaterRenderState.roaringAnimationState.copyFrom(bloater.roaringAnimationState);

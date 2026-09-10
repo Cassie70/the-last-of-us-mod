@@ -35,7 +35,7 @@ public class InfectedRoarTask extends Behavior<InfectedEntity> {
         LivingEntity livingEntity = infectedEntity.getBrain().getMemory(MemoryModuleType.ROAR_TARGET).get();
         BehaviorUtils.lookAtEntity(infectedEntity, livingEntity);
         infectedEntity.setPose(Pose.ROARING);
-        infectedEntity.increaseAngerAt(livingEntity, ANGER_INCREASE, false);
+        infectedEntity.increaseAngerAt(livingEntity, ANGER_INCREASE);
     }
 
     @Override

@@ -9,6 +9,5 @@ public class CommonClass {
                 "Hello from Common init on {}! we are currently in a {} environment!",
                 Services.PLATFORM.getPlatformName(),
                 Services.PLATFORM.getEnvironmentName());
-
     }
 }

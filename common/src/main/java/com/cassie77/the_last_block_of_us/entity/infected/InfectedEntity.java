@@ -229,11 +229,11 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     }
 
     public void increaseAngerAt(@Nullable Entity entity) {
-        this.increaseAngerAt(entity, this.getInfectedAngrinessAmount(), true);
+        this.increaseAngerAt(entity, this.getInfectedAngrinessAmount());
     }
 
     @VisibleForTesting
-    public void increaseAngerAt(@Nullable Entity entity, int amount, boolean listening) {
+    public void increaseAngerAt(@Nullable Entity entity, int amount) {
         if (!this.isNoAi() && this.isValidTarget(entity)) {
             boolean bl = !(this.getTarget() instanceof Player);
             int i = this.angerManagement.increaseAnger(entity, amount);
@@ -258,7 +258,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
         boolean bl = super.hurtServer(world, source, amount);
         if (!this.isNoAi()) {
             Entity entity = source.getEntity();
-            this.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 20, false);
+            this.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 20);
 
             if (entity != null) {
                 double radius = this.getInfectedCallingDistance();
@@ -275,10 +275,10 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
                 );
 
                 for (InfectedEntity clicker : nearbyClickers)
-                    clicker.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 10, false);
+                    clicker.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 10);
 
                 for (BloaterEntity bloater : nearbyBloaters)
-                    bloater.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 10, false);
+                    bloater.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 10);
             }
 
             if (this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).isEmpty() && entity instanceof LivingEntity livingEntity) {
@@ -387,7 +387,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
 
                             InfectedEntity.this.increaseAngerAt(entity);
                         } else {
-                            InfectedEntity.this.increaseAngerAt(entity, 10, true);
+                            InfectedEntity.this.increaseAngerAt(entity, 10);
                         }
                     }
 

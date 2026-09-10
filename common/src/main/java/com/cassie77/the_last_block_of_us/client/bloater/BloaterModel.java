@@ -1,4 +1,4 @@
-package com.cassie77.the_last_block_of_us.bloater;
+package com.cassie77.the_last_block_of_us.client.bloater;
 
 import com.cassie77.the_last_block_of_us.Constants;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.client.animation.KeyframeAnimation;
+import org.jetbrains.annotations.NotNull;
 
 public class BloaterModel extends EntityModel<BloaterRenderState> {
 
@@ -100,7 +101,7 @@ public class BloaterModel extends EntityModel<BloaterRenderState> {
     }
 
     @Override
-    public void setupAnim(BloaterRenderState state) {
+    public void setupAnim(@NotNull BloaterRenderState state) {
         super.setupAnim(state);
         this.setHeadAngle(state.yRot, state.xRot);
 

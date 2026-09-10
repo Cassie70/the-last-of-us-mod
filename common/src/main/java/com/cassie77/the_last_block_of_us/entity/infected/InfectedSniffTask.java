@@ -50,7 +50,7 @@ public class InfectedSniffTask<E extends InfectedEntity> extends Behavior<E> {
         Objects.requireNonNull(infectedEntity);
         nearestAttackable.filter(infectedEntity::isValidTarget).ifPresent((target) -> {
             if (infectedEntity.closerThan(target, infectedEntity.getInfectedSniffHorizontalRadius(), infectedEntity.getInfectedSniffVerticalRadius())) {
-                infectedEntity.increaseAngerAt(target, 150, false);
+                infectedEntity.increaseAngerAt(target, 150);
             }
 
             if (!infectedEntity.getBrain().hasMemoryValue(MemoryModuleType.DISTURBANCE_LOCATION)) {

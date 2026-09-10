@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -35,6 +34,7 @@ public class BloaterEntity extends InfectedEntity {
     private static final double ATTACK_KNOCKBACK = 2.0;
     private static final double ATTACK_DAMAGE = 20.0;
     private static final double FOLLOW_RANGE = 6.0;
+    private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 5;
     private static final int BREAKING_BLOCK_COOLDOWN = 30;
     private int blockBreakingCooldown = 0;
@@ -69,7 +69,8 @@ public class BloaterEntity extends InfectedEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE);
+                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE)
+                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, WATER_MOVEMENT_EFFICIENCY);
     }
 
     @Override
@@ -198,9 +199,9 @@ public class BloaterEntity extends InfectedEntity {
     @Override
     public SoundEvent getListeningSound(InfectedAngriness angriness) {
         return switch (angriness) {
-            case CALM -> SoundEvents.WARDEN_LISTENING;
-            case AGITATED -> SoundEvents.WARDEN_LISTENING_ANGRY;
-            case ANGRY -> SoundEvents.WARDEN_LISTENING_ANGRY;
+            case CALM -> ModSounds.BLOATER_ALERT;
+            case AGITATED -> ModSounds.BLOATER_ALERT;
+            case ANGRY -> ModSounds.BLOATER_ALERT;
         };
     }
 

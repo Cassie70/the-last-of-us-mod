@@ -32,6 +32,7 @@ public class ClickerEntity extends InfectedEntity {
     private static final double ATTACK_KNOCKBACK = 1.0;
     private static final double ATTACK_DAMAGE = 15.0;
     private static final double FOLLOW_RANGE = 8.0;
+    private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 3;
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -60,7 +61,8 @@ public class ClickerEntity extends InfectedEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE);
+                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE)
+                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, WATER_MOVEMENT_EFFICIENCY);
     }
 
     @Override

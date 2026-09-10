@@ -1,4 +1,4 @@
-package com.cassie77.the_last_block_of_us.bloater;
+package com.cassie77.the_last_block_of_us.client.bloater;
 
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;

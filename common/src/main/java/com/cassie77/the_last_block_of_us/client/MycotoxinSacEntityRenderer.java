@@ -1,4 +1,4 @@
-package com.cassie77.the_last_block_of_us;
+package com.cassie77.the_last_block_of_us.client;
 
 import com.cassie77.the_last_block_of_us.item.micotoxinsac.MycotoxinSacEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
