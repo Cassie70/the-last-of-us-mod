@@ -71,9 +71,7 @@ public class BottleEntity extends ThrowableItemProjectile {
                 BlockPos blockPos = blockHitResult.getBlockPos();
                 BlockState blockState = this.level().getBlockState(blockPos);
 
-                if(
-                        blockState.getBlock() == Blocks.GLASS_PANE
-                ) {
+                if(blockState.getBlock() == Blocks.GLASS_PANE || blockState.getBlock() == Blocks.GLASS) {
                     if (glassHits >= 3) {
                         breakBottle();
                         return;

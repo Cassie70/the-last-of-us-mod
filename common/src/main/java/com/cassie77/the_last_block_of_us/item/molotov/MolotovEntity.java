@@ -19,10 +19,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class MolotovEntity extends ThrowableItemProjectile {
+    private int glassHits = 0;
 
     public MolotovEntity(EntityType<? extends MolotovEntity> entityType, Level world) {
         super(entityType, world);
@@ -37,7 +41,7 @@ public class MolotovEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected Item getDefaultItem() {
+    protected @NotNull Item getDefaultItem() {
         return ModItems.MOLOTOV;
     }
 
@@ -58,35 +62,60 @@ public class MolotovEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected void onHit(HitResult hitResult) {
+    protected void onHit(@NotNull HitResult hitResult) {
         super.onHit(hitResult);
         if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte) 3);
 
-            ((ServerLevel) this.level()).sendParticles(
-                    ParticleTypes.LAVA,
-                    this.getX() + 0.5,
-                    this.getY() + 0.5,
-                    this.getZ() + 0.5,
-                    100,
-                    0.5, 0.5, 0.5,
-                    0.0
-            );
+            if (hitResult instanceof BlockHitResult blockHitResult) {
+                BlockPos blockPos = blockHitResult.getBlockPos();
+                BlockState blockState = this.level().getBlockState(blockPos);
 
-            this.level().playSound(
-                    null, this.getX(), this.getY(), this.getZ(),
-                    ModSounds.EXPLODE_MOLOTOV,
-                    SoundSource.NEUTRAL,
-                    2.0F, 1.0F
-            );
+                if(blockState.getBlock() == Blocks.AIR){
+                    return;
+                }
 
-            spawnMolotovFire();
-            this.discard();
+                if (blockState.getBlock() == Blocks.GLASS_PANE || blockState.getBlock() == Blocks.GLASS) {
+                    if (glassHits >= 3) {
+                        breakMolotov();
+                        return;
+                    }
+                    glassHits++;
+
+                    this.level().destroyBlock(blockPos, false);
+
+                }else{
+                    breakMolotov();
+                }
+            }
+
+
         }
     }
 
+    private void breakMolotov() {
+        ((ServerLevel) this.level()).sendParticles(
+                ParticleTypes.LAVA,
+                this.getX() + 0.5,
+                this.getY() + 0.5,
+                this.getZ() + 0.5,
+                100,
+                0.5, 0.5, 0.5,
+                0.0
+        );
+        this.level().broadcastEntityEvent(this, (byte) 3);
+        this.level().playSound(
+                null, this.getX(), this.getY(), this.getZ(),
+                ModSounds.EXPLODE_MOLOTOV,
+                SoundSource.NEUTRAL,
+                2.0F, 1.0F
+        );
+        spawnMolotovFire();
+        this.discard();
+    }
+
     @Override
-    protected void onHitEntity(EntityHitResult entityHitResult) {
+    protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
 
         if (!this.level().isClientSide()) {
