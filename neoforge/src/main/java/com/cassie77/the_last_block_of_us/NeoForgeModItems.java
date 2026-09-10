@@ -27,6 +27,10 @@ public final class NeoForgeModItems {
     public static final DeferredHolder<Item, Item> BLADE = register("blade", Item::new, item -> ModItems.BLADE = item);
     public static final DeferredHolder<Item, Item> ALCOHOL = register("alcohol", Item::new,
             item -> ModItems.ALCOHOL = item);
+    public static final DeferredHolder<Item, Item> ALCOHOL_HALF = register("alcohol_half", Item::new,
+            item -> ModItems.ALCOHOL_HALF = item);
+    public static final DeferredHolder<Item, Item> ALCOHOL_QUARTER = register("alcohol_quarter", Item::new,
+            item -> ModItems.ALCOHOL_QUARTER = item);
     public static final DeferredHolder<Item, Item> BINDING = register("binding", Item::new,
             item -> ModItems.BINDING = item);
     public static final DeferredHolder<Item, Item> CANISTER = register("canister", Item::new,

@@ -27,6 +27,8 @@ public final class ForgeModItems {
     public static final RegistryObject<Item> RAG = register("rag", Item::new, item -> ModItems.RAG = item);
     public static final RegistryObject<Item> BLADE = register("blade", Item::new, item -> ModItems.BLADE = item);
     public static final RegistryObject<Item> ALCOHOL = register("alcohol", Item::new, item -> ModItems.ALCOHOL = item);
+    public static final RegistryObject<Item> ALCOHOL_HALF = register("alcohol_half", Item::new, item -> ModItems.ALCOHOL_HALF = item);
+    public static final RegistryObject<Item> ALCOHOL_QUARTER = register("alcohol_quarter", Item::new, item -> ModItems.ALCOHOL_QUARTER = item);
     public static final RegistryObject<Item> BINDING = register("binding", Item::new, item -> ModItems.BINDING = item);
     public static final RegistryObject<Item> CANISTER = register("canister", Item::new,
             item -> ModItems.CANISTER = item);

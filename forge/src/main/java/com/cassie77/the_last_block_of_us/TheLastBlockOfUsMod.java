@@ -54,6 +54,8 @@ public class TheLastBlockOfUsMod {
             event.accept(ModItems.RAG);
             event.accept(ModItems.BLADE);
             event.accept(ModItems.ALCOHOL);
+            event.accept(ModItems.ALCOHOL_HALF);
+            event.accept(ModItems.ALCOHOL_QUARTER);
             event.accept(ModItems.BINDING);
             event.accept(ModItems.CANISTER);
         } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
