@@ -24,12 +24,22 @@ public final class ForgeModItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
 
-    public static final RegistryObject<Item> RAG = register("rag", Item::new, item -> ModItems.RAG = item);
-    public static final RegistryObject<Item> BLADE = register("blade", Item::new, item -> ModItems.BLADE = item);
     public static final RegistryObject<Item> ALCOHOL = register("alcohol", Item::new, item -> ModItems.ALCOHOL = item);
     public static final RegistryObject<Item> ALCOHOL_HALF = register("alcohol_half", Item::new, item -> ModItems.ALCOHOL_HALF = item);
     public static final RegistryObject<Item> ALCOHOL_QUARTER = register("alcohol_quarter", Item::new, item -> ModItems.ALCOHOL_QUARTER = item);
+
     public static final RegistryObject<Item> BINDING = register("binding", Item::new, item -> ModItems.BINDING = item);
+    public static final RegistryObject<Item> BINDING_HALF = register("binding_half", Item::new, item -> ModItems.BINDING_HALF = item);
+    public static final RegistryObject<Item> BINDING_QUARTER = register("binding_quarter", Item::new, item -> ModItems.BINDING_QUARTER = item);
+
+    public static final RegistryObject<Item> BLADE = register("blade", Item::new, item -> ModItems.BLADE = item);
+    public static final RegistryObject<Item> BLADE_HALF = register("blade_half", Item::new, item -> ModItems.BLADE_HALF = item);
+    public static final RegistryObject<Item> BLADE_QUARTER = register("blade_quarter", Item::new, item -> ModItems.BLADE_QUARTER = item);
+
+    public static final RegistryObject<Item> RAG = register("rag", Item::new, item -> ModItems.RAG = item);
+    public static final RegistryObject<Item> RAG_HALF = register("rag_half", Item::new, item -> ModItems.RAG_HALF = item);
+    public static final RegistryObject<Item> RAG_QUARTER = register("rag_quarter", Item::new, item -> ModItems.RAG_QUARTER = item);
+
     public static final RegistryObject<Item> CANISTER = register("canister", Item::new,
             item -> ModItems.CANISTER = item);
 

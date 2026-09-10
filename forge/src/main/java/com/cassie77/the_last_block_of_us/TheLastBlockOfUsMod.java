@@ -51,13 +51,24 @@ public class TheLastBlockOfUsMod {
 
     private void onBuildCreativeTabs(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.RAG);
-            event.accept(ModItems.BLADE);
             event.accept(ModItems.ALCOHOL);
             event.accept(ModItems.ALCOHOL_HALF);
             event.accept(ModItems.ALCOHOL_QUARTER);
+
             event.accept(ModItems.BINDING);
+            event.accept(ModItems.BINDING_HALF);
+            event.accept(ModItems.BINDING_QUARTER);
+
+            event.accept(ModItems.BLADE);
+            event.accept(ModItems.BLADE_HALF);
+            event.accept(ModItems.BLADE_QUARTER);
+
+            event.accept(ModItems.RAG);
+            event.accept(ModItems.RAG_HALF);
+            event.accept(ModItems.RAG_QUARTER);
+
             event.accept(ModItems.CANISTER);
+
         } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(ModItems.BOTTLE);
             event.accept(ModItems.MOLOTOV);

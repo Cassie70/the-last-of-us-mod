@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the_last_block_of_us:rag_quarter",
+    "the_last_block_of_us:rag_quarter",
+    "the_last_block_of_us:rag_quarter",
+    "the_last_block_of_us:rag_quarter"
+  ],
+  "result": {
+    "id": "the_last_block_of_us:rag",
+    "count": 1
+  }
+}

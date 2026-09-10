@@ -38,12 +38,22 @@ public class TheLastBlockOfUsMod implements ModInitializer {
 
     private void registerCreativeTabs() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
-            entries.accept(ModItems.RAG);
-            entries.accept(ModItems.BLADE);
             entries.accept(ModItems.ALCOHOL);
             entries.accept(ModItems.ALCOHOL_HALF);
             entries.accept(ModItems.ALCOHOL_QUARTER);
+
             entries.accept(ModItems.BINDING);
+            entries.accept(ModItems.BINDING_HALF);
+            entries.accept(ModItems.BINDING_QUARTER);
+
+            entries.accept(ModItems.BLADE);
+            entries.accept(ModItems.BLADE_HALF);
+            entries.accept(ModItems.BLADE_QUARTER);
+
+            entries.accept(ModItems.RAG);
+            entries.accept(ModItems.RAG_HALF);
+            entries.accept(ModItems.RAG_QUARTER);
+
             entries.accept(ModItems.CANISTER);
         });
 

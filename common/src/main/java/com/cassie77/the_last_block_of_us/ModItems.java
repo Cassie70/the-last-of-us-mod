@@ -5,11 +5,21 @@ import net.minecraft.world.item.Item;
 public class ModItems {
 
     public static Item RAG;
+    public static Item RAG_HALF;
+    public static Item RAG_QUARTER;
+
     public static Item BLADE;
+    public static Item BLADE_HALF;
+    public static Item BLADE_QUARTER;
+
     public static Item ALCOHOL;
     public static Item ALCOHOL_HALF;
     public static Item ALCOHOL_QUARTER;
+
     public static Item BINDING;
+    public static Item BINDING_HALF;
+    public static Item BINDING_QUARTER;
+
     public static Item CANISTER;
 
     public static Item MOLOTOV;

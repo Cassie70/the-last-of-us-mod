@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "the_last_block_of_us:binding_half",
+    "the_last_block_of_us:binding_quarter",
+    "the_last_block_of_us:binding_quarter"
+  ],
+  "result": {
+    "id": "the_last_block_of_us:binding",
+    "count": 1
+  }
+}

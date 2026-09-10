@@ -23,16 +23,28 @@ public final class NeoForgeModItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, Constants.MOD_ID);
 
-    public static final DeferredHolder<Item, Item> RAG = register("rag", Item::new, item -> ModItems.RAG = item);
-    public static final DeferredHolder<Item, Item> BLADE = register("blade", Item::new, item -> ModItems.BLADE = item);
     public static final DeferredHolder<Item, Item> ALCOHOL = register("alcohol", Item::new,
             item -> ModItems.ALCOHOL = item);
     public static final DeferredHolder<Item, Item> ALCOHOL_HALF = register("alcohol_half", Item::new,
             item -> ModItems.ALCOHOL_HALF = item);
     public static final DeferredHolder<Item, Item> ALCOHOL_QUARTER = register("alcohol_quarter", Item::new,
             item -> ModItems.ALCOHOL_QUARTER = item);
+
     public static final DeferredHolder<Item, Item> BINDING = register("binding", Item::new,
             item -> ModItems.BINDING = item);
+    public static final DeferredHolder<Item, Item> BINDING_HALF = register("binding_half", Item::new,
+            item -> ModItems.BINDING_HALF = item);
+    public static final DeferredHolder<Item, Item> BINDING_QUARTER = register("binding_quarter", Item::new,
+            item -> ModItems.BINDING_QUARTER = item);
+
+    public static final DeferredHolder<Item, Item> BLADE = register("blade", Item::new, item -> ModItems.BLADE = item);
+    public static final DeferredHolder<Item, Item> BLADE_HALF = register("blade_half", Item::new, item -> ModItems.BLADE_HALF = item);
+    public static final DeferredHolder<Item, Item> BLADE_QUARTER = register("blade_quarter", Item::new, item -> ModItems.BLADE_QUARTER = item);
+
+    public static final DeferredHolder<Item, Item> RAG = register("rag", Item::new, item -> ModItems.RAG = item);
+    public static final DeferredHolder<Item, Item> RAG_HALF = register("rag_half", Item::new, item -> ModItems.RAG_HALF = item);
+    public static final DeferredHolder<Item, Item> RAG_QUARTER = register("rag_quarter", Item::new, item -> ModItems.RAG_QUARTER = item);
+
     public static final DeferredHolder<Item, Item> CANISTER = register("canister", Item::new,
             item -> ModItems.CANISTER = item);
     public static final DeferredHolder<Item, Item> MOLOTOV = register("molotov", MolotovItem::new,

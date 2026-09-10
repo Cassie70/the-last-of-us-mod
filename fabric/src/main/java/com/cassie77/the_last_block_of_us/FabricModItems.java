@@ -31,14 +31,22 @@ public class FabricModItems {
     public static void initialize() {
         Constants.LOG.info("Registering {} Items", Constants.MOD_ID);
 
-        ModItems.RAG = register("rag", Item::new);
-        ModItems.BLADE = register("blade", Item::new);
-
         ModItems.ALCOHOL = register("alcohol", Item::new);
         ModItems.ALCOHOL_HALF = register("alcohol_half", Item::new);
         ModItems.ALCOHOL_QUARTER = register("alcohol_quarter", Item::new);
 
         ModItems.BINDING = register("binding", Item::new);
+        ModItems.BINDING_HALF = register("binding_half", Item::new);
+        ModItems.BINDING_QUARTER = register("binding_quarter", Item::new);
+
+        ModItems.BLADE = register("blade", Item::new);
+        ModItems.BLADE_HALF = register("blade_half", Item::new);
+        ModItems.BLADE_QUARTER = register("blade_quarter", Item::new);
+
+        ModItems.RAG = register("rag", Item::new);
+        ModItems.RAG_HALF = register("rag_half", Item::new);
+        ModItems.RAG_QUARTER = register("rag_quarter", Item::new);
+
         ModItems.CANISTER = register("canister", Item::new);
 
         ModItems.MOLOTOV = register("molotov", MolotovItem::new);

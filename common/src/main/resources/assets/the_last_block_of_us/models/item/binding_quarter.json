@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "the_last_block_of_us:item/binding_quarter"
+  }
+}
