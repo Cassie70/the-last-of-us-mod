@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -33,7 +34,7 @@ public class BloaterEntity extends InfectedEntity {
     private static final double KNOCKBACK_RESISTANCE = 0.75;
     private static final double ATTACK_KNOCKBACK = 2.0;
     private static final double ATTACK_DAMAGE = 20.0;
-    private static final double FOLLOW_RANGE = 6.0;
+    private static final double FOLLOW_RANGE = 16.0;
     private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 5;
     private static final int BREAKING_BLOCK_COOLDOWN = 30;
@@ -220,4 +221,9 @@ public class BloaterEntity extends InfectedEntity {
 
     @Override
     protected int getInfectedAngrinessAmount() { return 45; }
+
+    @Override
+    protected @NotNull SoundEvent getHurtSound(@NotNull DamageSource source) {
+        return ModSounds.BLOATER_ALERT;
+    }
 }

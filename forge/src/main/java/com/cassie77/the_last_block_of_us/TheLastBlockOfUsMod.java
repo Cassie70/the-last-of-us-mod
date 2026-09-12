@@ -92,14 +92,14 @@ public class TheLastBlockOfUsMod {
                 ModEntities.CLICKER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules,
+                Monster::checkAnyLightMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
 
         event.register(
                 ModEntities.BLOATER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules,
+                Monster::checkAnyLightMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 }

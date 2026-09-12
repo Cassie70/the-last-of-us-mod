@@ -84,7 +84,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
         SpawnPlacements.register(ModEntities.CLICKER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules);
+                Monster::checkAnyLightMonsterSpawnRules);
 
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
                 MobCategory.MONSTER, ModEntities.BLOATER, 2, 1, 1);
@@ -92,6 +92,6 @@ public class TheLastBlockOfUsMod implements ModInitializer {
         SpawnPlacements.register(ModEntities.BLOATER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules);
+                Monster::checkAnyLightMonsterSpawnRules);
     }
 }

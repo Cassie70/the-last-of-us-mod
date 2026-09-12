@@ -51,16 +51,16 @@ public class TheLastBlockOfUsMod {
             event.accept(ModItems.ALCOHOL_QUARTER);
 
             event.accept(ModItems.BINDING);
-            event.accept(ModItems.BINDING);
-            event.accept(ModItems.BINDING);
+            event.accept(ModItems.BINDING_HALF);
+            event.accept(ModItems.BINDING_QUARTER);
 
             event.accept(ModItems.BLADE);
-            event.accept(ModItems.BLADE);
-            event.accept(ModItems.BLADE);
+            event.accept(ModItems.BLADE_HALF);
+            event.accept(ModItems.BLADE_QUARTER);
 
             event.accept(ModItems.RAG);
-            event.accept(ModItems.RAG);
-            event.accept(ModItems.RAG);
+            event.accept(ModItems.RAG_HALF);
+            event.accept(ModItems.RAG_QUARTER);
 
             event.accept(ModItems.CANISTER);
         } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
@@ -86,7 +86,7 @@ public class TheLastBlockOfUsMod {
                 ModEntities.CLICKER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules,
+                Monster::checkAnyLightMonsterSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
@@ -94,7 +94,7 @@ public class TheLastBlockOfUsMod {
                 ModEntities.BLOATER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkMonsterSpawnRules,
+                Monster::checkAnyLightMonsterSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

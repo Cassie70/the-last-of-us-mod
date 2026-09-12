@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,7 +32,7 @@ public class ClickerEntity extends InfectedEntity {
     private static final double KNOCKBACK_RESISTANCE = 0.0;
     private static final double ATTACK_KNOCKBACK = 1.0;
     private static final double ATTACK_DAMAGE = 15.0;
-    private static final double FOLLOW_RANGE = 8.0;
+    private static final double FOLLOW_RANGE = 16.0;
     private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 3;
 
@@ -181,6 +182,11 @@ public class ClickerEntity extends InfectedEntity {
     @Override
     public SoundEvent getAngrySound() {
         return ModSounds.CLICKER_ANGRY;
+    }
+
+    @Override
+    protected @NotNull SoundEvent getHurtSound(@NotNull DamageSource source) {
+        return ModSounds.CLICKER_ALERT;
     }
 
 

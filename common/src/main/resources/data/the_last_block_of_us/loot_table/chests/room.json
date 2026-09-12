@@ -79,12 +79,12 @@
         {
           "type": "minecraft:item",
           "name": "the_last_block_of_us:rag",
-          "weight": 1
+          "weight": 2
         },
         {
           "type": "minecraft:item",
           "name": "the_last_block_of_us:rag_half",
-          "weight": 1,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -98,7 +98,7 @@
         {
           "type": "minecraft:item",
           "name": "the_last_block_of_us:rag_quarter",
-          "weight": 2,
+          "weight": 4,
           "functions": [
             {
               "function": "minecraft:set_count",
