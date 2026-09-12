@@ -122,5 +122,7 @@ public class NailBombEntity extends ThrowableItemProjectile {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
             }
         }
+
+        breakNailBomb();
     }
 }

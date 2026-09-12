@@ -129,6 +129,8 @@ public class BottleEntity extends ThrowableItemProjectile {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 5, false, true));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
             }
+
+            breakBottle();
         }
     }
 }
