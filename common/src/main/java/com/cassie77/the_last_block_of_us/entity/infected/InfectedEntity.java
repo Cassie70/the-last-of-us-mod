@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.GameEventTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
@@ -196,6 +197,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
                     && livingEntity.getType() != EntityType.ARMOR_STAND
                     && livingEntity.getType() != ModEntities.CLICKER
                     && livingEntity.getType() != ModEntities.BLOATER
+                    && !livingEntity.getType().is(EntityTypeTags.AQUATIC)
                     && !livingEntity.isInvulnerable()
                     && !livingEntity.isDeadOrDying()
                     && this.level().getWorldBorder().isWithinBounds(livingEntity.getBoundingBox());

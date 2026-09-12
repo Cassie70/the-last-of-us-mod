@@ -5,10 +5,10 @@
       "rolls": 1,
       "entries": [
         { "type": "minecraft:empty", "weight": 75 },
-        { "type": "minecraft:item","name": "the_last_block_of_us:alcohol", "weight": 6.5 },
-        { "type": "minecraft:item","name": "the_last_block_of_us:binding", "weight": 6.5 },
-        { "type": "minecraft:item","name": "the_last_block_of_us:rag", "weight": 6.5 },
-        { "type": "minecraft:item","name": "the_last_block_of_us:blade", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:alcohol_quarter", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:binding_quarter", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:rag_quarter", "weight": 6.5 },
+        { "type": "minecraft:item","name": "the_last_block_of_us:blade_quarter", "weight": 6.5 },
         { "type": "minecraft:item","name": "the_last_block_of_us:canister", "weight": 6.5 },
         { "type": "minecraft:item","name": "the_last_block_of_us:bottle", "weight": 6.5 },
         { "type": "minecraft:item","name": "the_last_block_of_us:pipe", "weight": 3.25 }

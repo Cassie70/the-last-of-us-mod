@@ -66,7 +66,7 @@ public final class NeoForgeModItems {
             properties -> new UpgratedPipeItem(properties.sword(ToolMaterial.IRON, 27.0F, -3.5F).durability(3)),
             item -> ModItems.UPGRADED_PIPE = item);
     public static final DeferredHolder<Item, Item> SHIV = register("shiv",
-            properties -> new Item(properties.sword(ToolMaterial.IRON, 17.0F, -3.5F).durability(3)),
+            properties -> new Item(properties.sword(ToolMaterial.IRON, 17.0F, -2.5F).durability(3)),
             item -> ModItems.SHIV = item);
     public static final DeferredHolder<Item, Item> CLICKER_SPAWN_EGG = register("clicker_spawn_egg",
             properties -> new SpawnEggItem(NeoForgeModEntities.CLICKER.get(), properties),

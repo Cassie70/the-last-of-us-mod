@@ -58,7 +58,7 @@ public class FabricModItems {
 
         ModItems.PIPE = register("pipe", properties -> new Item(properties.sword(ToolMaterial.IRON, 2.0F, -2.0F).durability(8)));
         ModItems.UPGRADED_PIPE = register("upgraded_pipe", properties -> new UpgratedPipeItem(properties.sword(ToolMaterial.IRON, 27.0F, -3.5F).durability(3)));
-        ModItems.SHIV = register("shiv", properties -> new Item(properties.sword(ToolMaterial.IRON, 17.0F, -3.5F).durability(3)));
+        ModItems.SHIV = register("shiv", properties -> new Item(properties.sword(ToolMaterial.IRON, 17.0F, -2.5F).durability(3)));
 
         ModItems.CLICKER_SPAWN_EGG = register("clicker_spawn_egg", properties -> new SpawnEggItem(ModEntities.CLICKER, properties));
         ModItems.BLOATER_SPAWN_EGG = register("bloater_spawn_egg", properties -> new SpawnEggItem(ModEntities.BLOATER, properties));
