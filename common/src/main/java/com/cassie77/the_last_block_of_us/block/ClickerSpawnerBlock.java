@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ClickerSpawnerBlock extends Block implements EntityBlock {
 
-    private static final double DETECTION_RADIUS = 16.0; // 16 bloques cubre una habitación completa de forma más segura durante worldgen
+    private static final double DETECTION_RADIUS = 32.0;
     private static final float SPAWN_CHANCE = 0.5f;
 
     public ClickerSpawnerBlock(Properties properties) {

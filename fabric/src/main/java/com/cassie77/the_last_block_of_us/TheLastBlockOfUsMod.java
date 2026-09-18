@@ -79,7 +79,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
 
     private void registerSpawns() {
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
-                MobCategory.MONSTER, ModEntities.CLICKER, 5, 1, 4);
+                MobCategory.MONSTER, ModEntities.CLICKER, 5, 1, 3);
 
         SpawnPlacements.register(ModEntities.CLICKER,
                 SpawnPlacementTypes.ON_GROUND,
