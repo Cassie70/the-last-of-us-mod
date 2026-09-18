@@ -5,28 +5,13 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "the_last_block_of_us:binding",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
-          "name": "the_last_block_of_us:binding_half",
-          "weight": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1,
-                "max": 2
-              }
-            }
-          ]
+          "type": "minecraft:empty",
+          "weight": 34
         },
         {
           "type": "minecraft:item",
           "name": "the_last_block_of_us:binding_quarter",
-          "weight": 2,
+          "weight": 22,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -38,19 +23,19 @@
           ]
         },
         {
-          "type": "minecraft:empty",
-          "weight": 4
-        }
-      ]
-    },
-
-    {
-      "rolls": 1,
-      "entries": [
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:binding_half",
+          "weight": 11
+        },
         {
           "type": "minecraft:item",
-          "name": "the_last_block_of_us:bottle",
-          "weight": 1,
+          "name": "the_last_block_of_us:binding",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:blade_quarter",
+          "weight": 16,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -62,31 +47,24 @@
           ]
         },
         {
-          "type": "minecraft:empty",
-          "weight": 4
-        }
-      ]
-    },
-    {
-      "rolls": 1,
-      "entries": [
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:blade_half",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:blade",
+          "weight": 3
+        },
         {
           "type": "minecraft:item",
           "name": "the_last_block_of_us:canister",
-          "weight": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1,
-                "max": 2
-              }
-            }
-          ]
+          "weight": 13
         },
         {
-          "type": "minecraft:empty",
-          "weight": 4
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:pipe",
+          "weight": 3
         }
       ]
     }

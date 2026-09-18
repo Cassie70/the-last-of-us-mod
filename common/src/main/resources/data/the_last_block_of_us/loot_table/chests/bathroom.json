@@ -5,28 +5,13 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "the_last_block_of_us:alcohol",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
-          "name": "the_last_block_of_us:alcohol_half",
-          "weight": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1,
-                "max": 2
-              }
-            }
-          ]
+          "type": "minecraft:empty",
+          "weight": 22
         },
         {
           "type": "minecraft:item",
           "name": "the_last_block_of_us:alcohol_quarter",
-          "weight": 2,
+          "weight": 28,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -37,18 +22,44 @@
             }
           ]
         },
-
-
-
         {
           "type": "minecraft:item",
-          "name": "the_last_block_of_us:blade",
-          "weight": 1
+          "name": "the_last_block_of_us:alcohol_half",
+          "weight": 14
         },
         {
           "type": "minecraft:item",
-          "name": "the_last_block_of_us:blade_half",
-          "weight": 1,
+          "name": "the_last_block_of_us:alcohol",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:rag_quarter",
+          "weight": 24,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:rag_half",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:rag",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "the_last_block_of_us:blade_quarter",
+          "weight": 12,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -61,32 +72,8 @@
         },
         {
           "type": "minecraft:item",
-          "name": "the_last_block_of_us:blade_quarter",
-          "weight": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1,
-                "max": 3
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "the_last_block_of_us:pipe",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:empty",
-          "name": "the_last_block_of_us:pipe",
-          "weight": 4
+          "name": "the_last_block_of_us:blade_half",
+          "weight": 6
         }
       ]
     }
