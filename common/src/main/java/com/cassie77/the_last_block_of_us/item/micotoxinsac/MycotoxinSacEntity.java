@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class MycotoxinSacEntity extends ThrowableItemProjectile {
 
@@ -38,7 +39,7 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected Item getDefaultItem() {
+    protected @NotNull Item getDefaultItem() {
         return ModItems.MYCOTOXIN_SAC;
     }
 
@@ -59,7 +60,7 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected void onHit(HitResult hitResult) {
+    protected void onHit(@NotNull HitResult hitResult) {
         super.onHit(hitResult);
 
         Level world = this.level();
@@ -84,7 +85,7 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
         }
 
         cloud.setParticleArea(ParticleTypes.FIREFLY);
-        cloud.setDensityFactor(0.2F);
+        cloud.setDensityFactor(0.10F);
         cloud.setRadius(RADIUS);
         cloud.setRadiusOnUse(-0.5F);
         cloud.setDuration(600);
@@ -95,7 +96,7 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected void onHitEntity(EntityHitResult entityHitResult) {
+    protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
 
         if (!this.level().isClientSide()) {

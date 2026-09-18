@@ -10,8 +10,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -81,7 +79,7 @@ public class BloaterEntity extends InfectedEntity {
 
     @Override
     public boolean doHurtTarget(ServerLevel world, @NotNull Entity target) {
-        ThrowTask.cooldown(this, 40);
+        ThrowTask.cooldown(this, 80);
         return super.doHurtTarget(world, target);
     }
 
@@ -108,7 +106,7 @@ public class BloaterEntity extends InfectedEntity {
 
                     for (BlockPos blockPos : BlockPos.betweenClosed(
                             this.getBlockX() - j, this.getBlockY() + minY, this.getBlockZ() - j,
-                            this.getBlockX() + j, this.getBlockY() + k,    this.getBlockZ() + j)) {
+                            this.getBlockX() + j, this.getBlockY() + k, this.getBlockZ() + j)) {
 
                         BlockState blockState = world.getBlockState(blockPos);
                         if (canDestroy(blockState)) {
@@ -126,22 +124,15 @@ public class BloaterEntity extends InfectedEntity {
     }
 
     private static final Set<Block> BLOATER_IMMUNE = Set.of(
-            Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS, Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST, Blocks.SHORT_GRASS, Blocks.TALL_GRASS
-    );
+            Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS,
+            Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST, Blocks.SHORT_GRASS, Blocks.TALL_GRASS);
 
     public static boolean canDestroy(BlockState block) {
-        if (block.is(BlockTags.FLOWERS) || block.is(BlockTags.SMALL_FLOWERS)) return false;
-        if (BLOATER_IMMUNE.contains(block.getBlock())) return false;
-        return !block.isAir() && !block.is(BlockTags.WITHER_IMMUNE);
-    }
-
-    @Override
-    public boolean canBeAffected(MobEffectInstance effect) {
-        if (effect.getEffect() == MobEffects.POISON) {
+        if (block.is(BlockTags.FLOWERS) || block.is(BlockTags.SMALL_FLOWERS))
             return false;
-        }
-
-        return super.canBeAffected(effect);
+        if (BLOATER_IMMUNE.contains(block.getBlock()))
+            return false;
+        return !block.isAir() && !block.is(BlockTags.WITHER_IMMUNE);
     }
 
     @Override
@@ -181,7 +172,8 @@ public class BloaterEntity extends InfectedEntity {
             switch (this.getPose()) {
                 case ROARING, SNIFFING -> this.roaringAnimationState.start(this.tickCount);
                 case STANDING -> this.roaringAnimationState.stop();
-                default -> {}
+                default -> {
+                }
             }
         }
 
@@ -217,10 +209,14 @@ public class BloaterEntity extends InfectedEntity {
     }
 
     @Override
-    protected int getInfectedMeleeAttackInterval() { return 20; }
+    protected int getInfectedMeleeAttackInterval() {
+        return 20;
+    }
 
     @Override
-    protected int getInfectedAngrinessAmount() { return 45; }
+    protected int getInfectedAngrinessAmount() {
+        return 45;
+    }
 
     @Override
     protected @NotNull SoundEvent getHurtSound(@NotNull DamageSource source) {

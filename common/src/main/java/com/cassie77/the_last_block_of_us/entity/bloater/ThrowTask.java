@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 public class ThrowTask extends Behavior<InfectedEntity> {
     private static final int HORIZONTAL_RANGE = 15;
     private static final int VERTICAL_RANGE = 20;
-    public static final int COOLDOWN = 40;
-    private static final int EXTENDED_COOLDOWN = 200;
+    public static final int COOLDOWN = 80;
+    private static final int EXTENDED_COOLDOWN = 240;
     private static final int MAX_THROWS = 3;
     private static final int SOUND_DELAY = Mth.ceil(34.0);
     private static final int RUN_TIME = Mth.ceil(60.0);
@@ -38,22 +38,22 @@ public class ThrowTask extends Behavior<InfectedEntity> {
                         MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                         MemoryModuleType.SONIC_BOOM_COOLDOWN, MemoryStatus.VALUE_ABSENT,
                         MemoryModuleType.SONIC_BOOM_SOUND_COOLDOWN, MemoryStatus.REGISTERED,
-                        MemoryModuleType.SONIC_BOOM_SOUND_DELAY, MemoryStatus.REGISTERED
-                ),
-                RUN_TIME
-        );
+                        MemoryModuleType.SONIC_BOOM_SOUND_DELAY, MemoryStatus.REGISTERED),
+                RUN_TIME);
     }
 
     @Override
-    protected boolean checkExtraStartConditions(@NotNull ServerLevel serverWorld, @NotNull InfectedEntity infectedEntity) {
+    protected boolean checkExtraStartConditions(@NotNull ServerLevel serverWorld,
+            @NotNull InfectedEntity infectedEntity) {
         if (!(infectedEntity instanceof BloaterEntity bloaterEntity)) {
             return false;
         }
-        return bloaterEntity.closerThan(
-                bloaterEntity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get(),
-                HORIZONTAL_RANGE,
-                VERTICAL_RANGE
-        );
+        LivingEntity target = bloaterEntity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
+        if (target == null) {
+            return false;
+        }
+        return !bloaterEntity.isWithinMeleeAttackRange(target)
+                && bloaterEntity.closerThan(target, HORIZONTAL_RANGE, VERTICAL_RANGE);
     }
 
     @Override
@@ -65,7 +65,8 @@ public class ThrowTask extends Behavior<InfectedEntity> {
     protected void start(ServerLevel serverWorld, @NotNull InfectedEntity infectedEntity, long l) {
         BloaterEntity bloaterEntity = (BloaterEntity) infectedEntity;
         bloaterEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.ATTACK_COOLING_DOWN, true, RUN_TIME);
-        bloaterEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.SONIC_BOOM_SOUND_DELAY, Unit.INSTANCE, SOUND_DELAY);
+        bloaterEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.SONIC_BOOM_SOUND_DELAY, Unit.INSTANCE,
+                SOUND_DELAY);
         serverWorld.broadcastEntityEvent(bloaterEntity, (byte) 62);
 
         ticksSinceStart = 0;
@@ -90,15 +91,16 @@ public class ThrowTask extends Behavior<InfectedEntity> {
             bloaterEntity.getBrain().setMemoryWithExpiry(
                     MemoryModuleType.SONIC_BOOM_SOUND_COOLDOWN,
                     Unit.INSTANCE,
-                    (RUN_TIME - SOUND_DELAY)
-            );
+                    (RUN_TIME - SOUND_DELAY));
 
             bloaterEntity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET)
                     .filter(bloaterEntity::isValidTarget)
                     .filter((target) -> bloaterEntity.closerThan(target, HORIZONTAL_RANGE, VERTICAL_RANGE))
                     .ifPresent((target) -> {
-                        MycotoxinSacEntity mycotoxinSacEntity = new MycotoxinSacEntity(serverWorld, bloaterEntity, bloaterEntity.getItemInHand(InteractionHand.OFF_HAND));
-                        mycotoxinSacEntity.setPos(bloaterEntity.getX(), bloaterEntity.getEyeY() - 0.1, bloaterEntity.getZ());
+                        MycotoxinSacEntity mycotoxinSacEntity = new MycotoxinSacEntity(serverWorld, bloaterEntity,
+                                bloaterEntity.getItemInHand(InteractionHand.OFF_HAND));
+                        mycotoxinSacEntity.setPos(bloaterEntity.getX(), bloaterEntity.getEyeY() - 0.1,
+                                bloaterEntity.getZ());
 
                         Vec3 targetPos = target.getEyePosition().subtract(mycotoxinSacEntity.position());
                         mycotoxinSacEntity.shoot(targetPos.x, targetPos.y, targetPos.z, THROW_SPEED, THROW_PITCH);

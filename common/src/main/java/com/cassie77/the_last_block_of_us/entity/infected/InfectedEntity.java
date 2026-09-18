@@ -20,6 +20,8 @@ import net.minecraft.util.Unit;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
@@ -147,7 +149,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
         profiler.pop();
         super.customServerAiStep(world);
 
-        if (this.tickCount % 20 == 0) {
+        if (this.tickCount % 10 == 0) {
             this.angerManagement.tick(world, this::isValidTarget);
             this.updateAnger();
 
@@ -243,6 +245,15 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
                 this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
             }
         }
+    }
+
+    @Override
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.POISON) {
+            return false;
+        }
+
+        return super.canBeAffected(effect);
     }
 
     public Optional<LivingEntity> getPrimeSuspect() {
