@@ -138,29 +138,40 @@ public class BloaterEntity extends InfectedEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.getPose() == Pose.STANDING
-                && !this.idleAnimationState.isStarted()
-                && !this.attackingAnimationState.isStarted()
-                && !this.roaringAnimationState.isStarted()) {
-            this.idleAnimationState.start(this.tickCount);
+
+        if (this.level().isClientSide()) {
+            if (this.getPose() == Pose.STANDING) {
+                if (!this.idleAnimationState.isStarted()
+                        && !this.attackingAnimationState.isStarted()
+                        && !this.roaringAnimationState.isStarted()
+                        && !this.throwingAnimationState.isStarted()) {
+
+                    this.idleAnimationState.start(this.tickCount);
+                }
+            } else {
+                this.idleAnimationState.stop();
+            }
         }
     }
 
     @Override
     public void handleEntityEvent(byte status) {
-        this.roaringAnimationState.stop();
-        this.throwingAnimationState.stop();
-        this.attackingAnimationState.stop();
-
-        if (status == 4) {
+        if (status == 4 || status == 5) {
             this.roaringAnimationState.stop();
+            this.throwingAnimationState.stop();
+            this.idleAnimationState.stop();
             this.attackingAnimationState.start(this.tickCount);
         } else if (status == 62) {
             this.roaringAnimationState.stop();
+            this.attackingAnimationState.stop();
+            this.idleAnimationState.stop();
             this.throwingAnimationState.start(this.tickCount);
-        } else if (status == 5) {
-            this.roaringAnimationState.stop();
-            this.attackingAnimationState.start(this.tickCount);
+        } else if (status == 6) {
+            this.attackingAnimationState.stop();
+            this.throwingAnimationState.stop();
+            if (this.getPose() == Pose.STANDING && !this.idleAnimationState.isStarted()) {
+                this.idleAnimationState.start(this.tickCount);
+            }
         } else {
             super.handleEntityEvent(status);
         }
@@ -170,10 +181,23 @@ public class BloaterEntity extends InfectedEntity {
     public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> data) {
         if (DATA_POSE.equals(data)) {
             switch (this.getPose()) {
-                case ROARING, SNIFFING -> this.roaringAnimationState.start(this.tickCount);
-                case STANDING -> this.roaringAnimationState.stop();
-                default -> {
+                case ROARING, SNIFFING -> {
+                    this.idleAnimationState.stop();
+
+                    if (!this.roaringAnimationState.isStarted()) {
+                        this.roaringAnimationState.start(this.tickCount);
+                    }
                 }
+
+                case STANDING -> {
+                    this.roaringAnimationState.stop();
+
+                    if (!this.idleAnimationState.isStarted()) {
+                        this.idleAnimationState.start(this.tickCount);
+                    }
+                }
+
+                default -> this.roaringAnimationState.stop();
             }
         }
 
@@ -196,6 +220,11 @@ public class BloaterEntity extends InfectedEntity {
             case AGITATED -> ModSounds.BLOATER_ALERT;
             case ANGRY -> ModSounds.BLOATER_ALERT;
         };
+    }
+
+    @Override
+    protected int getInfectedSniffDuration() {
+        return 30;
     }
 
     @Override

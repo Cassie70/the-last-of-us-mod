@@ -66,8 +66,8 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     protected float getInfectedCelebrateTime() { return 0.7F; }
     protected float getInfectedRangedApproachSpeed() { return 1.2F; }
     protected int getInfectedMeleeAttackInterval() { return 10; }
-    protected int getInfectedRoarDuration() { return 20; }
-    protected int getInfectedSniffDuration() { return 84; }
+    protected int getInfectedRoarDuration() { return 30; }
+    protected int getInfectedSniffDuration() { return 60; }
     protected float getInfectedSwimSpeed() { return 0.8F; }
     protected int getInfectedLookAtTargetMinDuration() { return 45; }
     protected int getInfectedLookAtTargetMaxDuration() { return 90; }

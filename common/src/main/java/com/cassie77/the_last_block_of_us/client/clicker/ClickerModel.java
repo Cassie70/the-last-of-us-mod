@@ -73,10 +73,10 @@ public class ClickerModel extends EntityModel<ClickerRenderState> {
         super.setupAnim(state);
         this.setHeadAngle(state.yRot, state.xRot);
 
-        this.walkingAnimation.applyWalk(state.walkAnimationPos, state.walkAnimationSpeed, 2.0F, 2.5F);
-        this.attackingAnimation.apply(state.attackingAnimationState, state.ageInTicks);
-        this.roaringAnimation.apply(state.roaringAnimationState, state.ageInTicks);
         this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
+        this.walkingAnimation.applyWalk(state.walkAnimationPos, state.walkAnimationSpeed, 2.0F, 2.5F);
+        this.roaringAnimation.apply(state.roaringAnimationState, state.ageInTicks);
+        this.attackingAnimation.apply(state.attackingAnimationState, state.ageInTicks);
     }
 
     private void setHeadAngle(float yaw, float pitch) {

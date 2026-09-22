@@ -23,7 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Predicate;
 
 public class ClickerEntity extends InfectedEntity {
-    private static final Predicate<Difficulty> DOOR_BREAK_DIFFICULTY_CHECKER = (difficulty) -> difficulty == Difficulty.HARD;
+    private static final Predicate<Difficulty> DOOR_BREAK_DIFFICULTY_CHECKER = (
+            difficulty) -> difficulty == Difficulty.HARD;
     private final ClickerBreakDoorGoal breakDoorsGoal;
     private boolean canBreakDoors;
 
@@ -100,9 +101,9 @@ public class ClickerEntity extends InfectedEntity {
         this.setCanBreakDoors(valueInput.getBooleanOr("CanBreakDoors", false));
     }
 
-
     @Override
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull EntitySpawnReason spawnReason, SpawnGroupData entityData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty,
+            @NotNull EntitySpawnReason spawnReason, SpawnGroupData entityData) {
         this.setCanBreakDoors(true);
         return super.finalizeSpawn(world, difficulty, spawnReason, entityData);
     }
@@ -110,25 +111,28 @@ public class ClickerEntity extends InfectedEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.getPose() == Pose.STANDING
-                && !this.idleAnimationState.isStarted()
-                && !this.attackingAnimationState.isStarted()
-                && !this.roaringAnimationState.isStarted()) {
-            this.idleAnimationState.start(this.tickCount);
+        if (this.level().isClientSide()) {
+            if (this.getPose() == Pose.STANDING) {
+                if (!this.idleAnimationState.isStarted()
+                        && !this.attackingAnimationState.isStarted()
+                        && !this.roaringAnimationState.isStarted()) {
+                    this.idleAnimationState.start(this.tickCount);
+                }
+            } else {
+                this.idleAnimationState.stop();
+            }
         }
     }
 
     @Override
     public void handleEntityEvent(byte status) {
-        if (status == 4) {
+        if (status == 4 || status == 5) {
             this.roaringAnimationState.stop();
-            this.attackingAnimationState.start(this.tickCount);
-        } else if (status == 5) {
-            this.roaringAnimationState.stop();
+            this.idleAnimationState.stop();
             this.attackingAnimationState.start(this.tickCount);
         } else if (status == 6) {
             this.attackingAnimationState.stop();
-            if (!this.idleAnimationState.isStarted()) {
+            if (this.getPose() == Pose.STANDING && !this.idleAnimationState.isStarted()) {
                 this.idleAnimationState.start(this.tickCount);
             }
         } else {
@@ -140,16 +144,19 @@ public class ClickerEntity extends InfectedEntity {
     public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> data) {
         if (DATA_POSE.equals(data)) {
             switch (this.getPose()) {
-                case ROARING -> this.roaringAnimationState.start(this.tickCount);
-                case SNIFFING -> {
-                    this.roaringAnimationState.stop();
-                    this.roaringAnimationState.start(this.tickCount);
+                case ROARING, SNIFFING -> {
+                    this.idleAnimationState.stop();
+
+                    if (!this.roaringAnimationState.isStarted()) {
+                        this.roaringAnimationState.start(this.tickCount);
+                    }
                 }
                 case STANDING -> {
                     this.roaringAnimationState.stop();
                     this.idleAnimationState.start(this.tickCount);
                 }
-                default -> {}
+                default -> {
+                }
             }
         }
 
@@ -188,7 +195,5 @@ public class ClickerEntity extends InfectedEntity {
     protected @NotNull SoundEvent getHurtSound(@NotNull DamageSource source) {
         return ModSounds.CLICKER_ALERT;
     }
-
-
 
 }
