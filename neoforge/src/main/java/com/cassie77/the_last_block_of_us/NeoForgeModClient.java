@@ -5,6 +5,8 @@ import com.cassie77.the_last_block_of_us.client.bloater.BloaterModel;
 import com.cassie77.the_last_block_of_us.client.bloater.BloaterRenderer;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerModel;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerRenderer;
+import com.cassie77.the_last_block_of_us.client.shambler.ShamblerModel;
+import com.cassie77.the_last_block_of_us.client.shambler.ShamblerRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
@@ -15,6 +17,7 @@ public final class NeoForgeModClient {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ClickerModel.CLICKER, ClickerModel::getTexturedModelData);
         event.registerLayerDefinition(BloaterModel.BLOATER, BloaterModel::getTexturedModelData);
+        event.registerLayerDefinition(ShamblerModel.SHAMBLER, ShamblerModel::getTexturedModelData);
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -26,5 +29,6 @@ public final class NeoForgeModClient {
         event.registerEntityRenderer(ModEntities.SMOKE_BOMB_ENTITY, SmokeBombEntityRenderer::new);
         event.registerEntityRenderer(ModEntities.CLICKER, ClickerRenderer::new);
         event.registerEntityRenderer(ModEntities.BLOATER, BloaterRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHAMBLER, ShamblerRenderer::new);
     }
 }

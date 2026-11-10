@@ -2,6 +2,7 @@ package com.cassie77.the_last_block_of_us;
 
 import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
 import com.cassie77.the_last_block_of_us.entity.clicker.ClickerEntity;
+import com.cassie77.the_last_block_of_us.entity.shambler.ShamblerEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -27,6 +28,7 @@ public class TheLastBlockOfUsMod {
         ForgeModEntities.ENTITY_TYPES.register(modBusGroup);
         ForgeModSensors.SENSOR_TYPES.register(modBusGroup);
         ForgeModSounds.SOUNDS.register(modBusGroup);
+        ForgeModEffects.EFFECTS.register(modBusGroup);
         ForgeModBlockEntities.BLOCK_ENTITY_TYPES.register(modBusGroup);
         ForgeModItems.ITEMS.register(modBusGroup);
         CommonClass.init();
@@ -47,6 +49,7 @@ public class TheLastBlockOfUsMod {
     private void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(ModEntities.CLICKER, ClickerEntity.addAttributes().build());
         event.put(ModEntities.BLOATER, BloaterEntity.addAttributes().build());
+        event.put(ModEntities.SHAMBLER, ShamblerEntity.addAttributes().build());
     }
 
     private void onBuildCreativeTabs(BuildCreativeModeTabContentsEvent event) {

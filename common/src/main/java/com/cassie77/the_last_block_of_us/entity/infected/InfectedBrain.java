@@ -97,9 +97,12 @@ public class InfectedBrain {
                         || !infected.isValidTarget(livingEntity), InfectedBrain::removeDeadSuspect, false));
         fightTasks.add(SetEntityLookTarget.create((livingEntity) -> isTargeting(infected, livingEntity),
                 (float) infected.getAttributeValue(Attributes.FOLLOW_RANGE)));
-        fightTasks
-                .add(SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(infected.getInfectedRangedApproachSpeed()));
-        fightTasks.add(MeleeAttack.create(infected.getInfectedMeleeAttackInterval()));
+
+        if (infected.usesMeleeCombat()) {
+            fightTasks
+                    .add(SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(infected.getInfectedRangedApproachSpeed()));
+            fightTasks.add(MeleeAttack.create(infected.getInfectedMeleeAttackInterval()));
+        }
 
         BehaviorControl<? super InfectedEntity> additionalFightTask = infected.getAdditionalFightTask();
         if (additionalFightTask != null) {

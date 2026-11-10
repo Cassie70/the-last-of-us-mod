@@ -1,5 +1,6 @@
 package com.cassie77.the_last_block_of_us.entity.infected;
 
+import com.cassie77.the_last_block_of_us.ModEffects;
 import com.cassie77.the_last_block_of_us.ModEntities;
 import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
 import com.google.common.annotations.VisibleForTesting;
@@ -21,7 +22,6 @@ import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
@@ -78,6 +78,15 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
 
     protected BehaviorControl<? super InfectedEntity> getAdditionalFightTask() {
         return null;
+    }
+
+    /**
+     * Whether this infected fights with the default melee attack and walk-towards-target
+     * behaviours. Mobs with a custom fight task (for example the Shambler) can disable
+     * them and drive their own movement.
+     */
+    protected boolean usesMeleeCombat() {
+        return true;
     }
     
 
@@ -199,6 +208,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
                     && livingEntity.getType() != EntityType.ARMOR_STAND
                     && livingEntity.getType() != ModEntities.CLICKER
                     && livingEntity.getType() != ModEntities.BLOATER
+                    && livingEntity.getType() != ModEntities.SHAMBLER
                     && !livingEntity.getType().is(EntityTypeTags.AQUATIC)
                     && !livingEntity.isInvulnerable()
                     && !livingEntity.isDeadOrDying()
@@ -249,7 +259,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
 
     @Override
     public boolean canBeAffected(MobEffectInstance effect) {
-        if (effect.getEffect() == MobEffects.POISON) {
+        if (effect.getEffect().value() == ModEffects.CORROSION) {
             return false;
         }
 

@@ -2,6 +2,7 @@ package com.cassie77.the_last_block_of_us;
 
 import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
 import com.cassie77.the_last_block_of_us.entity.clicker.ClickerEntity;
+import com.cassie77.the_last_block_of_us.entity.shambler.ShamblerEntity;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -23,11 +24,13 @@ public class TheLastBlockOfUsMod implements ModInitializer {
         CommonClass.init();
 
             FabricModSounds.initialize();
+            FabricModEffects.initialize();
             FabricModEntities.initialize();
             FabricModSensors.initialize();
             FabricModBlocks.initialize();
         FabricDefaultAttributeRegistry.register(ModEntities.CLICKER, ClickerEntity.addAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.BLOATER, BloaterEntity.addAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SHAMBLER, ShamblerEntity.addAttributes());
 
         FabricModBlockEntities.initialize();
         FabricModItems.initialize();

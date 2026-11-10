@@ -1,5 +1,6 @@
 package com.cassie77.the_last_block_of_us.item.micotoxinsac;
 
+import com.cassie77.the_last_block_of_us.ModEffects;
 import com.cassie77.the_last_block_of_us.ModEntities;
 import com.cassie77.the_last_block_of_us.ModItems;
 import com.cassie77.the_last_block_of_us.entity.CustomAreaEffectCloudEntity;
@@ -91,7 +92,7 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
         cloud.setDuration(600);
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick(-cloud.getRadius() / (float) cloud.getDuration());
-        cloud.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 2));
+        cloud.addEffect(new MobEffectInstance(ModEffects.corrosion(), 200, 2));
         world.addFreshEntity(cloud);
     }
 

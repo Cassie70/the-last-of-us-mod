@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jetbrains.annotations.NotNull;
 
 public class CustomAreaEffectCloudEntity extends AreaEffectCloud {
 
@@ -33,8 +34,8 @@ public class CustomAreaEffectCloudEntity extends AreaEffectCloud {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.scalable(this.getRadius() * 2.0F, 3.0F);
+    public @NotNull EntityDimensions getDimensions(@NotNull Pose pose) {
+        return EntityDimensions.scalable(this.getRadius() * 2.0F, this.getRadius());
     }
 
     @Override
@@ -94,7 +95,7 @@ public class CustomAreaEffectCloudEntity extends AreaEffectCloud {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DENSITY_FACTOR, 0.0F);
         builder.define(PARTICLE_EFFECT, ParticleTypes.EFFECT);
@@ -116,13 +117,13 @@ public class CustomAreaEffectCloudEntity extends AreaEffectCloud {
         return this.entityData.get(PARTICLE_EFFECT);
     }
 
-    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+    protected void addAdditionalSaveData(@NotNull ValueOutput valueOutput) {
         super.addAdditionalSaveData(valueOutput);
         valueOutput.putFloat("DensityFactor", getDensityFactor());
         valueOutput.store("CustomParticle", ParticleTypes.CODEC, getParticleArea());
     }
 
-    protected void readAdditionalSaveData(ValueInput valueInput) {
+    protected void readAdditionalSaveData(@NotNull ValueInput valueInput) {
         super.readAdditionalSaveData(valueInput);
         setDensityFactor(valueInput.getFloatOr("DensityFactor", 0.0F));
         valueInput.read("CustomParticle", ParticleTypes.CODEC)

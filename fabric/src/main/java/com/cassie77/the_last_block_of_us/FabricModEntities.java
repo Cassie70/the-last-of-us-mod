@@ -3,6 +3,7 @@ package com.cassie77.the_last_block_of_us;
 import com.cassie77.the_last_block_of_us.entity.CustomAreaEffectCloudEntity;
 import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
 import com.cassie77.the_last_block_of_us.entity.clicker.ClickerEntity;
+import com.cassie77.the_last_block_of_us.entity.shambler.ShamblerEntity;
 import com.cassie77.the_last_block_of_us.item.bottle.BottleEntity;
 import com.cassie77.the_last_block_of_us.item.micotoxinsac.MycotoxinSacEntity;
 import com.cassie77.the_last_block_of_us.item.molotov.MolotovEntity;
@@ -30,6 +31,7 @@ public final class FabricModEntities {
         ModEntities.MYCOTOXIN_SAC_ENTITY = register("mycotoxin_sac_entity", EntityType.Builder.<MycotoxinSacEntity>of(MycotoxinSacEntity::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
         ModEntities.CLICKER = register("clicker", EntityType.Builder.of(ClickerEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).passengerAttachments(2.0125F).clientTrackingRange(8));
         ModEntities.BLOATER = register("bloater", EntityType.Builder.of(BloaterEntity::new, MobCategory.MONSTER).sized(0.9F, 2.25F).passengerAttachments(3.15F).clientTrackingRange(16));
+        ModEntities.SHAMBLER = register("shambler", EntityType.Builder.of(ShamblerEntity::new, MobCategory.MONSTER).sized(0.8F, 2.10F).clientTrackingRange(8));
         ModEntities.CUSTOM_AREA_EFFECT_CLOUD_ENTITY = register("area_effect_cloud", EntityType.Builder.<CustomAreaEffectCloudEntity>of(CustomAreaEffectCloudEntity::new, MobCategory.MISC).noLootTable().fireImmune().sized(6.0F, 3.0F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
     }
 
