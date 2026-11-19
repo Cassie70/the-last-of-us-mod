@@ -25,6 +25,13 @@ public final class NeoForgeModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_AMBIENT_2 = register("bloater_ambient_2");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_AMBIENT_3 = register("bloater_ambient_3");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_ALERT = register("bloater_alert");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_AWARE = register("shambler_aware");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_DETONATION = register("shambler_detonation");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_DEATH = register("shambler_death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_AMBIENT = register("shambler_ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_AMBIENT_2 = register("shambler_ambient_2");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_ANGRY = register("shambler_angry");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_ALERT = register("shambler_alert");
 
     private NeoForgeModSounds() {
     }
@@ -49,6 +56,13 @@ public final class NeoForgeModSounds {
                 case "bloater_ambient_2" -> ModSounds.BLOATER_AMBIENT_2 = sound;
                 case "bloater_ambient_3" -> ModSounds.BLOATER_AMBIENT_3 = sound;
                 case "bloater_alert" -> ModSounds.BLOATER_ALERT = sound;
+                case "shambler_aware" -> ModSounds.SHAMBLER_AWARE = sound;
+                case "shambler_detonation" -> ModSounds.SHAMBLER_DETONATION = sound;
+                case "shambler_death" -> ModSounds.SHAMBLER_DEATH = sound;
+                case "shambler_ambient" -> ModSounds.SHAMBLER_AMBIENT = sound;
+                case "shambler_ambient_2" -> ModSounds.SHAMBLER_AMBIENT_2 = sound;
+                case "shambler_angry" -> ModSounds.SHAMBLER_ANGRY = sound;
+                case "shambler_alert" -> ModSounds.SHAMBLER_ALERT = sound;
             }
             return sound;
         });
