@@ -63,10 +63,55 @@
       "the_last_block_of_us:bloater_ambient_3"
     ]
   },
-    "bloater_alert": {
-        "subtitle": "sound.the_last_block_of_us.bloater_alert",
-        "sounds": [
-        "the_last_block_of_us:bloater_alert"
-        ]
-    }
+
+
+  "bloater_alert": {
+    "subtitle": "sound.the_last_block_of_us.bloater_alert",
+    "sounds": [
+      "the_last_block_of_us:bloater_alert"
+    ]
+  },
+
+  "shambler_aware": {
+    "subtitle": "sound.the_last_block_of_us.shambler_aware",
+    "sounds": [
+      "the_last_block_of_us:shambler_aware"
+    ]
+  },
+
+  "shambler_detonation": {
+    "subtitle": "sound.the_last_block_of_us.shambler_detonation",
+    "sounds": [
+      "the_last_block_of_us:shambler_detonation"
+    ]
+  },
+
+  "shambler_death": {
+    "subtitle": "sound.the_last_block_of_us.shambler_death",
+    "sounds": [
+      "the_last_block_of_us:shambler_death"
+    ]
+  },
+
+  "shambler_ambient": {
+    "subtitle": "sound.the_last_block_of_us.shambler_ambient",
+    "sounds": [
+      "the_last_block_of_us:shambler_ambient",
+      "the_last_block_of_us:shambler_ambient_2"
+    ]
+  },
+
+  "shambler_angry": {
+    "subtitle": "sound.the_last_block_of_us.shambler_angry",
+    "sounds": [
+      "the_last_block_of_us:shambler_angry"
+    ]
+  },
+
+  "shambler_alert": {
+    "subtitle": "sound.the_last_block_of_us.shambler_alert",
+    "sounds": [
+      "the_last_block_of_us:shambler_alert"
+    ]
+  }
 }

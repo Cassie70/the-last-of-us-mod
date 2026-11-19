@@ -1,6 +1,8 @@
 package com.cassie77.the_last_block_of_us.entity.shambler;
 
 import com.cassie77.the_last_block_of_us.ModEffects;
+import com.cassie77.the_last_block_of_us.ModParticles;
+import com.cassie77.the_last_block_of_us.ModSounds;
 import com.cassie77.the_last_block_of_us.entity.CustomAreaEffectCloudEntity;
 import com.cassie77.the_last_block_of_us.entity.infected.InfectedAngriness;
 import com.cassie77.the_last_block_of_us.entity.infected.InfectedEntity;
@@ -40,30 +42,18 @@ public class ShamblerEntity extends InfectedEntity {
     private static final double FOLLOW_RANGE = 16.0;
     private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
 
-    /**
-     * Custom entity event for the fuse. Avoid 21, 35 and 63: the client's
-     * {@code ClientPacketListener} intercepts them (guardian, totem and sniffer)
-     * before dispatching to {@code handleEntityEvent}.
-     */
     public static final byte EVENT_EXPLOSION_FUSE = 64;
 
-    /**
-     * Vanilla couples reach and damage: entities are damaged out to {@code power * 2}
-     * blocks, with damage falling off from the centre. 3.0F reaches ~6 blocks
-     * (creeper-level), so stepping back a couple of blocks no longer avoids the blast.
-     */
-    private static final float EXPLOSION_POWER = 3.0F;
+    private static final float EXPLOSION_POWER = 3.5F;
     private static final float CLOUD_RADIUS = 6.0F;
     private static final int CLOUD_DURATION = 300;
     private static final int CLOUD_CORROSION_DURATION = 40;
     private static final int CLOUD_CORROSION_AMPLIFIER = 3;
     private static final int CLOUD_SLOWNESS_DURATION = 200;
     private static final int CLOUD_SLOWNESS_AMPLIFIER = 1;
-    private static final int EXPLOSION_COOLDOWN_TICKS = 40;
+    private static final int EXPLOSION_COOLDOWN_TICKS = 60;
 
-    /** Death animation tick (0..20) at which the pending death explosion triggers. */
     private static final int DEATH_EXPLOSION_TICK = 20;
-    /** Vanilla removes a dead living entity at tick 20; with a pending explosion we wait one extra tick. */
     private static final int DEATH_REMOVAL_TICK = 21;
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -126,7 +116,7 @@ public class ShamblerEntity extends InfectedEntity {
      * play the attack animation.
      */
     public void startExplosionFuse() {
-        this.playSound(SoundEvents.CREEPER_PRIMED, 1.0F, 1.0F);
+        this.playSound(ModSounds.SHAMBLER_DETONATION, 1.0F, 1.0F);
         if (this.level() instanceof ServerLevel serverLevel) {
             serverLevel.broadcastEntityEvent(this, EVENT_EXPLOSION_FUSE);
         }
@@ -178,15 +168,17 @@ public class ShamblerEntity extends InfectedEntity {
 
         serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 1, 0.0, 0.0, 0.0, 0.0);
         serverLevel.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 10, 1.5, 0.75, 1.5, 0.0);
-        serverLevel.sendParticles(ParticleTypes.FIREFLY, x, y, z, 30, 2.0, 1.0, 2.0, 0.05);
+        serverLevel.sendParticles(ModParticles.CORROSION_SMOKE, x, y, z, 40, 2.0, 1.0, 2.0, 0.02);
     }
 
     private void spawnMycotoxinCloud(ServerLevel serverLevel) {
         CustomAreaEffectCloudEntity cloud = new CustomAreaEffectCloudEntity(serverLevel,
                 this.getX(), this.getY(), this.getZ());
         cloud.setOwner(this);
-        cloud.setParticleArea(ParticleTypes.FIREFLY);
-        cloud.setDensityFactor(0.05F);
+        cloud.setParticleArea(ModParticles.CORROSION_SMOKE);
+        // The corrosion puff is far bigger than FIREFLY, so the density is lower than
+        // before to keep the cloud readable and cheap to render.
+        cloud.setDensityFactor(0.012F);
         cloud.setRadius(CLOUD_RADIUS);
         // No radiusOnUse: a hazard cloud should keep its size instead of shrinking by 0.5
         // every time it affects an entity (that made the cloud much smaller than it looked).
@@ -298,26 +290,34 @@ public class ShamblerEntity extends InfectedEntity {
     @Override
     public SoundEvent getAmbientSound(InfectedAngriness angriness) {
         return switch (angriness) {
-            case CALM, AGITATED -> SoundEvents.ZOMBIE_AMBIENT;
-            case ANGRY -> SoundEvents.ZOMBIE_DEATH;
+            case CALM, AGITATED -> ModSounds.SHAMBLER_AMBIENT;
+            case ANGRY -> ModSounds.SHAMBLER_AMBIENT;
         };
     }
 
     @Override
     public SoundEvent getListeningSound(InfectedAngriness angriness) {
         return switch (angriness) {
-            case CALM, AGITATED -> SoundEvents.ZOMBIE_AMBIENT;
-            case ANGRY -> SoundEvents.ZOMBIE_DEATH;
+            case CALM, AGITATED -> ModSounds.SHAMBLER_AMBIENT;
+            case ANGRY -> ModSounds.SHAMBLER_AMBIENT;
         };
     }
 
     @Override
     public SoundEvent getSniffSound() {
-        return SoundEvents.ZOMBIE_AMBIENT;
+        return ModSounds.SHAMBLER_AWARE;
     }
 
     @Override
     public SoundEvent getAngrySound() {
-        return SoundEvents.ZOMBIE_DEATH;
+        return ModSounds.SHAMBLER_ANGRY;
     }
+
+    @Override
+    protected @NotNull SoundEvent getDeathSound() {
+        return ModSounds.SHAMBLER_DEATH;
+    }
+
+    @Override
+    protected int getInfectedSniffDuration() { return 30; }
 }

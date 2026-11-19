@@ -27,6 +27,7 @@ public class TheLastBlockOfUsMod {
         NeoForgeModSensors.SENSOR_TYPES.register(eventBus);
         NeoForgeModSounds.SOUNDS.register(eventBus);
         NeoForgeModEffects.EFFECTS.register(eventBus);
+        NeoForgeModParticles.PARTICLES.register(eventBus);
         NeoForgeModBlockEntities.BLOCK_ENTITY_TYPES.register(eventBus);
         NeoForgeModItems.ITEMS.register(eventBus);
         CommonClass.init();
@@ -38,6 +39,7 @@ public class TheLastBlockOfUsMod {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             eventBus.addListener(NeoForgeModClient::registerLayerDefinitions);
             eventBus.addListener(NeoForgeModClient::registerRenderers);
+            eventBus.addListener(NeoForgeModClient::registerParticleProviders);
         }
     }
 

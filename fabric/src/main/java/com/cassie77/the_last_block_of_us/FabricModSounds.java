@@ -26,6 +26,13 @@ public final class FabricModSounds {
         ModSounds.BLOATER_AMBIENT_2 = register("bloater_ambient_2");
         ModSounds.BLOATER_AMBIENT_3 = register("bloater_ambient_3");
         ModSounds.BLOATER_ALERT = register("bloater_alert");
+        ModSounds.SHAMBLER_AWARE = register("shambler_aware");
+        ModSounds.SHAMBLER_DETONATION = register("shambler_detonation");
+        ModSounds.SHAMBLER_DEATH = register("shambler_death");
+        ModSounds.SHAMBLER_AMBIENT = register("shambler_ambient");
+        ModSounds.SHAMBLER_AMBIENT_2 = register("shambler_ambient_2");
+        ModSounds.SHAMBLER_ANGRY = register("shambler_angry");
+        ModSounds.SHAMBLER_ALERT = register("shambler_alert");
     }
 
     private static SoundEvent register(String name) {

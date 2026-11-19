@@ -5,10 +5,12 @@ import com.cassie77.the_last_block_of_us.client.bloater.BloaterModel;
 import com.cassie77.the_last_block_of_us.client.bloater.BloaterRenderer;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerModel;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerRenderer;
+import com.cassie77.the_last_block_of_us.client.particle.CorrosionSmokeParticle;
 import com.cassie77.the_last_block_of_us.client.shambler.ShamblerModel;
 import com.cassie77.the_last_block_of_us.client.shambler.ShamblerRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 
 public final class ForgeModClient {
 
@@ -31,5 +33,9 @@ public final class ForgeModClient {
         event.registerEntityRenderer(ModEntities.CLICKER, ClickerRenderer::new);
         event.registerEntityRenderer(ModEntities.BLOATER, BloaterRenderer::new);
         event.registerEntityRenderer(ModEntities.SHAMBLER, ShamblerRenderer::new);
+    }
+
+    public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.CORROSION_SMOKE, CorrosionSmokeParticle.Provider::new);
     }
 }

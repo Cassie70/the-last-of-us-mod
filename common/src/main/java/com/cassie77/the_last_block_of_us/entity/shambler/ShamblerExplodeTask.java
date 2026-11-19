@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ShamblerExplodeTask extends Behavior<InfectedEntity> {
 
-    private static final double DETONATION_DISTANCE_SQR = 4.0;
+    private static final double DETONATION_DISTANCE_SQR = 6.25;
     private static final int FUSE_TICKS = 20;
 
     private static final float APPROACH_SPEED = 1.5F;

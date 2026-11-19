@@ -5,9 +5,11 @@ import com.cassie77.the_last_block_of_us.client.bloater.BloaterRenderer;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerModel;
 import com.cassie77.the_last_block_of_us.client.bloater.BloaterModel;
 import com.cassie77.the_last_block_of_us.client.clicker.ClickerRenderer;
+import com.cassie77.the_last_block_of_us.client.particle.CorrosionSmokeParticle;
 import com.cassie77.the_last_block_of_us.client.shambler.ShamblerModel;
 import com.cassie77.the_last_block_of_us.client.shambler.ShamblerRenderer;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.entity.NoopRenderer;
@@ -30,5 +32,8 @@ public class TheLastBlockOfUsModClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(ShamblerModel.SHAMBLER, ShamblerModel::getTexturedModelData);
         EntityRendererRegistry.register(ModEntities.SHAMBLER, ShamblerRenderer::new);
+
+        ParticleFactoryRegistry.getInstance().register(ModParticles.CORROSION_SMOKE,
+                CorrosionSmokeParticle.Provider::new);
     }
 }

@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 
 @Mod(Constants.MOD_ID)
 public class TheLastBlockOfUsMod {
@@ -29,6 +30,7 @@ public class TheLastBlockOfUsMod {
         ForgeModSensors.SENSOR_TYPES.register(modBusGroup);
         ForgeModSounds.SOUNDS.register(modBusGroup);
         ForgeModEffects.EFFECTS.register(modBusGroup);
+        ForgeModParticles.PARTICLES.register(modBusGroup);
         ForgeModBlockEntities.BLOCK_ENTITY_TYPES.register(modBusGroup);
         ForgeModItems.ITEMS.register(modBusGroup);
         CommonClass.init();
@@ -42,6 +44,8 @@ public class TheLastBlockOfUsMod {
                     .addListener(ForgeModClient::registerLayerDefinitions);
             EntityRenderersEvent.RegisterRenderers.getBus(modBusGroup)
                     .addListener(ForgeModClient::registerRenderers);
+            RegisterParticleProvidersEvent.getBus(modBusGroup)
+                    .addListener(ForgeModClient::registerParticleProviders);
         }
 
     }

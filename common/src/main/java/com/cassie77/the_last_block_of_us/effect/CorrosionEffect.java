@@ -1,6 +1,8 @@
 package com.cassie77.the_last_block_of_us.effect;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,12 +18,16 @@ public class CorrosionEffect extends MobEffect {
     private static final float DAMAGE_PER_APPLICATION = 1.0F;
 
     public CorrosionEffect() {
-        super(MobEffectCategory.HARMFUL, 0x6C8A2E);
+        super(MobEffectCategory.HARMFUL, 0xDEE807);
     }
 
     @Override
     public boolean applyEffectTick(@NotNull ServerLevel level, LivingEntity entity, int amplifier) {
-        entity.hurtServer(level, level.damageSources().magic(), DAMAGE_PER_APPLICATION);
+        if (entity.hurtServer(level, level.damageSources().magic(), DAMAGE_PER_APPLICATION)) {
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.LAVA_EXTINGUISH, SoundSource.NEUTRAL, 0.6F, 1.0F);
+        }
+
         return true;
     }
 

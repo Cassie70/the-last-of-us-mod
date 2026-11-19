@@ -25,6 +25,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
 
             FabricModSounds.initialize();
             FabricModEffects.initialize();
+            FabricModParticles.initialize();
             FabricModEntities.initialize();
             FabricModSensors.initialize();
             FabricModBlocks.initialize();
@@ -82,19 +83,19 @@ public class TheLastBlockOfUsMod implements ModInitializer {
 
     private void registerSpawns() {
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
-                MobCategory.MONSTER, ModEntities.CLICKER, 5, 1, 3);
+                MobCategory.MONSTER, ModEntities.CLICKER, 10, 1, 3);
 
         SpawnPlacements.register(ModEntities.CLICKER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkAnyLightMonsterSpawnRules);
+                Monster::checkMonsterSpawnRules);
 
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
-                MobCategory.MONSTER, ModEntities.BLOATER, 2, 1, 1);
+                MobCategory.MONSTER, ModEntities.BLOATER, 4, 1, 1);
 
         SpawnPlacements.register(ModEntities.BLOATER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkAnyLightMonsterSpawnRules);
+                Monster::checkMonsterSpawnRules);
     }
 }

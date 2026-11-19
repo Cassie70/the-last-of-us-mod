@@ -3,6 +3,7 @@ package com.cassie77.the_last_block_of_us.item.micotoxinsac;
 import com.cassie77.the_last_block_of_us.ModEffects;
 import com.cassie77.the_last_block_of_us.ModEntities;
 import com.cassie77.the_last_block_of_us.ModItems;
+import com.cassie77.the_last_block_of_us.ModParticles;
 import com.cassie77.the_last_block_of_us.entity.CustomAreaEffectCloudEntity;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -85,8 +86,10 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
             cloud.setOwner(livingEntity);
         }
 
-        cloud.setParticleArea(ParticleTypes.FIREFLY);
-        cloud.setDensityFactor(0.10F);
+        cloud.setParticleArea(ModParticles.CORROSION_SMOKE);
+        // The corrosion puff is far bigger than FIREFLY, so the density is lower than
+        // before to keep the cloud readable and cheap to render.
+        cloud.setDensityFactor(0.02F);
         cloud.setRadius(RADIUS);
         cloud.setRadiusOnUse(-0.5F);
         cloud.setDuration(600);

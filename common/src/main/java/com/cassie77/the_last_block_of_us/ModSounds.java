@@ -18,4 +18,11 @@ public class ModSounds {
     public static SoundEvent BLOATER_AMBIENT_2;
     public static SoundEvent BLOATER_AMBIENT_3;
     public static SoundEvent BLOATER_ALERT;
+    public static SoundEvent SHAMBLER_AWARE;
+    public static SoundEvent SHAMBLER_DETONATION;
+    public static SoundEvent SHAMBLER_DEATH;
+    public static SoundEvent SHAMBLER_AMBIENT;
+    public static SoundEvent SHAMBLER_AMBIENT_2;
+    public static SoundEvent SHAMBLER_ANGRY;
+    public static SoundEvent SHAMBLER_ALERT;
 }
