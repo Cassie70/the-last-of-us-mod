@@ -31,16 +31,23 @@
   "entity.the_last_block_of_us.shambler": "Shambler",
   "effect.the_last_block_of_us.corrosion": "Corrosion",
 
-  "sound.the_last_block_of_us.clicker_angry": "Clicker Angry",
-  "sound.the_last_block_of_us.clicker_aware": "Clicker Aware",
-  "sound.the_last_block_of_us.clicker_ambient": "Clicker Listening",
-  "sound.the_last_block_of_us.clicker_alert": "Clicker Alerted",
-  "sound.the_last_block_of_us.clicker_alert_angry": "Clicker Alerted Angry",
+  "sound.the_last_block_of_us.clicker_angry": "Clicker screeches",
+  "sound.the_last_block_of_us.clicker_aware": "Clicker listens",
+  "sound.the_last_block_of_us.clicker_ambient": "Clicker clicks",
+  "sound.the_last_block_of_us.clicker_alert": "Clicker shrieks",
+  "sound.the_last_block_of_us.clicker_alert_angry": "Clicker rages",
 
-  "sound.the_last_block_of_us.bloater_angry": "Bloater Angry",
-  "sound.the_last_block_of_us.bloater_aware": "Bloater Aware",
-  "sound.the_last_block_of_us.bloater_ambient": "Bloater Groans",
-  "sound.the_last_block_of_us.bloater_alert": "Bloater Alerted",
+  "sound.the_last_block_of_us.bloater_angry": "Bloater roars",
+  "sound.the_last_block_of_us.bloater_aware": "Bloater growls",
+  "sound.the_last_block_of_us.bloater_ambient": "Bloater sighs",
+  "sound.the_last_block_of_us.bloater_alert": "Bloater alerts",
+
+  "sound.the_last_block_of_us.shambler_angry": "Shambler snarls",
+  "sound.the_last_block_of_us.shambler_aware": "Shambler grunts",
+  "sound.the_last_block_of_us.shambler_ambient": "Shambler murmurs",
+  "sound.the_last_block_of_us.shambler_alert": "Shambler alerts",
+  "sound.the_last_block_of_us.shambler_detonation": "Shambler explodes",
+  "sound.the_last_block_of_us.shambler_death": "Shambler dies",
 
   "block.the_last_block_of_us.clicker_spawner_block": "Clicker Spawner"
 }

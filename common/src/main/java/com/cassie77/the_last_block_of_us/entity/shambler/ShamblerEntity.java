@@ -295,8 +295,8 @@ public class ShamblerEntity extends InfectedEntity {
     @Override
     public SoundEvent getListeningSound(InfectedAngriness angriness) {
         return switch (angriness) {
-            case CALM, AGITATED -> ModSounds.SHAMBLER_AMBIENT;
-            case ANGRY -> ModSounds.SHAMBLER_AMBIENT;
+            case CALM, AGITATED -> ModSounds.SHAMBLER_ALERT;
+            case ANGRY -> ModSounds.SHAMBLER_ALERT;
         };
     }
 

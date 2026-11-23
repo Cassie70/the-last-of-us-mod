@@ -31,14 +31,21 @@
   "entity.the_last_block_of_us.shambler": "Tambaleante",
   "effect.the_last_block_of_us.corrosion": "Corrosión",
 
-  "sound.the_last_block_of_us.clicker_angry": "Chasqueador enojado",
-  "sound.the_last_block_of_us.clicker_aware": "Chasqueador informado",
-  "sound.the_last_block_of_us.clicker_ambient": "Chasqueador escuchando",
-  "sound.the_last_block_of_us.clicker_alert": "Chasqueador alertado",
-  "sound.the_last_block_of_us.clicker_alert_angry": "Chasqueador enojado alertado",
+  "sound.the_last_block_of_us.clicker_angry": "Chasqueador chilla",
+  "sound.the_last_block_of_us.clicker_aware": "Chasqueador escucha",
+  "sound.the_last_block_of_us.clicker_ambient": "Chasqueador chasquea",
+  "sound.the_last_block_of_us.clicker_alert": "Chasqueador se alerta",
+  "sound.the_last_block_of_us.clicker_alert_angry": "Chasqueador enfurece",
 
-  "sound.the_last_block_of_us.bloater_angry": "Gordinflon enojado",
-  "sound.the_last_block_of_us.bloater_aware": "Gordinflon informado",
-  "sound.the_last_block_of_us.bloater_ambient": "Gordinflon gruñidos",
-  "sound.the_last_block_of_us.bloater_alert": "Gordinflon alertado"
+  "sound.the_last_block_of_us.bloater_angry": "Gordinflón ruge",
+  "sound.the_last_block_of_us.bloater_aware": "Gordinflón gruñe",
+  "sound.the_last_block_of_us.bloater_ambient": "Gordinflón suspira",
+  "sound.the_last_block_of_us.bloater_alert": "Gordinflón se alerta",
+
+  "sound.the_last_block_of_us.shambler_angry": "Tambaleante ruge",
+  "sound.the_last_block_of_us.shambler_aware": "Tambaleante gruñe",
+  "sound.the_last_block_of_us.shambler_ambient": "Tambaleante murmura",
+  "sound.the_last_block_of_us.shambler_alert": "Tambaleante se alerta",
+  "sound.the_last_block_of_us.shambler_detonation": "Tambaleante explota",
+  "sound.the_last_block_of_us.shambler_death": "Tambaleante muere"
 }
