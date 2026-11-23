@@ -2,6 +2,8 @@ package com.cassie77.the_last_block_of_us.item.nailbomb;
 
 import com.cassie77.the_last_block_of_us.ModEntities;
 import com.cassie77.the_last_block_of_us.ModItems;
+import com.cassie77.the_last_block_of_us.item.AbstractBombEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -9,10 +11,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,15 +20,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.StainedGlassBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
-public class NailBombEntity extends ThrowableItemProjectile {
+public class NailBombEntity extends AbstractBombEntity {
 
-    private int ticksOnGround = 0;
     private int glassHits = 0;
 
     public NailBombEntity(EntityType<? extends NailBombEntity> entityType, Level world) {
@@ -49,80 +47,63 @@ public class NailBombEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected void onHit(@NotNull HitResult hitResult) {
-        super.onHit(hitResult);
-        if (!this.level().isClientSide()) {
-            this.level().broadcastEntityEvent(this, (byte) 3);
-
-            if (hitResult instanceof BlockHitResult blockHitResult) {
-                BlockPos blockPos = blockHitResult.getBlockPos();
-                Block block = this.level().getBlockState(blockPos).getBlock();
-
-                if(block == Blocks.AIR) return;
-
-                if(block == Blocks.GLASS_PANE || block == Blocks.GLASS || block instanceof StainedGlassBlock || block instanceof StainedGlassPaneBlock) {
-                    if (glassHits >= 3) {
-                        breakNailBomb();
-                        return;
-                    }
-                    glassHits++;
-
-                    this.level().destroyBlock(blockPos, false);
-
-                }else{
-                    breakNailBomb();
-                }
+    protected boolean onBeforeBlockImpact(BlockPos pos, BlockState state) {
+        if (isGlass(state.getBlock()) && this.glassHits < 3) {
+            if (!this.level().isClientSide()) {
+                this.glassHits++;
+                this.level().destroyBlock(pos, false);
             }
+            return true;
         }
-    }
-
-    private void breakNailBomb() {
-
-        this.setDeltaMovement(Vec3.ZERO);
-        this.hasImpulse = true;
-
-        ticksOnGround++;
-        if (ticksOnGround > 60) {
-            this.setPos(this.getX(), this.getBlockY() + 2, this.getZ());
-
-
-            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
-
-            ((ServerLevel) this.level()).sendParticles(
-                    ParticleTypes.EXPLOSION,
-                    this.getX() + 0.5,
-                    this.getY() + 0.5,
-                    this.getZ() + 0.5,
-                    50,
-                    2, 2, 2,
-                    0.0
-            );
-
-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), 5.0F, Level.ExplosionInteraction.NONE);
-            this.discard();
-        }
+        return false;
     }
 
     @Override
-    protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
-        super.onHitEntity(entityHitResult);
+    protected float getDirectHitDamage() {
+        return 5.0F;
+    }
 
-        if (!this.level().isClientSide()) {
-            Entity entity = entityHitResult.getEntity();
+    @Override
+    protected void applyDirectHitEffects(LivingEntity target) {
+        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 7, false, true));
+        target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 5, false, true));
+        target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
+    }
 
-            float damageAmount = 5.0F;
-            if (this.level() instanceof ServerLevel serverWorld) {
-                entity.hurtServer(serverWorld, this.damageSources().generic(), damageAmount);
-            }
+    @Override
+    protected void onDetonate(ServerLevel serverLevel) {
+        double expY = this.getY() + 0.5;
 
-            if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 7, false, true));
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 5, false, true));
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
-            }
-        }
+        serverLevel.playSound(null, this.getX(), expY, this.getZ(),
+                SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 
-        breakNailBomb();
+        serverLevel.sendParticles(
+                ParticleTypes.EXPLOSION,
+                this.getX(),
+                expY,
+                this.getZ(),
+                50,
+                2.0, 2.0, 2.0,
+                0.0
+        );
+
+        serverLevel.explode(this, this.getX(), expY, this.getZ(), 5.0F, Level.ExplosionInteraction.NONE);
+    }
+
+    private boolean isGlass(Block block) {
+        return block == Blocks.GLASS_PANE || block == Blocks.GLASS
+                || block instanceof StainedGlassBlock || block instanceof StainedGlassPaneBlock;
+    }
+
+    @Override
+    protected void addAdditionalSaveData(@NotNull ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putByte("GlassHits", (byte) this.glassHits);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(@NotNull ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.glassHits = input.getByteOr("GlassHits", (byte) 0);
     }
 }
