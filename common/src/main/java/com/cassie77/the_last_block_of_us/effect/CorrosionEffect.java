@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CorrosionEffect extends MobEffect {
 
-    public static final int DAMAGE_INTERVAL = 25;
+    public static final int DAMAGE_INTERVAL = 3;
     private static final float DAMAGE_PER_APPLICATION = 1.0F;
 
     public CorrosionEffect() {
@@ -33,7 +33,6 @@ public class CorrosionEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        int interval = DAMAGE_INTERVAL >> amplifier;
-        return interval > 0 ? duration % interval == 0 : true;
+        return duration % DAMAGE_INTERVAL == 0;
     }
 }

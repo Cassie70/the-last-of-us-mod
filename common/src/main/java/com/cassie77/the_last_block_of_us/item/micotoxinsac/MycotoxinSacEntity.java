@@ -87,15 +87,13 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
         }
 
         cloud.setParticleArea(ModParticles.CORROSION_SMOKE);
-        // The corrosion puff is far bigger than FIREFLY, so the density is lower than
-        // before to keep the cloud readable and cheap to render.
-        cloud.setDensityFactor(0.02F);
+        cloud.setDensityFactor(0.012F);
         cloud.setRadius(RADIUS);
-        cloud.setRadiusOnUse(-0.5F);
+        cloud.setRadiusOnUse(-0.25F);
         cloud.setDuration(600);
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick(-cloud.getRadius() / (float) cloud.getDuration());
-        cloud.addEffect(new MobEffectInstance(ModEffects.corrosion(), 200, 2));
+        cloud.addEffect(new MobEffectInstance(ModEffects.corrosion(), 60, 0));
         world.addFreshEntity(cloud);
     }
 

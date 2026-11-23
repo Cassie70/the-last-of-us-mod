@@ -47,8 +47,8 @@ public class ShamblerEntity extends InfectedEntity {
     private static final float EXPLOSION_POWER = 3.5F;
     private static final float CLOUD_RADIUS = 6.0F;
     private static final int CLOUD_DURATION = 300;
-    private static final int CLOUD_CORROSION_DURATION = 40;
-    private static final int CLOUD_CORROSION_AMPLIFIER = 3;
+    private static final int CLOUD_CORROSION_DURATION = 60;
+    private static final int CLOUD_CORROSION_AMPLIFIER = 0;
     private static final int CLOUD_SLOWNESS_DURATION = 200;
     private static final int CLOUD_SLOWNESS_AMPLIFIER = 1;
     private static final int EXPLOSION_COOLDOWN_TICKS = 60;
@@ -176,12 +176,9 @@ public class ShamblerEntity extends InfectedEntity {
                 this.getX(), this.getY(), this.getZ());
         cloud.setOwner(this);
         cloud.setParticleArea(ModParticles.CORROSION_SMOKE);
-        // The corrosion puff is far bigger than FIREFLY, so the density is lower than
-        // before to keep the cloud readable and cheap to render.
         cloud.setDensityFactor(0.012F);
         cloud.setRadius(CLOUD_RADIUS);
-        // No radiusOnUse: a hazard cloud should keep its size instead of shrinking by 0.5
-        // every time it affects an entity (that made the cloud much smaller than it looked).
+        cloud.setRadiusOnUse(-0.25F);
         cloud.setDuration(CLOUD_DURATION);
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick(-cloud.getRadius() / (float) cloud.getDuration());

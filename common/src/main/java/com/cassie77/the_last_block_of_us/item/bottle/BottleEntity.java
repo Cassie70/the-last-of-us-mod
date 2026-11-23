@@ -18,16 +18,16 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.StainedGlassBlock;
+import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
 public class BottleEntity extends ThrowableItemProjectile {
-
-    private int glassHits = 0;
 
     public BottleEntity(EntityType<? extends BottleEntity> entityType, Level world) {
         super(entityType, world);
@@ -69,27 +69,11 @@ public class BottleEntity extends ThrowableItemProjectile {
 
             if (hitResult instanceof BlockHitResult blockHitResult) {
                 BlockPos blockPos = blockHitResult.getBlockPos();
-                BlockState blockState = this.level().getBlockState(blockPos);
 
-                if(blockState.getBlock() == Blocks.GLASS_PANE || blockState.getBlock() == Blocks.GLASS) {
-                    if (glassHits >= 3) {
-                        breakBottle();
-                        return;
-                    }
-                    glassHits++;
+                Block block = this.level().getBlockState(blockPos).getBlock();
 
+                if(block == Blocks.GLASS_PANE || block == Blocks.GLASS || block instanceof StainedGlassBlock || block instanceof StainedGlassPaneBlock) {
                     this.level().destroyBlock(blockPos, false);
-
-                    this.level().playSound(
-                            null,
-                            this.getX(),
-                            this.getY(),
-                            this.getZ(),
-                            SoundEvents.GLASS_BREAK,
-                            SoundSource.BLOCKS,
-                            1.0F,
-                            1.0F
-                    );
                 }
                 breakBottle();
             }

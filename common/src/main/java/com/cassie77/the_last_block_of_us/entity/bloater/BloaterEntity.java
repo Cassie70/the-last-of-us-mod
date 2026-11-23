@@ -35,7 +35,7 @@ public class BloaterEntity extends InfectedEntity {
     private static final double FOLLOW_RANGE = 16.0;
     private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
     private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 5;
-    private static final int BREAKING_BLOCK_COOLDOWN = 30;
+    private static final int BREAKING_BLOCK_COOLDOWN = 60;
     private int blockBreakingCooldown = 0;
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -128,7 +128,7 @@ public class BloaterEntity extends InfectedEntity {
             Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST, Blocks.SHORT_GRASS, Blocks.TALL_GRASS);
 
     public static boolean canDestroy(BlockState block) {
-        if (block.is(BlockTags.FLOWERS) || block.is(BlockTags.SMALL_FLOWERS))
+        if (block.is(BlockTags.FLOWERS) || block.is(BlockTags.SMALL_FLOWERS) || block.is(BlockTags.SNOW) || block.is(BlockTags.WOOL_CARPETS))
             return false;
         if (BLOATER_IMMUNE.contains(block.getBlock()))
             return false;
