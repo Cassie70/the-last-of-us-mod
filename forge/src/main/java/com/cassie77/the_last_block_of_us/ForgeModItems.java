@@ -72,6 +72,9 @@ public final class ForgeModItems {
     public static final RegistryObject<Item> BLOATER_SPAWN_EGG = register("bloater_spawn_egg",
             properties -> new SpawnEggItem(ForgeModEntities.BLOATER.get(), properties),
             item -> ModItems.BLOATER_SPAWN_EGG = item);
+    public static final RegistryObject<Item> SHAMBLER_SPAWN_EGG = register("shambler_spawn_egg",
+            properties -> new SpawnEggItem(ForgeModEntities.BLOATER.get(), properties),
+            item -> ModItems.SHAMBLER_SPAWN_EGG = item);
 
     private ForgeModItems() {
     }

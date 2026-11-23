@@ -91,6 +91,7 @@ public class TheLastBlockOfUsMod {
         } else if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.CLICKER_SPAWN_EGG);
             event.accept(ModItems.BLOATER_SPAWN_EGG);
+            event.accept(ModItems.SHAMBLER_SPAWN_EGG);
         }
     }
 
@@ -99,14 +100,21 @@ public class TheLastBlockOfUsMod {
                 ModEntities.CLICKER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkAnyLightMonsterSpawnRules,
+                Monster::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
 
         event.register(
                 ModEntities.BLOATER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Monster::checkAnyLightMonsterSpawnRules,
+                Monster::checkMonsterSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+
+        event.register(
+                ModEntities.SHAMBLER,
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 }

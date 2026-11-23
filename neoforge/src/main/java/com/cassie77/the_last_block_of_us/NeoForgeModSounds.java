@@ -11,6 +11,7 @@ public final class NeoForgeModSounds {
             Constants.MOD_ID);
     public static final DeferredHolder<SoundEvent, SoundEvent> THROW_MOLOTOV = register("throw_molotov");
     public static final DeferredHolder<SoundEvent, SoundEvent> EXPLODE_MOLOTOV = register("explode_molotov");
+
     public static final DeferredHolder<SoundEvent, SoundEvent> CLICKER_ANGRY = register("clicker_angry");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLICKER_AWARE = register("clicker_aware");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLICKER_AMBIENT = register("clicker_ambient");
@@ -19,12 +20,14 @@ public final class NeoForgeModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> CLICKER_ALERT_ANGRY = register("clicker_alert_angry");
     public static final DeferredHolder<SoundEvent, SoundEvent> CLICKER_ALERT_ANGRY_2 = register(
             "clicker_alert_angry_2");
+
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_ANGRY = register("bloater_angry");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_AWARE = register("bloater_aware");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_AMBIENT = register("bloater_ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_AMBIENT_2 = register("bloater_ambient_2");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_AMBIENT_3 = register("bloater_ambient_3");
     public static final DeferredHolder<SoundEvent, SoundEvent> BLOATER_ALERT = register("bloater_alert");
+
     public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_AWARE = register("shambler_aware");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_DETONATION = register("shambler_detonation");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHAMBLER_DEATH = register("shambler_death");

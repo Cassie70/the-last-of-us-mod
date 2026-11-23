@@ -78,6 +78,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> {
             entries.accept(ModItems.CLICKER_SPAWN_EGG);
             entries.accept(ModItems.BLOATER_SPAWN_EGG);
+            entries.accept(ModItems.SHAMBLER_SPAWN_EGG);
         });
     }
 
@@ -94,6 +95,14 @@ public class TheLastBlockOfUsMod implements ModInitializer {
                 MobCategory.MONSTER, ModEntities.BLOATER, 4, 1, 1);
 
         SpawnPlacements.register(ModEntities.BLOATER,
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules);
+
+        BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(),
+                MobCategory.MONSTER, ModEntities.SHAMBLER, 6, 1, 2);
+
+        SpawnPlacements.register(ModEntities.SHAMBLER,
                 SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules);

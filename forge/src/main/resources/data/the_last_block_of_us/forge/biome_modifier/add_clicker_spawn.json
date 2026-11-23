@@ -4,7 +4,7 @@
     "spawners": [
         {
             "type": "the_last_block_of_us:clicker",
-            "weight": 5,
+            "weight": 10,
             "minCount": 1,
             "maxCount": 3
         }

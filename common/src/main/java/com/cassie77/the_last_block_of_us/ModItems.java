@@ -35,4 +35,5 @@ public class ModItems {
 
     public static Item CLICKER_SPAWN_EGG;
     public static Item BLOATER_SPAWN_EGG;
+    public static Item SHAMBLER_SPAWN_EGG;
 }

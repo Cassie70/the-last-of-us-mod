@@ -24,6 +24,20 @@
         },
         {
           "type": "minecraft:item",
+          "name": "the_last_block_of_us:canister",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
           "name": "the_last_block_of_us:blade_quarter",
           "weight": 16,
           "functions": [

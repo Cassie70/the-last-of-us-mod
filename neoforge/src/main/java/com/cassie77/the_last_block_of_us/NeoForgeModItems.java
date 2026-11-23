@@ -74,6 +74,9 @@ public final class NeoForgeModItems {
     public static final DeferredHolder<Item, Item> BLOATER_SPAWN_EGG = register("bloater_spawn_egg",
             properties -> new SpawnEggItem(NeoForgeModEntities.BLOATER.get(), properties),
             item -> ModItems.BLOATER_SPAWN_EGG = item);
+    public static final DeferredHolder<Item, Item> SHAMBLER_SPAWN_EGG = register("shambler_spawn_egg",
+            properties -> new SpawnEggItem(NeoForgeModEntities.SHAMBLER.get(), properties),
+            item -> ModItems.SHAMBLER_SPAWN_EGG = item);
 
     private NeoForgeModItems() {
     }

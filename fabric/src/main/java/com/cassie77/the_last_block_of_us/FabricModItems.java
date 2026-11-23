@@ -62,6 +62,7 @@ public class FabricModItems {
 
         ModItems.CLICKER_SPAWN_EGG = register("clicker_spawn_egg", properties -> new SpawnEggItem(ModEntities.CLICKER, properties));
         ModItems.BLOATER_SPAWN_EGG = register("bloater_spawn_egg", properties -> new SpawnEggItem(ModEntities.BLOATER, properties));
+        ModItems.SHAMBLER_SPAWN_EGG = register("shambler_spawn_egg", properties -> new SpawnEggItem(ModEntities.SHAMBLER, properties));
 
     }
 }
