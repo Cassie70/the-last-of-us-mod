@@ -47,7 +47,7 @@ public class ShamblerEntity extends InfectedEntity {
     private static final float EXPLOSION_POWER = 3.5F;
     private static final float CLOUD_RADIUS = 6.0F;
     private static final int CLOUD_DURATION = 300;
-    private static final int CLOUD_CORROSION_DURATION = 60;
+    private static final int CLOUD_CORROSION_DURATION = 40;
     private static final int CLOUD_CORROSION_AMPLIFIER = 0;
     private static final int CLOUD_SLOWNESS_DURATION = 200;
     private static final int CLOUD_SLOWNESS_AMPLIFIER = 1;
