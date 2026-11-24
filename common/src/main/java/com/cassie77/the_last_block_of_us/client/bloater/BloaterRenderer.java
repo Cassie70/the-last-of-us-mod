@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class BloaterRenderer extends MobRenderer<BloaterEntity, BloaterRenderState, BloaterModel> {
+public class BloaterRenderer extends MobRenderer<BloaterEntity, BloaterModel> {
 
     public BloaterRenderer(EntityRendererProvider.Context context) {
         super(context, new BloaterModel(context.bakeLayer(BloaterModel.BLOATER)), 0.5f);
@@ -16,30 +16,14 @@ public class BloaterRenderer extends MobRenderer<BloaterEntity, BloaterRenderSta
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull BloaterRenderState state) {
-        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/bloater/bloater.png");
+    public @NotNull ResourceLocation getTextureLocation(@NotNull BloaterEntity entity) {
+        return new ResourceLocation(Constants.MOD_ID, "textures/entity/bloater/bloater.png");
     }
 
     @Override
-    protected void scale(@NotNull BloaterRenderState state, PoseStack matrices) {
+    protected void scale(@NotNull BloaterEntity entity, @NotNull PoseStack matrices, float partialTick) {
         float scale = 1.25f;
         matrices.scale(scale, scale, scale);
-        super.scale(state, matrices);
-    }
-
-    @Override
-    public @NotNull BloaterRenderState createRenderState() {
-        return new BloaterRenderState();
-    }
-
-    @Override
-    public void extractRenderState(@NotNull BloaterEntity bloater, @NotNull BloaterRenderState bloaterRenderState, float f) {
-        super.extractRenderState(bloater, bloaterRenderState, f);
-
-        bloaterRenderState.roaringAnimationState.copyFrom(bloater.roaringAnimationState);
-        bloaterRenderState.idleAnimationState.copyFrom(bloater.idleAnimationState);
-        bloaterRenderState.attackingAnimationState.copyFrom(bloater.attackingAnimationState);
-        bloaterRenderState.throwingAnimationState.copyFrom(bloater.throwingAnimationState);
-        bloaterRenderState.heldItem = bloater.getOffhandItem();
+        super.scale(entity, matrices, partialTick);
     }
 }

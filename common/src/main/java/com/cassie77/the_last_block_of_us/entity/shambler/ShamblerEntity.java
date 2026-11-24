@@ -24,7 +24,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,7 +40,6 @@ public class ShamblerEntity extends InfectedEntity {
     private static final double ATTACK_KNOCKBACK = 0;
     private static final double ATTACK_DAMAGE = 8.0;
     private static final double FOLLOW_RANGE = 16.0;
-    private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
 
     public static final byte EVENT_EXPLOSION_FUSE = 64;
 
@@ -60,6 +59,14 @@ public class ShamblerEntity extends InfectedEntity {
     public final AnimationState attackingAnimationState = new AnimationState();
     public final AnimationState roaringAnimationState = new AnimationState();
 
+    /**
+     * 1.20.1 has no render state carrying {@code deathTime}, so the death animation in
+     * {@code ShamblerModel} reads it from the entity instead.
+     */
+    public int getDeathTime() {
+        return this.deathTime;
+    }
+
     private int explosionCooldown;
     private boolean deathExplosionPending;
     private boolean deathExplosionPlayed;
@@ -69,12 +76,12 @@ public class ShamblerEntity extends InfectedEntity {
 
         this.xpReward = 5;
         this.getNavigation().setCanFloat(true);
-        this.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_OTHER, 8.0F);
-        this.setPathfindingMalus(PathType.POWDER_SNOW, 8.0F);
-        this.setPathfindingMalus(PathType.LAVA, 8.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_FIRE, 0.0F);
-        this.setPathfindingMalus(PathType.DANGER_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.UNPASSABLE_RAIL, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_OTHER, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.POWDER_SNOW, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.LAVA, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0.0F);
     }
 
     public static AttributeSupplier.Builder addAttributes() {
@@ -84,13 +91,12 @@ public class ShamblerEntity extends InfectedEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE)
-                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, WATER_MOVEMENT_EFFICIENCY);
+                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE);
     }
 
     @Override
     public boolean canBeAffected(@NotNull MobEffectInstance effect) {
-        if (effect.getEffect() == MobEffects.SLOWNESS) {
+        if (effect.getEffect() == MobEffects.MOVEMENT_SLOWDOWN) {
             return false;
         }
 
@@ -146,7 +152,7 @@ public class ShamblerEntity extends InfectedEntity {
         this.setInvulnerable(true);
         try {
             serverLevel.playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                    SoundEvents.GENERIC_EXPLODE, SoundSource.NEUTRAL, 1.0F, 1.0F);
             serverLevel.explode(this, this.getX(), this.getY(), this.getZ(),
                     EXPLOSION_POWER, Level.ExplosionInteraction.NONE);
         } finally {
@@ -183,13 +189,13 @@ public class ShamblerEntity extends InfectedEntity {
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick(-cloud.getRadius() / (float) cloud.getDuration());
         cloud.addEffect(new MobEffectInstance(ModEffects.corrosion(), CLOUD_CORROSION_DURATION, CLOUD_CORROSION_AMPLIFIER));
-        cloud.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, CLOUD_SLOWNESS_DURATION, CLOUD_SLOWNESS_AMPLIFIER));
+        cloud.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, CLOUD_SLOWNESS_DURATION, CLOUD_SLOWNESS_AMPLIFIER));
         serverLevel.addFreshEntity(cloud);
     }
 
     @Override
     public void die(@NotNull DamageSource source) {
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             this.deathExplosionPending = true;
         }
 
@@ -204,7 +210,7 @@ public class ShamblerEntity extends InfectedEntity {
     protected void tickDeath() {
         this.deathTime++;
 
-        if (this.level().isClientSide()) {
+        if (this.level().isClientSide) {
             return;
         }
 
@@ -227,7 +233,7 @@ public class ShamblerEntity extends InfectedEntity {
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             if (this.explosionCooldown > 0) {
                 this.explosionCooldown--;
             }

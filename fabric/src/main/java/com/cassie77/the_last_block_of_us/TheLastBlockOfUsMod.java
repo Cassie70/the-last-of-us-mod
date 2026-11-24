@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -87,7 +86,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
                 MobCategory.MONSTER, ModEntities.CLICKER, 10, 1, 3);
 
         SpawnPlacements.register(ModEntities.CLICKER,
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules);
 
@@ -95,7 +94,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
                 MobCategory.MONSTER, ModEntities.BLOATER, 4, 1, 1);
 
         SpawnPlacements.register(ModEntities.BLOATER,
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules);
 
@@ -103,7 +102,7 @@ public class TheLastBlockOfUsMod implements ModInitializer {
                 MobCategory.MONSTER, ModEntities.SHAMBLER, 6, 1, 2);
 
         SpawnPlacements.register(ModEntities.SHAMBLER,
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules);
     }

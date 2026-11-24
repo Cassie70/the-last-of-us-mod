@@ -3,7 +3,7 @@ package com.cassie77.the_last_block_of_us;
 import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
 import com.cassie77.the_last_block_of_us.entity.clicker.ClickerEntity;
 import com.cassie77.the_last_block_of_us.entity.shambler.ShamblerEntity;
-import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -12,6 +12,7 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -20,10 +21,10 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 @Mod(Constants.MOD_ID)
 public class TheLastBlockOfUsMod {
 
-    public TheLastBlockOfUsMod(FMLJavaModLoadingContext context) {
+    public TheLastBlockOfUsMod() {
         Constants.LOG.info("Initializing {} on Forge!", Constants.MOD_NAME);
 
-        var modBusGroup = context.getModBusGroup();
+        IEventBus modBusGroup = FMLJavaModLoadingContext.get().getModEventBus();
         ForgeModBlocks.BLOCKS.register(modBusGroup);
         ForgeModBlocks.ITEMS.register(modBusGroup);
         ForgeModEntities.ENTITY_TYPES.register(modBusGroup);
@@ -35,17 +36,14 @@ public class TheLastBlockOfUsMod {
         ForgeModItems.ITEMS.register(modBusGroup);
         CommonClass.init();
 
-        EntityAttributeCreationEvent.getBus(modBusGroup).addListener(this::onEntityAttributeCreation);
-        BuildCreativeModeTabContentsEvent.getBus(modBusGroup).addListener(this::onBuildCreativeTabs);
-        SpawnPlacementRegisterEvent.getBus(modBusGroup).addListener(this::onRegisterSpawnPlacements);
+        modBusGroup.addListener(this::onEntityAttributeCreation);
+        modBusGroup.addListener(this::onBuildCreativeTabs);
+        modBusGroup.addListener(this::onRegisterSpawnPlacements);
 
         if (FMLLoader.getDist() == Dist.CLIENT) {
-            EntityRenderersEvent.RegisterLayerDefinitions.getBus(modBusGroup)
-                    .addListener(ForgeModClient::registerLayerDefinitions);
-            EntityRenderersEvent.RegisterRenderers.getBus(modBusGroup)
-                    .addListener(ForgeModClient::registerRenderers);
-            RegisterParticleProvidersEvent.getBus(modBusGroup)
-                    .addListener(ForgeModClient::registerParticleProviders);
+            modBusGroup.addListener(ForgeModClient::registerLayerDefinitions);
+            modBusGroup.addListener(ForgeModClient::registerRenderers);
+            modBusGroup.addListener(ForgeModClient::registerParticleProviders);
         }
 
     }
@@ -98,21 +96,21 @@ public class TheLastBlockOfUsMod {
     private void onRegisterSpawnPlacements(SpawnPlacementRegisterEvent event) {
         event.register(
                 ModEntities.CLICKER,
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
 
         event.register(
                 ModEntities.BLOATER,
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
 
         event.register(
                 ModEntities.SHAMBLER,
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);

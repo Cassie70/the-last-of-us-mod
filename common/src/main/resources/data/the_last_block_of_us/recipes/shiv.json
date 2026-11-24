@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "the_last_block_of_us:binding"},
+    {"item": "the_last_block_of_us:blade"}
+  ],
+  "result": {
+    "item": "the_last_block_of_us:shiv",
+    "count": 1
+  }
+}

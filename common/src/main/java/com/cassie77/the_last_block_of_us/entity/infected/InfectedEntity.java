@@ -7,6 +7,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,7 +20,6 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.GameEventTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
-import net.minecraft.util.profiling.Profiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,8 +37,6 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -134,16 +133,16 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     }
 
     @Override
-    public boolean doHurtTarget(ServerLevel world, @NotNull Entity target) {
-        world.broadcastEntityEvent(this, (byte) 4);
+    public boolean doHurtTarget(@NotNull Entity target) {
+        this.level().broadcastEntityEvent(this, (byte) 4);
         this.playSound(SoundEvents.PLAYER_ATTACK_STRONG, 1.5F, this.getVoicePitch());
-        return super.doHurtTarget(world, target);
+        return super.doHurtTarget(target);
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(ANGER, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ANGER, 0);
     }
 
     private void updateAnger() {
@@ -151,12 +150,13 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     }
 
     @Override
-    protected void customServerAiStep(@NotNull ServerLevel world) {
-        ProfilerFiller profiler = Profiler.get();
+    protected void customServerAiStep() {
+        ServerLevel world = (ServerLevel) this.level();
+        ProfilerFiller profiler = world.getProfiler();
         profiler.push("ClickerBrain");
         this.getBrain().tick(world, this);
         profiler.pop();
-        super.customServerAiStep(world);
+        super.customServerAiStep();
 
         if (this.tickCount % 10 == 0) {
             this.angerManagement.tick(world, this::isValidTarget);
@@ -209,7 +209,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
                     && livingEntity.getType() != ModEntities.CLICKER
                     && livingEntity.getType() != ModEntities.BLOATER
                     && livingEntity.getType() != ModEntities.SHAMBLER
-                    && !livingEntity.getType().is(EntityTypeTags.AQUATIC)
+                    && !livingEntity.canBreatheUnderwater()
                     && !livingEntity.isInvulnerable()
                     && !livingEntity.isDeadOrDying()
                     && this.level().getWorldBorder().isWithinBounds(livingEntity.getBoundingBox());
@@ -217,17 +217,24 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
         return false;
     }
 
-    protected void addAdditionalSaveData(@NotNull ValueOutput valueOutput) {
-        super.addAdditionalSaveData(valueOutput);
-        valueOutput.store("anger", AngerManagement.codec(this::isValidTarget), this.angerManagement);
-        valueOutput.store("listener", Data.CODEC, this.vibrationData);
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        AngerManagement.codec(this::isValidTarget).encodeStart(NbtOps.INSTANCE, this.angerManagement)
+                .result().ifPresent(encoded -> tag.put("anger", encoded));
+        Data.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationData)
+                .result().ifPresent(encoded -> tag.put("listener", encoded));
     }
 
-    protected void readAdditionalSaveData(@NotNull ValueInput valueInput) {
-        super.readAdditionalSaveData(valueInput);
-        this.angerManagement = valueInput.read("anger", AngerManagement.codec(this::isValidTarget)).orElseGet(() -> new AngerManagement(this::isValidTarget, Collections.emptyList()));
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.angerManagement = AngerManagement.codec(this::isValidTarget)
+                .parse(NbtOps.INSTANCE, tag.get("anger"))
+                .result().orElseGet(() -> new AngerManagement(this::isValidTarget, Collections.emptyList()));
         this.updateAnger();
-        this.vibrationData = valueInput.read("listener", Data.CODEC).orElseGet(Data::new);
+        this.vibrationData = Data.CODEC.parse(NbtOps.INSTANCE, tag.get("listener"))
+                .result().orElseGet(Data::new);
     }
 
     public InfectedAngriness getAngriness() {
@@ -259,7 +266,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
 
     @Override
     public boolean canBeAffected(MobEffectInstance effect) {
-        if (effect.getEffect().value() == ModEffects.CORROSION) {
+        if (effect.getEffect() == ModEffects.CORROSION) {
             return false;
         }
 
@@ -273,13 +280,13 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
     @Nullable
     @Override
     public LivingEntity getTarget() {
-        return this.getTargetFromBrain();
+        return this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
     }
 
     @Override
-    public boolean hurtServer(@NotNull ServerLevel world, @NotNull DamageSource source, float amount) {
-        boolean bl = super.hurtServer(world, source, amount);
-        if (!this.isNoAi()) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
+        boolean bl = super.hurt(source, amount);
+        if (!this.isNoAi() && this.level() instanceof ServerLevel world) {
             Entity entity = source.getEntity();
             this.increaseAngerAt(entity, InfectedAngriness.ANGRY.getThreshold() + 20);
 
@@ -305,7 +312,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
             }
 
             if (this.brain.getMemory(MemoryModuleType.ATTACK_TARGET).isEmpty() && entity instanceof LivingEntity livingEntity) {
-                if (source.isDirect() || this.closerThan(livingEntity, 5.0)) {
+                if (source.getDirectEntity() != null || this.closerThan(livingEntity, 5.0)) {
                     this.updateAttackTarget(livingEntity);
                 }
             }
@@ -378,7 +385,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
         }
 
         @Override
-        public boolean canReceiveVibration(@NotNull ServerLevel world, @NotNull BlockPos pos, @NotNull Holder<GameEvent> event, @Nullable GameEvent.Context context) {
+        public boolean canReceiveVibration(@NotNull ServerLevel world, @NotNull BlockPos pos, @NotNull GameEvent event, @Nullable GameEvent.Context context) {
             if (!InfectedEntity.this.isNoAi() && !InfectedEntity.this.isDeadOrDying() && !InfectedEntity.this.getBrain().hasMemoryValue(MemoryModuleType.VIBRATION_COOLDOWN) && world.getWorldBorder().isWithinBounds(pos)) {
                 if (context != null) {
                     Entity sourceEntity = context.sourceEntity();
@@ -393,7 +400,7 @@ public abstract class InfectedEntity extends Monster implements VibrationSystem 
         }
 
         @Override
-        public void onReceiveVibration(@NotNull ServerLevel world, @NotNull BlockPos pos, @NotNull Holder<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
+        public void onReceiveVibration(@NotNull ServerLevel world, @NotNull BlockPos pos, @NotNull GameEvent event, @Nullable Entity sourceEntity, @Nullable Entity entity, float distance) {
             if (!InfectedEntity.this.isDeadOrDying()) {
                 InfectedEntity.this.brain.setMemoryWithExpiry(MemoryModuleType.VIBRATION_COOLDOWN, Unit.INSTANCE, 20L);
                 world.broadcastEntityEvent(InfectedEntity.this, (byte) 61);

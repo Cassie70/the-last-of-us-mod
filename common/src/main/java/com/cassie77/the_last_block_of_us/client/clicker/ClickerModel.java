@@ -1,17 +1,21 @@
 package com.cassie77.the_last_block_of_us.client.clicker;
 
 import com.cassie77.the_last_block_of_us.Constants;
-import net.minecraft.client.animation.KeyframeAnimation;
-import net.minecraft.client.model.EntityModel;
+import com.cassie77.the_last_block_of_us.entity.clicker.ClickerEntity;
+import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-public class ClickerModel extends EntityModel<ClickerRenderState> {
+public class ClickerModel extends HierarchicalModel<ClickerEntity> {
+    private final ModelPart root;
 
-    public static final ModelLayerLocation CLICKER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "clicker"), "main");
+
+    public static final ModelLayerLocation CLICKER = new ModelLayerLocation(new ResourceLocation(Constants.MOD_ID, "clicker"), "main");
 
     private final ModelPart torso;
     private final ModelPart cabeza_completa;
@@ -20,13 +24,14 @@ public class ClickerModel extends EntityModel<ClickerRenderState> {
     private final ModelPart pierna_izquierda;
     private final ModelPart pierna_derecha;
 
-    private final KeyframeAnimation attackingAnimation;
-    private final KeyframeAnimation roaringAnimation;
-    private final KeyframeAnimation idleAnimation;
-    private final KeyframeAnimation walkingAnimation;
+    private final AnimationDefinition attackingAnimation;
+    private final AnimationDefinition roaringAnimation;
+    private final AnimationDefinition idleAnimation;
+    private final AnimationDefinition walkingAnimation;
 
     public ClickerModel(ModelPart root) {
-        super(root);
+        super();
+        this.root = root;
         this.torso = root.getChild("torso");
         this.cabeza_completa = this.torso.getChild("cabeza_completa");
         this.brazo_izquierdo = this.torso.getChild("brazo_izquierdo");
@@ -35,10 +40,10 @@ public class ClickerModel extends EntityModel<ClickerRenderState> {
         this.pierna_derecha = root.getChild("pierna_derecha");
 
 
-        this.attackingAnimation = ClickerAnimations.ATTACK.bake(root);
-        this.roaringAnimation = ClickerAnimations.GROAR.bake(root);
-        this.idleAnimation = ClickerAnimations.IDLE.bake(root);
-        this.walkingAnimation = ClickerAnimations.WALK.bake(root);
+        this.attackingAnimation = ClickerAnimations.ATTACK;
+        this.roaringAnimation = ClickerAnimations.GROAR;
+        this.idleAnimation = ClickerAnimations.IDLE;
+        this.walkingAnimation = ClickerAnimations.WALK;
     }
 
     public static LayerDefinition getTexturedModelData() {
@@ -69,14 +74,20 @@ public class ClickerModel extends EntityModel<ClickerRenderState> {
     }
 
     @Override
-    public void setupAnim(ClickerRenderState state) {
-        super.setupAnim(state);
-        this.setHeadAngle(state.yRot, state.xRot);
+    public ModelPart root() {
+        return this.root;
+    }
 
-        this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
-        this.walkingAnimation.applyWalk(state.walkAnimationPos, state.walkAnimationSpeed, 2.0F, 2.5F);
-        this.roaringAnimation.apply(state.roaringAnimationState, state.ageInTicks);
-        this.attackingAnimation.apply(state.attackingAnimationState, state.ageInTicks);
+    @Override
+    public void setupAnim(@NotNull ClickerEntity entity, float limbSwing, float limbSwingAmount,
+                          float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.setHeadAngle(netHeadYaw, headPitch);
+
+        this.animate(entity.idleAnimationState, this.idleAnimation, ageInTicks);
+        this.animateWalk(this.walkingAnimation, limbSwing, limbSwingAmount, 2.0F, 2.5F);
+        this.animate(entity.roaringAnimationState, this.roaringAnimation, ageInTicks);
+        this.animate(entity.attackingAnimationState, this.attackingAnimation, ageInTicks);
     }
 
     private void setHeadAngle(float yaw, float pitch) {

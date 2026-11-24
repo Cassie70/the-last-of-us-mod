@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -33,8 +33,6 @@ public class BloaterEntity extends InfectedEntity {
     private static final double ATTACK_KNOCKBACK = 2.0;
     private static final double ATTACK_DAMAGE = 20.0;
     private static final double FOLLOW_RANGE = 16.0;
-    private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
-    private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 5;
     private static final int BREAKING_BLOCK_COOLDOWN = 60;
     private int blockBreakingCooldown = 0;
 
@@ -48,17 +46,12 @@ public class BloaterEntity extends InfectedEntity {
 
         this.xpReward = 200;
         this.getNavigation().setCanFloat(true);
-        this.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_OTHER, 8.0F);
-        this.setPathfindingMalus(PathType.POWDER_SNOW, 8.0F);
-        this.setPathfindingMalus(PathType.LAVA, 8.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_FIRE, 0.0F);
-        this.setPathfindingMalus(PathType.DANGER_FIRE, 0.0F);
-    }
-
-    @Override
-    public float getSecondsToDisableBlocking() {
-        return WEAPON_DISABLE_BLOCKING_SECONDS;
+        this.setPathfindingMalus(BlockPathTypes.UNPASSABLE_RAIL, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_OTHER, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.POWDER_SNOW, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.LAVA, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0.0F);
     }
 
     public static AttributeSupplier.Builder addAttributes() {
@@ -68,8 +61,7 @@ public class BloaterEntity extends InfectedEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE)
-                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, WATER_MOVEMENT_EFFICIENCY);
+                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE);
     }
 
     @Override
@@ -78,14 +70,15 @@ public class BloaterEntity extends InfectedEntity {
     }
 
     @Override
-    public boolean doHurtTarget(ServerLevel world, @NotNull Entity target) {
+    public boolean doHurtTarget(@NotNull Entity target) {
         ThrowTask.cooldown(this, 80);
-        return super.doHurtTarget(world, target);
+        return super.doHurtTarget(target);
     }
 
     @Override
-    protected void customServerAiStep(@NotNull ServerLevel world) {
-        super.customServerAiStep(world);
+    protected void customServerAiStep() {
+        ServerLevel world = (ServerLevel) this.level();
+        super.customServerAiStep();
 
         if (this.blockBreakingCooldown <= 0) {
             this.blockBreakingCooldown = BREAKING_BLOCK_COOLDOWN;
@@ -125,7 +118,7 @@ public class BloaterEntity extends InfectedEntity {
 
     private static final Set<Block> BLOATER_IMMUNE = Set.of(
             Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK, Blocks.ANCIENT_DEBRIS,
-            Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST, Blocks.SHORT_GRASS, Blocks.TALL_GRASS);
+            Blocks.ENCHANTING_TABLE, Blocks.BEACON, Blocks.ENDER_CHEST, Blocks.GRASS, Blocks.TALL_GRASS);
 
     public static boolean canDestroy(BlockState block) {
         if (block.is(BlockTags.FLOWERS) || block.is(BlockTags.SMALL_FLOWERS) || block.is(BlockTags.SNOW) || block.is(BlockTags.WOOL_CARPETS))
@@ -139,7 +132,7 @@ public class BloaterEntity extends InfectedEntity {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide()) {
+        if (this.level().isClientSide) {
             if (this.getPose() == Pose.STANDING) {
                 if (!this.idleAnimationState.isStarted()
                         && !this.attackingAnimationState.isStarted()

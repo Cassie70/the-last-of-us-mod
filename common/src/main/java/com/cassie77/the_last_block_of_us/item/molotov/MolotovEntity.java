@@ -37,11 +37,13 @@ public class MolotovEntity extends ThrowableItemProjectile {
     }
 
     public MolotovEntity(Level world, LivingEntity owner, ItemStack stack) {
-        super(ModEntities.MOLOTOV_ENTITY, owner, world, stack);
+        super(ModEntities.MOLOTOV_ENTITY, owner, world);
+        this.setItem(stack);
     }
 
     public MolotovEntity(Level world, double x, double y, double z, ItemStack stack) {
-        super(ModEntities.MOLOTOV_ENTITY, x, y, z, world, stack);
+        super(ModEntities.MOLOTOV_ENTITY, x, y, z, world);
+        this.setItem(stack);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class MolotovEntity extends ThrowableItemProjectile {
     @Override
     protected void onHit(@NotNull HitResult hitResult) {
         super.onHit(hitResult);
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             this.level().broadcastEntityEvent(this, (byte) 3);
 
             if (hitResult instanceof BlockHitResult blockHitResult) {
@@ -120,17 +122,17 @@ public class MolotovEntity extends ThrowableItemProjectile {
     protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
 
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             Entity entity = entityHitResult.getEntity();
 
             float damageAmount = 15.0F;
             if (this.level() instanceof ServerLevel serverWorld) {
-                entity.hurtServer(serverWorld, this.damageSources().generic(), damageAmount);
+                entity.hurt(this.damageSources().generic(), damageAmount);
             }
-            entity.igniteForSeconds(20);
+            entity.setSecondsOnFire(20);
 
             if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 7, false, true));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 7, false, true));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 5, false, true));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
             }
@@ -143,7 +145,7 @@ public class MolotovEntity extends ThrowableItemProjectile {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide()) {
+        if (this.level().isClientSide) {
             double offsetX = (this.random.nextDouble() - 0.5) * 0.2;
             double offsetY = (this.random.nextDouble() - 0.5) * 0.2;
             double offsetZ = (this.random.nextDouble() - 0.5) * 0.2;
@@ -163,7 +165,7 @@ public class MolotovEntity extends ThrowableItemProjectile {
         BlockPos startPos;
 
         if (hitResult != null) {
-            Vec3 normal = Vec3.atLowerCornerOf(hitResult.getDirection().getUnitVec3i());
+            Vec3 normal = Vec3.atLowerCornerOf(hitResult.getDirection().getNormal());
             Vec3 safePoint = hitResult.getLocation().add(normal.scale(0.25));
             startPos = BlockPos.containing(safePoint);
         } else {
@@ -172,7 +174,7 @@ public class MolotovEntity extends ThrowableItemProjectile {
 
         BlockPos groundCenter = startPos;
         int maxDrop = 12;
-        while (maxDrop > 0 && groundCenter.getY() > level.getMinY() && canFireReplace(level, groundCenter)) {
+        while (maxDrop > 0 && groundCenter.getY() > level.getMinBuildHeight() && canFireReplace(level, groundCenter)) {
             groundCenter = groundCenter.below();
             maxDrop--;
         }

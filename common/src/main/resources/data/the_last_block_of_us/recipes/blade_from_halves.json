@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "the_last_block_of_us:blade_half"},
+    {"item": "the_last_block_of_us:blade_half"}
+  ],
+  "result": {
+    "item": "the_last_block_of_us:blade",
+    "count": 1
+  }
+}

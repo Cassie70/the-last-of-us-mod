@@ -2,6 +2,8 @@ package com.cassie77.the_last_block_of_us.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -14,9 +16,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,17 +41,19 @@ public abstract class AbstractBombEntity extends ThrowableItemProjectile {
     }
 
     protected AbstractBombEntity(EntityType<? extends AbstractBombEntity> entityType, LivingEntity owner, Level world, ItemStack stack) {
-        super(entityType, owner, world, stack);
+        super(entityType, owner, world);
+        this.setItem(stack);
     }
 
     protected AbstractBombEntity(EntityType<? extends AbstractBombEntity> entityType, double x, double y, double z, Level world, ItemStack stack) {
-        super(entityType, x, y, z, world, stack);
+        super(entityType, x, y, z, world);
+        this.setItem(stack);
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(IN_GROUND, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IN_GROUND, false);
     }
 
     public boolean isInGround() {
@@ -67,7 +73,7 @@ public abstract class AbstractBombEntity extends ThrowableItemProjectile {
         if (this.isInGround()) {
             this.setDeltaMovement(Vec3.ZERO);
 
-            if (!this.level().isClientSide()) {
+            if (!this.level().isClientSide) {
                 if (this.landedPos != null) {
                     BlockState currentState = this.level().getBlockState(this.landedPos);
                     if (currentState != this.lastState && this.shouldFall()) {
@@ -83,7 +89,7 @@ public abstract class AbstractBombEntity extends ThrowableItemProjectile {
                 }
             }
         } else {
-            if (!this.level().isClientSide() && this.ticksOnGround > 0) {
+            if (!this.level().isClientSide && this.ticksOnGround > 0) {
                 this.ticksOnGround++;
                 if (this.ticksOnGround >= this.getFuseTicks()) {
                     this.detonate();
@@ -134,12 +140,10 @@ public abstract class AbstractBombEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             Entity entity = entityHitResult.getEntity();
 
-            if (this.level() instanceof ServerLevel serverWorld) {
-                entity.hurtServer(serverWorld, this.damageSources().generic(), this.getDirectHitDamage());
-            }
+            entity.hurt(this.damageSources().generic(), this.getDirectHitDamage());
 
             if (entity instanceof LivingEntity livingEntity) {
                 this.applyDirectHitEffects(livingEntity);
@@ -179,7 +183,7 @@ public abstract class AbstractBombEntity extends ThrowableItemProjectile {
         this.lastState = state;
         this.setInGround(true);
 
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             this.gameEvent(GameEvent.HIT_GROUND);
             this.level().broadcastEntityEvent(this, (byte) 3);
         }
@@ -199,20 +203,26 @@ public abstract class AbstractBombEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected void addAdditionalSaveData(@NotNull ValueOutput output) {
-        super.addAdditionalSaveData(output);
-        output.putShort("TicksOnGround", (short) this.ticksOnGround);
-        output.putBoolean("InGround", this.isInGround());
-        output.storeNullable("InBlockState", BlockState.CODEC, this.lastState);
-        output.storeNullable("LandedPos", BlockPos.CODEC, this.landedPos);
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putShort("TicksOnGround", (short) this.ticksOnGround);
+        tag.putBoolean("InGround", this.isInGround());
+        if (this.lastState != null) {
+            BlockState.CODEC.encodeStart(NbtOps.INSTANCE, this.lastState)
+                    .result().ifPresent(encoded -> tag.put("InBlockState", encoded));
+        }
+        if (this.landedPos != null) {
+            tag.putLong("LandedPos", this.landedPos.asLong());
+        }
     }
 
     @Override
-    protected void readAdditionalSaveData(@NotNull ValueInput input) {
-        super.readAdditionalSaveData(input);
-        this.ticksOnGround = input.getShortOr("TicksOnGround", (short) 0);
-        this.setInGround(input.getBooleanOr("InGround", false));
-        this.lastState = input.read("InBlockState", BlockState.CODEC).orElse(null);
-        this.landedPos = input.read("LandedPos", BlockPos.CODEC).orElse(null);
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.ticksOnGround = tag.getShort("TicksOnGround");
+        this.setInGround(tag.getBoolean("InGround"));
+        this.lastState = BlockState.CODEC.parse(NbtOps.INSTANCE, tag.get("InBlockState"))
+                .result().orElse(null);
+        this.landedPos = tag.contains("LandedPos") ? BlockPos.of(tag.getLong("LandedPos")) : null;
     }
 }

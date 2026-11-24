@@ -17,7 +17,7 @@ public final class FabricModSensors {
 
     public static void initialize() {
         ResourceKey<SensorType<?>> key = ResourceKey.create(Registries.SENSOR_TYPE,
-                ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "infected_entity_sensor"));
+                new ResourceLocation(Constants.MOD_ID, "infected_entity_sensor"));
         ModSensors.INFECTED_ENTITY_SENSOR = register(key, InfectedAttackablesSensor::new);
     }
 

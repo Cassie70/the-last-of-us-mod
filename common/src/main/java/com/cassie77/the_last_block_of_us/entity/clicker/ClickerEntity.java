@@ -3,6 +3,7 @@ package com.cassie77.the_last_block_of_us.entity.clicker;
 import com.cassie77.the_last_block_of_us.ModSounds;
 import com.cassie77.the_last_block_of_us.entity.infected.InfectedAngriness;
 import com.cassie77.the_last_block_of_us.entity.infected.InfectedEntity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Difficulty;
@@ -15,9 +16,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
@@ -34,8 +33,6 @@ public class ClickerEntity extends InfectedEntity {
     private static final double ATTACK_KNOCKBACK = 1.0;
     private static final double ATTACK_DAMAGE = 15.0;
     private static final double FOLLOW_RANGE = 16.0;
-    private static final double WATER_MOVEMENT_EFFICIENCY = 0.8;
-    private static final int WEAPON_DISABLE_BLOCKING_SECONDS = 3;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackingAnimationState = new AnimationState();
@@ -46,12 +43,12 @@ public class ClickerEntity extends InfectedEntity {
 
         this.xpReward = 20;
         this.getNavigation().setCanFloat(true);
-        this.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_OTHER, 8.0F);
-        this.setPathfindingMalus(PathType.POWDER_SNOW, 8.0F);
-        this.setPathfindingMalus(PathType.LAVA, 8.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_FIRE, 0.0F);
-        this.setPathfindingMalus(PathType.DANGER_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.UNPASSABLE_RAIL, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_OTHER, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.POWDER_SNOW, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.LAVA, 8.0F);
+        this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, 0.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 0.0F);
 
         this.breakDoorsGoal = new ClickerBreakDoorGoal(this, DOOR_BREAK_DIFFICULTY_CHECKER);
     }
@@ -63,20 +60,14 @@ public class ClickerEntity extends InfectedEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE)
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE)
-                .add(Attributes.WATER_MOVEMENT_EFFICIENCY, WATER_MOVEMENT_EFFICIENCY);
-    }
-
-    @Override
-    public float getSecondsToDisableBlocking() {
-        return WEAPON_DISABLE_BLOCKING_SECONDS;
+                .add(Attributes.FOLLOW_RANGE, FOLLOW_RANGE);
     }
 
     private void setCanBreakDoors(boolean canBreakDoors) {
         if (this.getNavigation() instanceof GroundPathNavigation) {
             if (this.canBreakDoors != canBreakDoors) {
                 this.canBreakDoors = canBreakDoors;
-                this.getNavigation().setCanOpenDoors(canBreakDoors);
+                ((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(canBreakDoors);
                 if (canBreakDoors) {
                     this.goalSelector.addGoal(1, this.breakDoorsGoal);
                 } else {
@@ -90,28 +81,28 @@ public class ClickerEntity extends InfectedEntity {
     }
 
     @Override
-    protected void addAdditionalSaveData(@NotNull ValueOutput valueOutput) {
-        super.addAdditionalSaveData(valueOutput);
-        valueOutput.putBoolean("CanBreakDoors", this.canBreakDoors);
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("CanBreakDoors", this.canBreakDoors);
     }
 
     @Override
-    protected void readAdditionalSaveData(@NotNull ValueInput valueInput) {
-        super.readAdditionalSaveData(valueInput);
-        this.setCanBreakDoors(valueInput.getBooleanOr("CanBreakDoors", false));
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setCanBreakDoors(tag.getBoolean("CanBreakDoors"));
     }
 
     @Override
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty,
-            @NotNull EntitySpawnReason spawnReason, SpawnGroupData entityData) {
+            @NotNull MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag dataTag) {
         this.setCanBreakDoors(true);
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, dataTag);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.level().isClientSide()) {
+        if (this.level().isClientSide) {
             if (this.getPose() == Pose.STANDING) {
                 if (!this.idleAnimationState.isStarted()
                         && !this.attackingAnimationState.isStarted()

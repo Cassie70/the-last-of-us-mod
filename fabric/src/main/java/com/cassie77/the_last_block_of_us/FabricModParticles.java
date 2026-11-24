@@ -13,7 +13,7 @@ public final class FabricModParticles {
     public static void initialize() {
         ModParticles.CORROSION_SMOKE = Registry.register(
                 BuiltInRegistries.PARTICLE_TYPE,
-                ResourceLocation.fromNamespaceAndPath(
+                new ResourceLocation(
                         Constants.MOD_ID,
                         "corrosion_smoke"
                 ),

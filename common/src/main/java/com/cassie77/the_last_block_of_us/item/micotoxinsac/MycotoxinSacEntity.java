@@ -33,11 +33,13 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
     }
 
     public MycotoxinSacEntity(Level world, LivingEntity owner, ItemStack stack) {
-        super(ModEntities.MYCOTOXIN_SAC_ENTITY, owner, world, stack);
+        super(ModEntities.MYCOTOXIN_SAC_ENTITY, owner, world);
+        this.setItem(stack);
     }
 
     public MycotoxinSacEntity(Level world, double x, double y, double z, ItemStack stack) {
-        super(ModEntities.MYCOTOXIN_SAC_ENTITY, x, y, z, world, stack);
+        super(ModEntities.MYCOTOXIN_SAC_ENTITY, x, y, z, world);
+        this.setItem(stack);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
 
         if (world instanceof ServerLevel serverWorld) {
             serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                    SoundEvents.GENERIC_EXPLODE, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
             serverWorld.explode(this, this.getX(), this.getY(), this.getZ(), 1.5F, Level.ExplosionInteraction.NONE);
 
@@ -101,16 +103,16 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
     protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
 
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             Entity entity = entityHitResult.getEntity();
 
             float damageAmount = 1.0F;
             if (this.level() instanceof ServerLevel serverWorld) {
-                entity.hurtServer(serverWorld, this.damageSources().generic(), damageAmount);
+                entity.hurt(this.damageSources().generic(), damageAmount);
             }
 
             if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 1, false, true));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1, false, true));
             }
         }
     }
@@ -119,10 +121,10 @@ public class MycotoxinSacEntity extends ThrowableItemProjectile {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide()) {
+        if (this.level().isClientSide) {
             ParticleOptions particleEffect = ParticleTypes.SMOKE;
             for (int i = 0; i < 2; ++i) {
-                this.level().addParticle(particleEffect, this.getX() + this.getRandom().nextGaussian() * 0.2, this.getY() + this.getRandom().nextGaussian() * 0.2, this.getZ() + this.getRandom().nextGaussian() * 0.2, 0.0, 0.0, 0.0);
+                this.level().addParticle(particleEffect, this.getX() + this.random.nextGaussian() * 0.2, this.getY() + this.random.nextGaussian() * 0.2, this.getZ() + this.random.nextGaussian() * 0.2, 0.0, 0.0, 0.0);
             }
         }
     }

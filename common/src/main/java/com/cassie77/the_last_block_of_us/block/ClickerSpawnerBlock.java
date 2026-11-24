@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -52,9 +52,10 @@ public class ClickerSpawnerBlock extends Block implements EntityBlock {
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 
             if (random.nextFloat() < SPAWN_CHANCE) {
-                ClickerEntity clicker = ModEntities.CLICKER.create(level, EntitySpawnReason.TRIGGERED);
+                ClickerEntity clicker = ModEntities.CLICKER.create(level);
                 if (clicker != null) {
-                    clicker.snapTo(
+                    clicker.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.TRIGGERED, null, null);
+                    clicker.moveTo(
                             pos.getX() + 0.5,
                             pos.getY(),
                             pos.getZ() + 0.5,

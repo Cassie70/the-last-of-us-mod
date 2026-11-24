@@ -17,7 +17,8 @@ public final class ForgeModBlockEntities {
                         .register("clicker_spawner_block_entity", () -> {
                                 BlockEntityType<ClickerSpawnerBlockEntity> type = new BlockEntityType<>(
                                                 ClickerSpawnerBlockEntity::new,
-                                                Set.of(ForgeModBlocks.CLICKER_SPAWNER_BLOCK.get()));
+                                                Set.of(ForgeModBlocks.CLICKER_SPAWNER_BLOCK.get()),
+                                                null);
                                 ModBlockEntities.CLICKER_SPAWNER_BLOCK_ENTITY = type;
                                 return type;
                         });

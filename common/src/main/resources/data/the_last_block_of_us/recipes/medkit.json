@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "the_last_block_of_us:rag"},
+    {"item": "the_last_block_of_us:alcohol"}
+  ],
+  "result": {
+    "item": "the_last_block_of_us:medkit",
+    "count": 1
+  }
+}

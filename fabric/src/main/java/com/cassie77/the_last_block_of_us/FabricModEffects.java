@@ -11,7 +11,7 @@ public final class FabricModEffects {
     }
 
     public static void initialize() {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "corrosion");
+        ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "corrosion");
         ModEffects.CORROSION = Registry.register(BuiltInRegistries.MOB_EFFECT, location, new CorrosionEffect());
     }
 }

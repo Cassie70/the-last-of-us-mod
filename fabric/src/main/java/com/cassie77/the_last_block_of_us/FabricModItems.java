@@ -14,7 +14,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tiers;
 
 
 import java.util.function.Function;
@@ -22,8 +23,8 @@ import java.util.function.Function;
 public class FabricModItems {
 
     public static Item register(String name, Function<Item.Properties, Item> itemFactory) {
-        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
-        Item item = itemFactory.apply(new Item.Properties().setId(itemKey));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, new ResourceLocation(Constants.MOD_ID, name));
+        Item item = itemFactory.apply(new Item.Properties());
         Registry.register(BuiltInRegistries.ITEM, itemKey, item);
         return item;
     }
@@ -56,13 +57,13 @@ public class FabricModItems {
         ModItems.MYCOTOXIN_SAC = register("mycotoxin_sac", MycotoxinSacItem::new);
         ModItems.SMOKE_BOMB = register("smoke_bomb", SmokeBombItem::new);
 
-        ModItems.PIPE = register("pipe", properties -> new Item(properties.sword(ToolMaterial.IRON, 2.0F, -2.0F).durability(8)));
-        ModItems.UPGRADED_PIPE = register("upgraded_pipe", properties -> new UpgratedPipeItem(properties.sword(ToolMaterial.IRON, 27.0F, -3.5F).durability(3)));
-        ModItems.SHIV = register("shiv", properties -> new Item(properties.sword(ToolMaterial.IRON, 17.0F, -2.5F).durability(3)));
+        ModItems.PIPE = register("pipe", properties -> new SwordItem(Tiers.IRON, 2, -2.0F, properties.durability(8)));
+        ModItems.UPGRADED_PIPE = register("upgraded_pipe", properties -> new UpgratedPipeItem(properties.durability(3)));
+        ModItems.SHIV = register("shiv", properties -> new SwordItem(Tiers.IRON, 17, -2.5F, properties.durability(3)));
 
-        ModItems.CLICKER_SPAWN_EGG = register("clicker_spawn_egg", properties -> new SpawnEggItem(ModEntities.CLICKER, properties));
-        ModItems.BLOATER_SPAWN_EGG = register("bloater_spawn_egg", properties -> new SpawnEggItem(ModEntities.BLOATER, properties));
-        ModItems.SHAMBLER_SPAWN_EGG = register("shambler_spawn_egg", properties -> new SpawnEggItem(ModEntities.SHAMBLER, properties));
+        ModItems.CLICKER_SPAWN_EGG = register("clicker_spawn_egg", properties -> new SpawnEggItem(ModEntities.CLICKER, 0xFFFFFF, 0xFFFFFF, properties));
+        ModItems.BLOATER_SPAWN_EGG = register("bloater_spawn_egg", properties -> new SpawnEggItem(ModEntities.BLOATER, 0xFFFFFF, 0xFFFFFF, properties));
+        ModItems.SHAMBLER_SPAWN_EGG = register("shambler_spawn_egg", properties -> new SpawnEggItem(ModEntities.SHAMBLER, 0xFFFFFF, 0xFFFFFF, properties));
 
     }
 }

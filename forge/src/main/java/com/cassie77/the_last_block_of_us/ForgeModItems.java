@@ -12,7 +12,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tiers;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -57,23 +59,23 @@ public final class ForgeModItems {
             item -> ModItems.SMOKE_BOMB = item);
 
     public static final RegistryObject<Item> PIPE = register("pipe",
-            properties -> new Item(properties.sword(ToolMaterial.IRON, 2.0F, -2.0F).durability(8)),
+            properties -> new SwordItem(Tiers.IRON, 2, -2.0F, properties.durability(8)),
             item -> ModItems.PIPE = item);
     public static final RegistryObject<Item> UPGRADED_PIPE = register("upgraded_pipe",
-            properties -> new UpgratedPipeItem(properties.sword(ToolMaterial.IRON, 27.0F, -3.5F).durability(3)),
+            properties -> new UpgratedPipeItem(properties.durability(3)),
             item -> ModItems.UPGRADED_PIPE = item);
     public static final RegistryObject<Item> SHIV = register("shiv",
-            properties -> new Item(properties.sword(ToolMaterial.IRON, 17.0F, -2.5F).durability(3)),
+            properties -> new SwordItem(Tiers.IRON, 17, -2.5F, properties.durability(3)),
             item -> ModItems.SHIV = item);
 
     public static final RegistryObject<Item> CLICKER_SPAWN_EGG = register("clicker_spawn_egg",
-            properties -> new SpawnEggItem(ForgeModEntities.CLICKER.get(), properties),
+            properties -> new ForgeSpawnEggItem(ForgeModEntities.CLICKER, 0xFFFFFF, 0xFFFFFF, properties),
             item -> ModItems.CLICKER_SPAWN_EGG = item);
     public static final RegistryObject<Item> BLOATER_SPAWN_EGG = register("bloater_spawn_egg",
-            properties -> new SpawnEggItem(ForgeModEntities.BLOATER.get(), properties),
+            properties -> new ForgeSpawnEggItem(ForgeModEntities.BLOATER, 0xFFFFFF, 0xFFFFFF, properties),
             item -> ModItems.BLOATER_SPAWN_EGG = item);
     public static final RegistryObject<Item> SHAMBLER_SPAWN_EGG = register("shambler_spawn_egg",
-            properties -> new SpawnEggItem(ForgeModEntities.SHAMBLER.get(), properties),
+            properties -> new ForgeSpawnEggItem(ForgeModEntities.SHAMBLER, 0xFFFFFF, 0xFFFFFF, properties),
             item -> ModItems.SHAMBLER_SPAWN_EGG = item);
 
     private ForgeModItems() {
@@ -82,9 +84,7 @@ public final class ForgeModItems {
     private static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> factory,
             Consumer<T> setter) {
         return ITEMS.register(name, () -> {
-            ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
-                    ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
-            T item = factory.apply(new Item.Properties().setId(itemKey));
+            T item = factory.apply(new Item.Properties());
             setter.accept(item);
             return item;
         });

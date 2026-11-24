@@ -6,6 +6,7 @@ import com.cassie77.the_last_block_of_us.item.AbstractBombEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -21,8 +22,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.StainedGlassBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 public class NailBombEntity extends AbstractBombEntity {
@@ -49,7 +48,7 @@ public class NailBombEntity extends AbstractBombEntity {
     @Override
     protected boolean onBeforeBlockImpact(BlockPos pos, BlockState state) {
         if (isGlass(state.getBlock()) && this.glassHits < 3) {
-            if (!this.level().isClientSide()) {
+            if (!this.level().isClientSide) {
                 this.glassHits++;
                 this.level().destroyBlock(pos, false);
             }
@@ -65,7 +64,7 @@ public class NailBombEntity extends AbstractBombEntity {
 
     @Override
     protected void applyDirectHitEffects(LivingEntity target) {
-        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 7, false, true));
+        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 7, false, true));
         target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 5, false, true));
         target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
     }
@@ -75,7 +74,7 @@ public class NailBombEntity extends AbstractBombEntity {
         double expY = this.getY() + 0.5;
 
         serverLevel.playSound(null, this.getX(), expY, this.getZ(),
-                SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                SoundEvents.GENERIC_EXPLODE, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
         serverLevel.sendParticles(
                 ParticleTypes.EXPLOSION,
@@ -96,14 +95,14 @@ public class NailBombEntity extends AbstractBombEntity {
     }
 
     @Override
-    protected void addAdditionalSaveData(@NotNull ValueOutput output) {
-        super.addAdditionalSaveData(output);
-        output.putByte("GlassHits", (byte) this.glassHits);
+    public void addAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putByte("GlassHits", (byte) this.glassHits);
     }
 
     @Override
-    protected void readAdditionalSaveData(@NotNull ValueInput input) {
-        super.readAdditionalSaveData(input);
-        this.glassHits = input.getByteOr("GlassHits", (byte) 0);
+    public void readAdditionalSaveData(@NotNull CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.glassHits = tag.getByte("GlassHits");
     }
 }

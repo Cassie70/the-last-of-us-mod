@@ -36,7 +36,7 @@ public final class FabricModSounds {
     }
 
     private static SoundEvent register(String name) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name);
+        ResourceLocation location = new ResourceLocation(Constants.MOD_ID, name);
         return Registry.register(BuiltInRegistries.SOUND_EVENT, location,
                 SoundEvent.createVariableRangeEvent(location));
     }

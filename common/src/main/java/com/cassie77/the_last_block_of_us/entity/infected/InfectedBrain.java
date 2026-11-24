@@ -51,7 +51,7 @@ public class InfectedBrain {
 
     private static void addCoreActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                new Swim<>(infected.getInfectedSwimSpeed()),
+                new Swim(infected.getInfectedSwimSpeed()),
                 new LookAtTargetSink(infected.getInfectedLookAtTargetMinDuration(),
                         infected.getInfectedLookAtTargetMaxDuration()),
                 new MoveToTargetSink()));
@@ -93,7 +93,7 @@ public class InfectedBrain {
     protected static void addFightActivities(InfectedEntity infected, Brain<InfectedEntity> brain) {
         ImmutableList.Builder<BehaviorControl<? super InfectedEntity>> fightTasks = ImmutableList.builder();
         fightTasks.add(
-                StopAttackingIfTargetInvalid.create((serverLevel, livingEntity) -> !infected.getAngriness().isAngry()
+                StopAttackingIfTargetInvalid.create((livingEntity) -> !infected.getAngriness().isAngry()
                         || !infected.isValidTarget(livingEntity), InfectedBrain::removeDeadSuspect, false));
         fightTasks.add(SetEntityLookTarget.create((livingEntity) -> isTargeting(infected, livingEntity),
                 (float) infected.getAttributeValue(Attributes.FOLLOW_RANGE)));
@@ -118,7 +118,7 @@ public class InfectedBrain {
                 .filter((livingEntity) -> livingEntity == entity).isPresent();
     }
 
-    protected static void removeDeadSuspect(ServerLevel world, InfectedEntity infected, LivingEntity target) {
+    protected static void removeDeadSuspect(InfectedEntity infected, LivingEntity target) {
         if (!infected.isValidTarget(target)) {
             infected.removeSuspect(target);
         }

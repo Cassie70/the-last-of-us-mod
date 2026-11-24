@@ -7,20 +7,15 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class ShamblerRenderer extends MobRenderer<ShamblerEntity, ShamblerRenderState, ShamblerModel> {
+public class ShamblerRenderer extends MobRenderer<ShamblerEntity, ShamblerModel> {
 
     public ShamblerRenderer(EntityRendererProvider.Context context) {
         super(context, new ShamblerModel(context.bakeLayer(ShamblerModel.SHAMBLER)), 0.5f);
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull ShamblerRenderState state) {
-        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/shambler/shambler.png");
-    }
-
-    @Override
-    public @NotNull ShamblerRenderState createRenderState() {
-        return new ShamblerRenderState();
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ShamblerEntity entity) {
+        return new ResourceLocation(Constants.MOD_ID, "textures/entity/shambler/shambler.png");
     }
 
     /**
@@ -29,16 +24,7 @@ public class ShamblerRenderer extends MobRenderer<ShamblerEntity, ShamblerRender
      * both rotations.
      */
     @Override
-    protected float getFlipDegrees() {
+    protected float getFlipDegrees(@NotNull ShamblerEntity entity) {
         return 0.0F;
-    }
-
-    @Override
-    public void extractRenderState(@NotNull ShamblerEntity shambler, @NotNull ShamblerRenderState shamblerRenderState, float f) {
-        super.extractRenderState(shambler, shamblerRenderState, f);
-
-        shamblerRenderState.idleAnimationState.copyFrom(shambler.idleAnimationState);
-        shamblerRenderState.attackingAnimationState.copyFrom(shambler.attackingAnimationState);
-        shamblerRenderState.roaringAnimationState.copyFrom(shambler.roaringAnimationState);
     }
 }

@@ -27,40 +27,40 @@ public final class ForgeModEntities {
                         .create(ForgeRegistries.ENTITY_TYPES, Constants.MOD_ID);
 
         public static final RegistryObject<EntityType<MolotovEntity>> MOLOTOV_ENTITY = register("molotov_entity",
-                        EntityType.Builder.<MolotovEntity>of(MolotovEntity::new, MobCategory.MISC).noLootTable()
+                        EntityType.Builder.<MolotovEntity>of(MolotovEntity::new, MobCategory.MISC)
                                         .sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10),
                         entity -> ModEntities.MOLOTOV_ENTITY = entity);
 
         public static final RegistryObject<EntityType<BottleEntity>> BOTTLE_ENTITY = register("bottle_entity",
-                        EntityType.Builder.<BottleEntity>of(BottleEntity::new, MobCategory.MISC).noLootTable()
+                        EntityType.Builder.<BottleEntity>of(BottleEntity::new, MobCategory.MISC)
                                         .sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10),
                         entity -> ModEntities.BOTTLE_ENTITY = entity);
 
         public static final RegistryObject<EntityType<NailBombEntity>> NAIL_BOMB_ENTITY = register("nail_bomb_entity",
-                        EntityType.Builder.<NailBombEntity>of(NailBombEntity::new, MobCategory.MISC).noLootTable()
+                        EntityType.Builder.<NailBombEntity>of(NailBombEntity::new, MobCategory.MISC)
                                         .sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10),
                         entity -> ModEntities.NAIL_BOMB_ENTITY = entity);
 
         public static final RegistryObject<EntityType<SmokeBombEntity>> SMOKE_BOMB_ENTITY = register(
                         "smoke_bomb_entity",
-                        EntityType.Builder.<SmokeBombEntity>of(SmokeBombEntity::new, MobCategory.MISC).noLootTable()
+                        EntityType.Builder.<SmokeBombEntity>of(SmokeBombEntity::new, MobCategory.MISC)
                                         .sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10),
                         entity -> ModEntities.SMOKE_BOMB_ENTITY = entity);
 
         public static final RegistryObject<EntityType<MycotoxinSacEntity>> MYCOTOXIN_SAC_ENTITY = register(
                         "mycotoxin_sac_entity",
                         EntityType.Builder.<MycotoxinSacEntity>of(MycotoxinSacEntity::new, MobCategory.MISC)
-                                        .noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10),
+                                        .sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10),
                         entity -> ModEntities.MYCOTOXIN_SAC_ENTITY = entity);
 
         public static final RegistryObject<EntityType<ClickerEntity>> CLICKER = register("clicker",
                         EntityType.Builder.of(ClickerEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F)
-                                        .passengerAttachments(2.0125F).clientTrackingRange(8),
+                                        .clientTrackingRange(8),
                         entity -> ModEntities.CLICKER = entity);
 
         public static final RegistryObject<EntityType<BloaterEntity>> BLOATER = register("bloater",
                         EntityType.Builder.of(BloaterEntity::new, MobCategory.MONSTER).sized(0.9F, 2.25F)
-                                        .passengerAttachments(3.15F).clientTrackingRange(16),
+                                        .clientTrackingRange(16),
                         entity -> ModEntities.BLOATER = entity);
 
         public static final RegistryObject<EntityType<ShamblerEntity>> SHAMBLER = register("shambler",
@@ -73,7 +73,7 @@ public final class ForgeModEntities {
                         EntityType.Builder
                                         .<CustomAreaEffectCloudEntity>of(CustomAreaEffectCloudEntity::new,
                                                         MobCategory.MISC)
-                                        .noLootTable().fireImmune().sized(6.0F, 3.0F).clientTrackingRange(10)
+                                        .fireImmune().sized(6.0F, 3.0F).clientTrackingRange(10)
                                         .updateInterval(Integer.MAX_VALUE),
                         entity -> ModEntities.CUSTOM_AREA_EFFECT_CLOUD_ENTITY = entity);
 
@@ -85,8 +85,8 @@ public final class ForgeModEntities {
                         Consumer<EntityType<T>> setter) {
                 return ENTITY_TYPES.register(name, () -> {
                         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE,
-                                        ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
-                        EntityType<T> entity = builder.build(key);
+                                        new ResourceLocation(Constants.MOD_ID, name));
+                        EntityType<T> entity = builder.build(key.location().toString());
                         setter.accept(entity);
                         return entity;
                 });

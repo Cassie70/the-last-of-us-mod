@@ -24,20 +24,20 @@ public final class FabricModEntities {
     }
 
     public static void initialize() {
-        ModEntities.MOLOTOV_ENTITY = register("molotov_entity", EntityType.Builder.<MolotovEntity>of(MolotovEntity::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
-        ModEntities.BOTTLE_ENTITY = register("bottle_entity", EntityType.Builder.<BottleEntity>of(BottleEntity::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
-        ModEntities.NAIL_BOMB_ENTITY = register("nail_bomb_entity", EntityType.Builder.<NailBombEntity>of(NailBombEntity::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
-        ModEntities.SMOKE_BOMB_ENTITY = register("smoke_bomb_entity", EntityType.Builder.<SmokeBombEntity>of(SmokeBombEntity::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
-        ModEntities.MYCOTOXIN_SAC_ENTITY = register("mycotoxin_sac_entity", EntityType.Builder.<MycotoxinSacEntity>of(MycotoxinSacEntity::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
-        ModEntities.CLICKER = register("clicker", EntityType.Builder.of(ClickerEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).passengerAttachments(2.0125F).clientTrackingRange(8));
-        ModEntities.BLOATER = register("bloater", EntityType.Builder.of(BloaterEntity::new, MobCategory.MONSTER).sized(0.9F, 2.25F).passengerAttachments(3.15F).clientTrackingRange(16));
+        ModEntities.MOLOTOV_ENTITY = register("molotov_entity", EntityType.Builder.<MolotovEntity>of(MolotovEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+        ModEntities.BOTTLE_ENTITY = register("bottle_entity", EntityType.Builder.<BottleEntity>of(BottleEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+        ModEntities.NAIL_BOMB_ENTITY = register("nail_bomb_entity", EntityType.Builder.<NailBombEntity>of(NailBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+        ModEntities.SMOKE_BOMB_ENTITY = register("smoke_bomb_entity", EntityType.Builder.<SmokeBombEntity>of(SmokeBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+        ModEntities.MYCOTOXIN_SAC_ENTITY = register("mycotoxin_sac_entity", EntityType.Builder.<MycotoxinSacEntity>of(MycotoxinSacEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+        ModEntities.CLICKER = register("clicker", EntityType.Builder.of(ClickerEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).clientTrackingRange(8));
+        ModEntities.BLOATER = register("bloater", EntityType.Builder.of(BloaterEntity::new, MobCategory.MONSTER).sized(0.9F, 2.25F).clientTrackingRange(16));
         ModEntities.SHAMBLER = register("shambler", EntityType.Builder.of(ShamblerEntity::new, MobCategory.MONSTER).sized(0.8F, 2.10F).clientTrackingRange(8));
-        ModEntities.CUSTOM_AREA_EFFECT_CLOUD_ENTITY = register("area_effect_cloud", EntityType.Builder.<CustomAreaEffectCloudEntity>of(CustomAreaEffectCloudEntity::new, MobCategory.MISC).noLootTable().fireImmune().sized(6.0F, 3.0F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
+        ModEntities.CUSTOM_AREA_EFFECT_CLOUD_ENTITY = register("area_effect_cloud", EntityType.Builder.<CustomAreaEffectCloudEntity>of(CustomAreaEffectCloudEntity::new, MobCategory.MISC).fireImmune().sized(6.0F, 3.0F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE));
     }
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE,
-                ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
-        return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, builder.build(key));
+                new ResourceLocation(Constants.MOD_ID, name));
+        return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, builder.build(key.location().toString()));
     }
 }

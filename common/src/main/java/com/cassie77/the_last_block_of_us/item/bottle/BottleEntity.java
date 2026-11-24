@@ -34,11 +34,13 @@ public class BottleEntity extends ThrowableItemProjectile {
     }
 
     public BottleEntity(Level world, LivingEntity owner, ItemStack stack) {
-        super(ModEntities.BOTTLE_ENTITY, owner, world, stack);
+        super(ModEntities.BOTTLE_ENTITY, owner, world);
+        this.setItem(stack);
     }
 
     public BottleEntity(Level world, double x, double y, double z, ItemStack stack) {
-        super(ModEntities.BOTTLE_ENTITY, x, y, z, world, stack);
+        super(ModEntities.BOTTLE_ENTITY, x, y, z, world);
+        this.setItem(stack);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class BottleEntity extends ThrowableItemProjectile {
     @Override
     protected void onHit(@NotNull HitResult hitResult) {
         super.onHit(hitResult);
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
 
             if (hitResult instanceof BlockHitResult blockHitResult) {
                 BlockPos blockPos = blockHitResult.getBlockPos();
@@ -100,16 +102,16 @@ public class BottleEntity extends ThrowableItemProjectile {
     protected void onHitEntity(@NotNull EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
 
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide) {
             Entity entity = entityHitResult.getEntity();
 
             float damageAmount = 5.0F;
             if (this.level() instanceof ServerLevel serverWorld) {
-                entity.hurtServer(serverWorld, this.damageSources().generic(), damageAmount);
+                entity.hurt(this.damageSources().generic(), damageAmount);
             }
 
             if (entity instanceof LivingEntity livingEntity) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 7, false, true));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 7, false, true));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 5, false, true));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
             }

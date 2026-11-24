@@ -32,14 +32,14 @@ public final class FabricModBlocks {
     private static Block register(String name, BlockBehaviour.Properties properties,
                                   java.util.function.Function<BlockBehaviour.Properties, Block> factory) {
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK,
-                ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
-        Block block = factory.apply(properties.setId(blockKey));
+                new ResourceLocation(Constants.MOD_ID, name));
+        Block block = factory.apply(properties);
         Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
 
         ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
-                ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
+                new ResourceLocation(Constants.MOD_ID, name));
         Registry.register(BuiltInRegistries.ITEM, itemKey,
-                new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix()));
+                new BlockItem(block, new Item.Properties()));
         return block;
     }
 }

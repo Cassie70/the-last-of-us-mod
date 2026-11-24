@@ -40,7 +40,7 @@ public final class ForgeModSounds {
     private static RegistryObject<SoundEvent> register(String name) {
         return SOUNDS.register(name, () -> {
             SoundEvent sound = SoundEvent.createVariableRangeEvent(
-                    ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
+                    new ResourceLocation(Constants.MOD_ID, name));
             assign(name, sound);
             return sound;
         });

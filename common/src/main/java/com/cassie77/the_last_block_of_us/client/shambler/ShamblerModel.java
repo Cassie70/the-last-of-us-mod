@@ -1,23 +1,28 @@
 package com.cassie77.the_last_block_of_us.client.shambler;
 
 import com.cassie77.the_last_block_of_us.Constants;
-import net.minecraft.client.animation.KeyframeAnimation;
-import net.minecraft.client.model.EntityModel;
+import com.cassie77.the_last_block_of_us.entity.shambler.ShamblerEntity;
+import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.client.animation.KeyframeAnimations;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 /**
  * Model for the Shambler, adapted from the Blockbench export to the
- * vanilla 1.21.8 {@link EntityModel} render-state pattern.
+ * vanilla 1.20.1 {@link HierarchicalModel} pattern.
  */
-public class ShamblerModel extends EntityModel<ShamblerRenderState> {
+public class ShamblerModel extends HierarchicalModel<ShamblerEntity> {
+    private final ModelPart root;
+
 
     public static final ModelLayerLocation SHAMBLER = new ModelLayerLocation(
-            ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "shambler"), "main");
+            new ResourceLocation(Constants.MOD_ID, "shambler"), "main");
 
     private final ModelPart torso;
     private final ModelPart cabeza_completa;
@@ -26,14 +31,15 @@ public class ShamblerModel extends EntityModel<ShamblerRenderState> {
     private final ModelPart pierna_izquierda;
     private final ModelPart pierna_derecha;
 
-    private final KeyframeAnimation attackingAnimation;
-    private final KeyframeAnimation roaringAnimation;
-    private final KeyframeAnimation idleAnimation;
-    private final KeyframeAnimation walkingAnimation;
-    private final KeyframeAnimation deathAnimation;
+    private final AnimationDefinition attackingAnimation;
+    private final AnimationDefinition roaringAnimation;
+    private final AnimationDefinition idleAnimation;
+    private final AnimationDefinition walkingAnimation;
+    private final AnimationDefinition deathAnimation;
 
     public ShamblerModel(ModelPart root) {
-        super(root);
+        super();
+        this.root = root;
         this.torso = root.getChild("torso");
         this.cabeza_completa = this.torso.getChild("cabeza_completa");
         this.brazo_izquierdo = this.torso.getChild("brazo_izquierdo");
@@ -41,11 +47,11 @@ public class ShamblerModel extends EntityModel<ShamblerRenderState> {
         this.pierna_izquierda = root.getChild("pierna_izquierda");
         this.pierna_derecha = root.getChild("pierna_derecha");
 
-        this.attackingAnimation = ShamblerAnimations.ATTACK.bake(root);
-        this.roaringAnimation = ShamblerAnimations.GROAR.bake(root);
-        this.idleAnimation = ShamblerAnimations.IDLE.bake(root);
-        this.walkingAnimation = ShamblerAnimations.WALK.bake(root);
-        this.deathAnimation = ShamblerAnimations.DEATH.bake(root);
+        this.attackingAnimation = ShamblerAnimations.ATTACK;
+        this.roaringAnimation = ShamblerAnimations.GROAR;
+        this.idleAnimation = ShamblerAnimations.IDLE;
+        this.walkingAnimation = ShamblerAnimations.WALK;
+        this.deathAnimation = ShamblerAnimations.DEATH;
     }
 
     public static LayerDefinition getTexturedModelData() {
@@ -121,17 +127,24 @@ public class ShamblerModel extends EntityModel<ShamblerRenderState> {
     }
 
     @Override
-    public void setupAnim(@NotNull ShamblerRenderState state) {
-        super.setupAnim(state);
-        this.setHeadAngle(state.yRot, state.xRot);
+    public ModelPart root() {
+        return this.root;
+    }
 
-        this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
-        this.walkingAnimation.applyWalk(state.walkAnimationPos, state.walkAnimationSpeed, 2.0F, 2.5F);
-        this.roaringAnimation.apply(state.roaringAnimationState, state.ageInTicks);
-        this.attackingAnimation.apply(state.attackingAnimationState, state.ageInTicks);
+    @Override
+    public void setupAnim(@NotNull ShamblerEntity entity, float limbSwing, float limbSwingAmount,
+                          float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.setHeadAngle(netHeadYaw, headPitch);
 
-        if (state.deathTime > 0.0F) {
-            this.deathAnimation.apply((long) (state.deathTime * 50.0F), 1.0F);
+        this.animate(entity.idleAnimationState, this.idleAnimation, ageInTicks);
+        this.animateWalk(this.walkingAnimation, limbSwing, limbSwingAmount, 2.0F, 2.5F);
+        this.animate(entity.roaringAnimationState, this.roaringAnimation, ageInTicks);
+        this.animate(entity.attackingAnimationState, this.attackingAnimation, ageInTicks);
+
+        if (entity.getDeathTime() > 0) {
+            KeyframeAnimations.animate(this, this.deathAnimation, (long) (entity.getDeathTime() * 50.0F), 1.0F,
+                    new Vector3f());
         }
     }
 

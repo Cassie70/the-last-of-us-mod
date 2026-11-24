@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Works like vanilla poison (1 damage every 25 ticks, halved per amplifier level)
+ * Works like vanilla poison (1 damage every 3 ticks, halved per amplifier level)
  * but, unlike poison, it does not stop at 1 health: it can kill the entity.
  */
 public class CorrosionEffect extends MobEffect {
@@ -22,17 +22,16 @@ public class CorrosionEffect extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(@NotNull ServerLevel level, LivingEntity entity, int amplifier) {
-        if (entity.hurtServer(level, level.damageSources().magic(), DAMAGE_PER_APPLICATION)) {
+    public void applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
+        if (entity.level() instanceof ServerLevel level
+                && entity.hurt(level.damageSources().magic(), DAMAGE_PER_APPLICATION)) {
             level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                     SoundEvents.LAVA_EXTINGUISH, SoundSource.NEUTRAL, 0.6F, 1.0F);
         }
-
-        return true;
     }
 
     @Override
-    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
         return duration % DAMAGE_INTERVAL == 0;
     }
 }

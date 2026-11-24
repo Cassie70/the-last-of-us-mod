@@ -47,7 +47,7 @@ public class SmokeBombEntity extends AbstractBombEntity {
 
     @Override
     protected void applyDirectHitEffects(LivingEntity target) {
-        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 7, false, true));
+        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 7, false, true));
         target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 5, false, true));
         target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 5, false, true));
     }
@@ -57,7 +57,7 @@ public class SmokeBombEntity extends AbstractBombEntity {
         double expY = this.getY() + 0.5;
 
         serverLevel.playSound(null, this.getX(), expY, this.getZ(),
-                SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
+                SoundEvents.GENERIC_EXPLODE, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
         serverLevel.sendParticles(
                 ParticleTypes.EXPLOSION,
@@ -88,7 +88,7 @@ public class SmokeBombEntity extends AbstractBombEntity {
         cloud.setWaitTime(0);
         cloud.setRadiusPerTick(-cloud.getRadius() / (float) cloud.getDuration());
         cloud.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0, false, true));
-        cloud.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 0, false, true));
+        cloud.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 0, false, true));
         cloud.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 40, 0, false, true));
         cloud.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40, 0, false, true));
         world.addFreshEntity(cloud);

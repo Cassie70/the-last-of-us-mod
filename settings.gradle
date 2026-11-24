@@ -47,5 +47,4 @@ plugins {
 rootProject.name = 'The Last Block Of Us Mod'
 include('common')
 include('fabric')
-include('neoforge')
 include('forge')

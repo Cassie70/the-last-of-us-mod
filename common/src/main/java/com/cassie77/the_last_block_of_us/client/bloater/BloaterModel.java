@@ -1,20 +1,23 @@
 package com.cassie77.the_last_block_of_us.client.bloater;
 
 import com.cassie77.the_last_block_of_us.Constants;
+import com.cassie77.the_last_block_of_us.entity.bloater.BloaterEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.client.animation.KeyframeAnimation;
 import org.jetbrains.annotations.NotNull;
 
-public class BloaterModel extends EntityModel<BloaterRenderState> {
+public class BloaterModel extends HierarchicalModel<BloaterEntity> {
+    private final ModelPart root;
 
-    public static final ModelLayerLocation BLOATER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "bloater"), "main");
+
+    public static final ModelLayerLocation BLOATER = new ModelLayerLocation(new ResourceLocation(Constants.MOD_ID, "bloater"), "main");
 
     private final ModelPart torso;
     private final ModelPart torso2;
@@ -24,14 +27,15 @@ public class BloaterModel extends EntityModel<BloaterRenderState> {
     private final ModelPart pierna_izquierda;
     private final ModelPart pierna_derecha;
 
-    private final KeyframeAnimation attackingAnimation;
-    private final KeyframeAnimation roaringAnimation;
-    private final KeyframeAnimation idleAnimation;
-    private final KeyframeAnimation walkingAnimation;
-    private final KeyframeAnimation throwingAnimation;
+    private final AnimationDefinition attackingAnimation;
+    private final AnimationDefinition roaringAnimation;
+    private final AnimationDefinition idleAnimation;
+    private final AnimationDefinition walkingAnimation;
+    private final AnimationDefinition throwingAnimation;
 
     public BloaterModel(ModelPart root) {
-        super(root);
+        super();
+        this.root = root;
         this.torso = root.getChild("torso");
         this.torso2 = this.torso.getChild("torso2");
         this.cabeza_completa = this.torso2.getChild("cabeza_completa");
@@ -40,11 +44,11 @@ public class BloaterModel extends EntityModel<BloaterRenderState> {
         this.pierna_izquierda = this.torso.getChild("pierna_izquierda");
         this.pierna_derecha = this.torso.getChild("pierna_derecha");
 
-        this.attackingAnimation = BloaterAnimations.ATTACK.bake(root);
-        this.roaringAnimation = BloaterAnimations.ROAR.bake(root);
-        this.idleAnimation = BloaterAnimations.IDLE.bake(root);
-        this.walkingAnimation = BloaterAnimations.WALK.bake(root);
-        this.throwingAnimation = BloaterAnimations.THROW.bake(root);
+        this.attackingAnimation = BloaterAnimations.ATTACK;
+        this.roaringAnimation = BloaterAnimations.ROAR;
+        this.idleAnimation = BloaterAnimations.IDLE;
+        this.walkingAnimation = BloaterAnimations.WALK;
+        this.throwingAnimation = BloaterAnimations.THROW;
     }
 
     public static LayerDefinition getTexturedModelData() {
@@ -101,15 +105,21 @@ public class BloaterModel extends EntityModel<BloaterRenderState> {
     }
 
     @Override
-    public void setupAnim(@NotNull BloaterRenderState state) {
-        super.setupAnim(state);
-        this.setHeadAngle(state.yRot, state.xRot);
+    public ModelPart root() {
+        return this.root;
+    }
 
-        this.idleAnimation.apply(state.idleAnimationState, state.ageInTicks);
-        this.walkingAnimation.applyWalk(state.walkAnimationPos, state.walkAnimationSpeed, 2.0F, 2.5F);
-        this.roaringAnimation.apply(state.roaringAnimationState, state.ageInTicks);
-        this.throwingAnimation.apply(state.throwingAnimationState, state.ageInTicks);
-        this.attackingAnimation.apply(state.attackingAnimationState, state.ageInTicks);
+    @Override
+    public void setupAnim(@NotNull BloaterEntity entity, float limbSwing, float limbSwingAmount,
+                          float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
+        this.setHeadAngle(netHeadYaw, headPitch);
+
+        this.animate(entity.idleAnimationState, this.idleAnimation, ageInTicks);
+        this.animateWalk(this.walkingAnimation, limbSwing, limbSwingAmount, 2.0F, 2.5F);
+        this.animate(entity.roaringAnimationState, this.roaringAnimation, ageInTicks);
+        this.animate(entity.throwingAnimationState, this.throwingAnimation, ageInTicks);
+        this.animate(entity.attackingAnimationState, this.attackingAnimation, ageInTicks);
     }
 
     private void setHeadAngle(float yaw, float pitch) {

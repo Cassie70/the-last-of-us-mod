@@ -21,8 +21,7 @@ public final class ForgeModBlocks {
 
     public static final RegistryObject<Block> CORDYCEPS_BLOCK = register(
             "cordyceps_block",
-            BlockBehaviour.Properties.of()
-                    .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cordyceps_block"))),
+            BlockBehaviour.Properties.of(),
             Block::new
     );
 
@@ -32,8 +31,7 @@ public final class ForgeModBlocks {
                     .noCollission()
                     .noOcclusion()
                     .instabreak()
-                    .replaceable()
-                    .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "clicker_spawner_block"))),
+                    .replaceable(),
             ClickerSpawnerBlock::new
     );
 
@@ -53,13 +51,7 @@ public final class ForgeModBlocks {
             return registeredBlock;
         });
 
-        // Al crear las propiedades del Item, también debemos asignar su setId()
-        ITEMS.register(name, () -> new BlockItem(
-                block.get(),
-                new Item.Properties()
-                        .useBlockDescriptionPrefix()
-                        .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name)))
-        ));
+        ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
 
         return block;
     }

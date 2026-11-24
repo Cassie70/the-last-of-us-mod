@@ -11,7 +11,7 @@ public class FabricModBlockEntities {
     public static void initialize() {
         ModBlockEntities.CLICKER_SPAWNER_BLOCK_ENTITY = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "clicker_spawner_block_entity"),
+                new ResourceLocation(Constants.MOD_ID, "clicker_spawner_block_entity"),
                 FabricBlockEntityTypeBuilder.create(
                         ClickerSpawnerBlockEntity::new,
                         ModBlocks.CLICKER_SPAWNER_BLOCK
